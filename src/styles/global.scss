@@ -1,0 +1,6 @@
+@import "colors.scss";
+
+VUETIFY OVERRIDES .theme--light.v-application {
+  background-color: white;
+  color: $black;
+}
