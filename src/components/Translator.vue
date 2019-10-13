@@ -7,13 +7,13 @@ export default {
 </script>
 
 <template>
-  <v-container class="container">
+  <v-container class="container px-5">
     <v-tabs v-model="tab" background-color="transparent" color="primary" grow>
       <v-tab key="lang1" class="lang1-tab">Q'eqchi'</v-tab>
       <v-tab key="lang2" class="lang2-tab">Spanish</v-tab>
     </v-tabs>
 
-    <v-tabs-items v-model="tab" class="tab-items">
+    <v-tabs-items v-model="tab" class="tab-items pt-5">
       <v-tab-item key="lang1" class="tab-item">
         <v-card flat>Q'echi' Content</v-card>
       </v-tab-item>
