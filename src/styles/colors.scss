@@ -2,3 +2,16 @@ $blue: #00cee6;
 $green: #1de9b6;
 $red: #f44336;
 $black: #263238;
+
+// GRADIENTS
+
+$gradient: linear-gradient(
+  120deg,
+  rgba(0, 206, 230, 1) 0%,
+  rgba(29, 233, 182, 1) 100%
+);
+
+@mixin gradient-bkg {
+  background: $blue;
+  background: $gradient;
+}
