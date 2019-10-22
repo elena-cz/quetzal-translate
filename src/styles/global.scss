@@ -1,10 +1,13 @@
-@import "colors.scss";
+@import 'colors.scss';
 
 .gradient {
   @include gradient-bkg;
 }
 
 // VUETIFY OVERRIDES //
+.theme--light {
+  color: $black;
+}
 
 .theme--light.v-application {
   @include gradient-bkg;
@@ -23,6 +26,7 @@
   @include gradient-bkg;
 }
 
+// Tabs
 .v-tab {
   letter-spacing: 1px;
   font-size: 1.1rem;
@@ -32,4 +36,29 @@
 }
 .v-tabs-slider {
   background-color: $red;
+}
+
+// Expansion Panel
+.v-expansion-panel {
+  color: inherit !important;
+}
+
+.v-expansion-panel::before {
+  box-shadow: none;
+}
+
+.v-expansion-panel-header.outer-header {
+  padding: 24px 8px;
+  font-size: 1.1rem;
+  letter-spacing: 1px;
+  font-weight: 600;
+}
+
+.v-expansion-panel-content__wrap {
+  padding: 0 0 16px 16px;
+}
+
+.v-expansion-panel-header.inner-header {
+  padding: 16px 8px;
+  font-size: 1rem;
 }

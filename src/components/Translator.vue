@@ -1,8 +1,14 @@
 <script>
+import { mapState, mapGetters, mapActions } from 'vuex';
+
 export default {
   data: () => ({
-    tab: null
-  })
+    tab: null,
+  }),
+
+  computed: {
+    ...mapState('phrases', ['subtopicIds', 'subtopics', 'phrases']),
+  },
 };
 </script>
 
@@ -15,7 +21,29 @@ export default {
 
     <v-tabs-items v-model="tab" class="tab-items pt-5">
       <v-tab-item key="lang1" class="tab-item">
-        <v-card flat>Q'echi' Content</v-card>
+        <v-expansion-panels accordion multiple elevation="0">
+          <v-expansion-panel v-for="(subtopicId) in subtopicIds" :key="subtopicId">
+            <v-expansion-panel-header class="outer-header">{{ subtopics[subtopicId].title }}</v-expansion-panel-header>
+            <v-expansion-panel-content>
+              <v-expansion-panels accordion>
+                <v-expansion-panel
+                  v-for="(phraseId) in subtopics[subtopicId].phraseIds"
+                  :key="phraseId"
+                >
+                  <v-expansion-panel-header hide-actions class="inner-header">
+                    {{ phrases[phraseId].text}}
+                    <v-btn text icon>
+                      <v-icon>mdi-heart</v-icon>
+                    </v-btn>
+                  </v-expansion-panel-header>
+                  <v-expansion-panel-content>{{ phrases[phraseId].es.text}}</v-expansion-panel-content>
+                </v-expansion-panel>
+              </v-expansion-panels>
+            </v-expansion-panel-content>
+          </v-expansion-panel>
+        </v-expansion-panels>
+
+        <!-- <v-card flat>Q'echi' Content</v-card> -->
       </v-tab-item>
       <v-tab-item key="lang2" class="tab-item">
         <!-- <v-card flat> -->
