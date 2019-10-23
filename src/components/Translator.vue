@@ -35,7 +35,7 @@ export default {
                     class="inner-header d-flex justify-space-between align-center"
                   >
                     <span>{{ phrases[phraseId].text}}</span>
-                    <v-btn text icon color="primary" width="32" max-width="32" class="ml-3" x-large>
+                    <v-btn text icon color="primary" width="52" max-width="52" class="ml-2" x-large>
                       <v-icon class="material-icons-round" x-large>play_arrow</v-icon>
                     </v-btn>
                   </v-expansion-panel-header>

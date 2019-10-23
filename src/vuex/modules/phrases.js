@@ -36,10 +36,10 @@ const testData = {
     },
     3: {
       id: '3',
-      text: 'Are you allergic to any medicines?',
+      text: 'We need to fix your broken tooth',
       es: {
         id: 'es-3',
-        text: '¿Es alérgico a algún medicamento?',
+        text: 'Tenemos que reparar su diente roto',
       },
     },
     4: {
