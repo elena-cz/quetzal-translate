@@ -4,6 +4,15 @@
   @include gradient-bkg;
 }
 
+.app-container {
+  height: 100vh;
+}
+
+.container {
+  max-height: 100%;
+  overflow: scroll;
+}
+
 // VUETIFY OVERRIDES //
 .theme--light {
   color: $black;
@@ -13,6 +22,11 @@
 .theme--light.v-application {
   @include gradient-bkg;
   color: $black;
+}
+
+.v-content {
+  height: 100vh;
+  box-sizing: border-box;
 }
 
 .v-content__wrap {

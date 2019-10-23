@@ -13,7 +13,7 @@ export default {
 </script>
 
 <template>
-  <v-container class="container px-5">
+  <v-container class="px-5">
     <v-tabs v-model="tab" background-color="transparent" color="primary" grow>
       <v-tab key="lang1" class="lang1-tab">Q'eqchi'</v-tab>
       <v-tab key="lang2" class="lang2-tab">Spanish</v-tab>
@@ -118,11 +118,6 @@ export default {
 </template>
 
 <style lang="scss" scoped>
-.container,
-.tab-items {
-  height: 100%;
-}
-
 .lang1-tab {
   color: var(--v-primary-base) !important;
 }

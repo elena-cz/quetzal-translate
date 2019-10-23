@@ -22,7 +22,7 @@ export default {
 
   computed: {
     page() {
-      return this.$route;
+      return this.$route.params.page || 'phrases';
     },
     // ...mapState('module', [
     //   'foo',
@@ -43,7 +43,7 @@ export default {
 </script>
 
 <template>
-  <div>{page}</div>
+  <div>{{page}}</div>
 </template>
 
 <style lang="scss" scoped>
