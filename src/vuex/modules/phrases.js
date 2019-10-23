@@ -1,3 +1,5 @@
+import fb from '@/firebaseConfig';
+
 const testData = {
   subtopicIds: ['intake', 'chairside', 'postop'],
   subtopics: {
@@ -19,7 +21,7 @@ const testData = {
   },
   phrases: {
     1: {
-      id: '2',
+      id: '1',
       text: 'Good day!',
       es: {
         id: 'es-1',
@@ -124,6 +126,19 @@ const actions = {
     { commit, dispatch, state, getters, rootState, rootGetters },
     otherParams
   ) {},
+
+  async init() {
+    try {
+      const snapshot = await fb.phrasesCollection
+        .where('topics', 'array-contains', 'dentistry')
+        .get();
+      snapshot.forEach(doc => {
+        console.log(doc.data());
+      });
+    } catch (error) {
+      console.log('Error getting phrases: ', error);
+    }
+  },
 };
 
 /*

@@ -17,3 +17,18 @@ const config = {
   measurementId: process.env.VUE_APP_MEASUREMENTID,
 };
 firebase.initializeApp(config);
+
+// Firestore
+const db = firebase.firestore();
+
+const phrasesCollection = db.collection('phrases');
+const topicsCollection = db.collection('topics');
+
+// Export
+const fb = {
+  db,
+  phrasesCollection,
+  topicsCollection,
+};
+
+export default fb;

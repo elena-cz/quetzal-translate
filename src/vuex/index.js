@@ -1,16 +1,18 @@
-import Vue from "vue";
-import Vuex from "vuex";
+import Vue from 'vue';
+import Vuex from 'vuex';
 
-import phrases from "./modules/phrases";
+import phrases from './modules/phrases';
 
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
   modules: {
-    phrases
+    phrases,
   },
-  strict: process.env.NODE_ENV !== "production"
+  strict: process.env.NODE_ENV !== 'production',
 });
+
+store.dispatch('phrases/init');
 
 export default store;
 

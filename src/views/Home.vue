@@ -1,13 +1,14 @@
-<template>
-  <HelloWorld />
-</template>
-
 <script>
-import Translator from "../components/Translator";
+import Translator from '../components/Translator';
 
 export default {
   components: {
-    Translator
-  }
+    Translator,
+  },
 };
 </script>
+
+
+<template>
+  <Translator />
+</template>

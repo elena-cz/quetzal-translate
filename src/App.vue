@@ -32,10 +32,8 @@ export default {
       </v-btn>-->
     </v-app-bar>
 
-    <!-- <v-content class="elevation-8"> -->
     <v-content>
-      <!-- <v-content class="elevation-8 content"> -->
-      <Translator />
+      <router-view />
     </v-content>
   </v-app>
 </template>
