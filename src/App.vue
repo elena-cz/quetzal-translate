@@ -1,14 +1,14 @@
 <script>
-import Translator from "./components/Translator";
+import Translator from './components/Translator';
 
 export default {
-  name: "App",
+  name: 'App',
   components: {
-    Translator
+    Translator,
   },
   data: () => ({
     //
-  })
+  }),
 };
 </script>
 
@@ -16,7 +16,7 @@ export default {
   <v-app>
     <v-app-bar app flat color="transparent">
       <v-toolbar-title class="headline white--text">
-        <span>Quetzal Translate</span>
+        <span>Quetzal</span>
       </v-toolbar-title>
       <!-- <v-toolbar-title class="headline text-uppercase">
         <span>Vuetify</span>

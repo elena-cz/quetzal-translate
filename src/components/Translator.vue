@@ -30,10 +30,13 @@ export default {
                   v-for="(phraseId) in subtopics[subtopicId].phraseIds"
                   :key="phraseId"
                 >
-                  <v-expansion-panel-header hide-actions class="inner-header">
-                    {{ phrases[phraseId].text}}
-                    <v-btn text icon>
-                      <v-icon>mdi-heart</v-icon>
+                  <v-expansion-panel-header
+                    hide-actions
+                    class="inner-header d-flex justify-space-between align-center"
+                  >
+                    <span>{{ phrases[phraseId].text}}</span>
+                    <v-btn text icon color="primary" width="32" max-width="32" class="ml-3" x-large>
+                      <v-icon class="material-icons-round" x-large>play_arrow</v-icon>
                     </v-btn>
                   </v-expansion-panel-header>
                   <v-expansion-panel-content>{{ phrases[phraseId].es.text}}</v-expansion-panel-content>
