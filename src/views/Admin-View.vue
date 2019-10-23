@@ -1,9 +1,9 @@
 <script>
-import { mapState, mapGetters, mapActions } from 'vuex';
+import fb from '@/firebaseConfig';
 // import HelloWorld from '@/components/HelloWorld.vue';
 
 export default {
-  name: 'Admin-View',
+  name: 'AdminView',
 
   components: {
     // HelloWorld,
@@ -17,27 +17,77 @@ export default {
   },
 
   data() {
-    return {};
+    return {
+      currentId: '',
+      docs: {},
+    };
   },
 
   computed: {
     page() {
       return this.$route.params.page || 'phrases';
     },
-    // ...mapState('module', [
-    //   'foo',
-    // ]),
-    // ...mapGetters('module', [
-    //   'foo',
-    // ]),
-    // property() {},
+
+    collection() {
+      return this.page;
+    },
+
+    currentDoc() {
+      const { currentId, docs } = this;
+      return currentId ? docs[currentId] || {} : {};
+    },
+
+    newButtonText() {
+      const { page } = this;
+      const nouns = {
+        phrases: 'Phrase',
+        topics: 'Topic',
+      };
+      const noun = nouns[page] || 'Phrase';
+      return `New ${noun}`;
+    },
+  },
+
+  watch: {
+    page: {
+      handler() {
+        this.currentId = '';
+        this.docs = {};
+        this.getDocs();
+      },
+      immediate: true,
+    },
   },
 
   methods: {
-    // ...mapActions('module', [
-    //   'foo',
-    // ]),
-    // method() {},
+    getDocs() {
+      const { docs, collection } = this;
+      const updatedDocs = {};
+
+      fb.db.collection(collection).onSnapshot(
+        snapshot => {
+          snapshot.docChanges().forEach(change => {
+            if (change.type !== 'removed') {
+              const { id } = change.doc;
+              updatedDocs[id] = change.doc.data();
+            }
+          });
+          this.docs = { ...docs, ...updatedDocs };
+        },
+        error => {
+          console.log('Error getting docs', error);
+        }
+      );
+    },
+
+    setCurrentId(id) {
+      this.currentId = id || '';
+    },
+
+    doesIdExist(id) {
+      const { docs } = this;
+      return !!docs[id];
+    },
   },
 };
 </script>
@@ -52,7 +102,20 @@ export default {
 
     <v-content>
       <v-container class="admin-grid">
-        <aside class="sidebar">sidebar</aside>
+        <aside class="sidebar">
+          <v-btn color="primary" rounded @click="setCurrentId('')">{{ newButtonText }}</v-btn>
+
+          <v-list shaped dense>
+            <v-subheader>PHRASES</v-subheader>
+            <v-list-item-group v-model="currentDoc" color="primary">
+              <v-list-item v-for="(doc, i) in docs" :key="doc.id">
+                <v-list-item-content>
+                  <v-list-item-title v-text="doc.text"></v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+            </v-list-item-group>
+          </v-list>
+        </aside>
         <div class="main">main</div>
       </v-container>
     </v-content>
@@ -62,7 +125,7 @@ export default {
 <style lang="scss" scoped>
 .admin-grid {
   display: grid;
-  grid-template-columns: 230px auto;
+  grid-template-columns: 250px auto;
   grid-template-rows: auto;
   grid-template-areas: 'sidebar main';
   grid-gap: 1rem;
@@ -80,7 +143,7 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  width: calc(230px + 1rem);
+  width: calc(250px + 1rem);
   height: 100%;
   max-height: 100%;
   padding: 1rem;
