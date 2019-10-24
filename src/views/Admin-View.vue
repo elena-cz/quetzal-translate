@@ -1,19 +1,12 @@
 <script>
 import fb from '@/firebaseConfig';
-// import HelloWorld from '@/components/HelloWorld.vue';
+import AdminEditPhrases from '@/components/admin/AdminEditPhrases.vue';
 
 export default {
   name: 'AdminView',
 
   components: {
-    // HelloWorld,
-  },
-
-  props: {
-    // thing: {
-    //   type: Array,
-    //   required: true,
-    // },
+    AdminEditPhrases,
   },
 
   data() {
@@ -83,11 +76,6 @@ export default {
     setCurrentId(id) {
       this.currentId = id || '';
     },
-
-    doesIdExist(id) {
-      const { docs } = this;
-      return !!docs[id];
-    },
   },
 };
 </script>
@@ -107,8 +95,13 @@ export default {
 
           <v-list shaped dense>
             <v-subheader>PHRASES</v-subheader>
-            <v-list-item-group v-model="currentDoc" color="primary">
-              <v-list-item v-for="(doc, i) in docs" :key="doc.id">
+            <v-list-item-group color="primary">
+              <v-list-item
+                v-for="(doc, i) in docs"
+                :key="doc.id"
+                :input-value="currentId"
+                @click="setCurrentId(doc.id)"
+              >
                 <v-list-item-content>
                   <v-list-item-title v-text="doc.text"></v-list-item-title>
                 </v-list-item-content>
@@ -116,7 +109,9 @@ export default {
             </v-list-item-group>
           </v-list>
         </aside>
-        <div class="main">main</div>
+        <div class="main">
+          <AdminEditPhrases :saved-id="currentId" :doc="currentDoc" :set-current-id="setCurrentId" />
+        </div>
       </v-container>
     </v-content>
   </div>
