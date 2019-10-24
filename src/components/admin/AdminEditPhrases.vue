@@ -150,75 +150,81 @@ export default {
 </script>
 
 <template>
-  <v-form class="form">
-    <h2 class="display-3 mb-6">{{ (savedId) ? 'Edit Phrase' : 'New Phrase' }}</h2>
-    <v-container>
-      <v-row class="mb-3">
-        <p class="caption">ID: {{id}}</p>
-      </v-row>
-      <v-row>
-        <v-textarea
-          outlined
-          name="text"
-          label="Text"
-          v-model.trim="text"
-          @input="setHasUnsavedChanges"
-        ></v-textarea>
-      </v-row>
+  <div>
+    <v-form class="form">
+      <h2 class="display-3 mb-6">{{ (savedId) ? 'Edit Phrase' : 'New Phrase' }}</h2>
+      <v-container>
+        <v-row class="mb-3">
+          <p class="caption">ID: {{id}}</p>
+        </v-row>
+        <v-row>
+          <v-textarea
+            outlined
+            name="text"
+            label="Text"
+            v-model.trim="text"
+            @input="setHasUnsavedChanges"
+          ></v-textarea>
+        </v-row>
 
-      <v-row>
-        <v-select
-          v-model="topics"
-          :items="['dentistry']"
-          chips
-          label="Topics"
-          multiple
-          outlined
-          color="primary"
-        ></v-select>
-      </v-row>
-      <v-row>
-        <v-switch
-          v-model="visible"
-          label="Visible"
-          color="primary"
-          class="pl-1"
-          @input="setHasUnsavedChanges"
-        ></v-switch>
-      </v-row>
-      <v-row>
-        <v-col class="pa-0">
-          <p class="grey--text">Version: {{ version }}</p>
-
-          <p class="caption grey--text">Updated At: {{ lastUpdatedAt }}</p>
-
-          <p class="caption grey--text">Created At: {{ createdAt }}</p>
-        </v-col>
-      </v-row>
-
-      <v-row class="save-container justify-space-between">
-        <span>
-          <v-icon
-            small
-            :color="(hasUnsavedChanges || isNewDoc) ? 'grey' : 'primary'"
-            class="mr-2"
-          >lens</v-icon>
-          {{ (hasUnsavedChanges || isNewDoc) ? 'Not Saved' : 'Saved' }}
-        </span>
-
-        <div class="save-buttons">
-          <v-btn rounded class="mr-4" @click.prevent="setUnsavedData()">Cancel</v-btn>
-          <v-btn
-            rounded
+        <v-row>
+          <v-select
+            v-model="topics"
+            :items="['dentistry']"
+            chips
+            label="Topics"
+            multiple
+            outlined
             color="primary"
-            type="submit"
-            :disabled="disabled"
-            @click.prevent="saveToDb"
-          >Save to Dev</v-btn>
-        </div>
-      </v-row>
-    </v-container>
-  </v-form>
+          ></v-select>
+        </v-row>
+        <v-row>
+          <v-switch
+            v-model="visible"
+            label="Visible"
+            color="primary"
+            class="pl-1"
+            @input="setHasUnsavedChanges"
+          ></v-switch>
+        </v-row>
+        <v-row>
+          <v-col class="pa-0">
+            <p class="grey--text">Version: {{ version }}</p>
+
+            <p class="caption grey--text">
+              Updated At: {{ lastUpdatedAt }}
+              <br />
+              Created At: {{ createdAt }}
+            </p>
+          </v-col>
+        </v-row>
+
+        <v-row class="save-container justify-space-between">
+          <span>
+            <v-icon
+              small
+              :color="(hasUnsavedChanges || isNewDoc) ? 'grey' : 'primary'"
+              class="mr-2"
+            >lens</v-icon>
+            {{ (hasUnsavedChanges || isNewDoc) ? 'Not Saved' : 'Saved' }}
+          </span>
+
+          <div class="save-buttons">
+            <v-btn rounded class="mr-4" @click.prevent="setUnsavedData()">Cancel</v-btn>
+            <v-btn
+              rounded
+              color="primary"
+              type="submit"
+              :disabled="disabled"
+              @click.prevent="saveToDb"
+            >Save Source</v-btn>
+          </div>
+        </v-row>
+      </v-container>
+    </v-form>
+
+    <h3 class="display-2 mt-4">Translations</h3>
+  </div>
 </template>
 
 <style lang="scss" scoped>

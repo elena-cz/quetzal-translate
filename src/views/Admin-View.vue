@@ -95,13 +95,8 @@ export default {
 
           <v-list shaped dense>
             <v-subheader>PHRASES</v-subheader>
-            <v-list-item-group color="primary">
-              <v-list-item
-                v-for="(doc, i) in docs"
-                :key="doc.id"
-                :input-value="currentId"
-                @click="setCurrentId(doc.id)"
-              >
+            <v-list-item-group v-model="currentId" color="primary">
+              <v-list-item v-for="(doc, i) in docs" :key="doc.id" @click="setCurrentId(doc.id)">
                 <v-list-item-content>
                   <v-list-item-title v-text="doc.text"></v-list-item-title>
                 </v-list-item-content>
