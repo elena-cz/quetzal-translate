@@ -1,11 +1,13 @@
 <script>
+import moment from 'moment';
+
 export default {
   name: 'AdminEditTranslation',
 
   components: {},
 
   props: {
-    enId: {
+    id: {
       type: String,
       required: true,
     },
@@ -13,12 +15,17 @@ export default {
       type: Object,
       required: true,
     },
+    langName: {
+      type: String,
+      default: '',
+    },
   },
 
   data() {
     return {
-      isNewDoc: true,
       id: '',
+      enId: '',
+      lang: '',
       text: '',
       mp3_ref: '',
       mp3_url: '',
@@ -28,21 +35,19 @@ export default {
       lastUpdatedAt: null,
       createdAt: null,
       hasUnsavedChanges: false,
-      isIdSet: false,
     };
   },
 
   computed: {
     disabled() {
-      const { id, hasUnsavedChanges, mp3_url } = this;
-      return !id || !mp3_url || !hasUnsavedChanges;
+      const { id, hasUnsavedChanges } = this;
+      return !id || !hasUnsavedChanges;
     },
   },
 
   watch: {
-    enId: {
+    id: {
       handler() {
-        this.isNewDoc = !this.savedId;
         this.setUnsavedData();
       },
       immediate: true,
@@ -50,7 +55,38 @@ export default {
   },
 
   methods: {
-    setUnsavedData() {},
+    setUnsavedData() {
+      const { id, doc } = this;
+      const {
+        enId,
+        lang,
+        text,
+        mp3_ref,
+        mp3_url,
+        webm_ref,
+        webm_url,
+        version,
+        lastUpdatedAt,
+        createdAt,
+      } = doc;
+      console.log('createdAt', createdAt);
+      this.id = id || '';
+      this.enId = enId || '';
+      this.lang = lang || '';
+      this.text = text || '';
+      this.mp3_ref = mp3_ref || '';
+      this.mp3_url = mp3_url || '';
+      this.webm_ref = webm_ref || '';
+      this.webm_url = webm_url || '';
+      this.version = version || 0;
+      this.lastUpdatedAt = lastUpdatedAt
+        ? moment(lastUpdatedAt).format('MMM Do YYYY, h:mm')
+        : null;
+      this.createdAt = createdAt
+        ? moment(createdAt).format('MMM Do YYYY')
+        : null;
+      this.hasUnsavedChanges = false;
+    },
 
     setHasUnsavedChanges() {
       this.hasUnsavedChanges = true;
@@ -61,13 +97,10 @@ export default {
 
 <template>
   <div class="mb-5">
-    <h4 class="mb-3">{{ doc.lang }}</h4>
-    <h5>
-      <strong>1</strong>&nbsp;&nbsp;Add Language
-    </h5>
     <v-form>
       <v-container>
-        <v-row class="mb-3">
+        <v-row class="mb-3 justify-space-between">
+          <h4 class="mb-3">{{ doc.lang }} - {{langName}}</h4>
           <p class="caption">ID: {{id}}</p>
         </v-row>
 
@@ -84,20 +117,36 @@ export default {
           ></v-textarea>
         </v-row>
 
-        <v-row class="justify-end">
-          <v-btn
-            rounded
-            color="secondary"
-            type="submit"
-            :disabled="disabled"
-            @click.prevent="saveToDb"
-          >Add Language</v-btn>
+        <v-row>
+          <p class="caption grey--text">
+            Version: {{ version }}
+            <br />
+            Updated At: {{ lastUpdatedAt }}
+            <br />
+            Created At: {{ createdAt }}
+          </p>
+        </v-row>
+
+        <v-row class="save-container justify-space-between align-center">
+          <span>
+            <v-icon small :color="hasUnsavedChanges ? 'grey' : 'secondary'" class="mr-2">lens</v-icon>
+            {{ hasUnsavedChanges ? 'Not Saved' : 'Saved' }}
+          </span>
+
+          <div class="save-buttons">
+            <v-btn rounded class="mr-4" @click.prevent="setUnsavedData()">Cancel</v-btn>
+            <v-btn
+              rounded
+              color="secondary"
+              type="submit"
+              :disabled="disabled"
+              @click.prevent="saveToDb"
+            >Save {{lang}}</v-btn>
+          </div>
         </v-row>
       </v-container>
+      <v-divider class="my-4" />
     </v-form>
-    <h5>
-      <strong>2</strong>&nbsp;&nbsp;Add Audio
-    </h5>
   </div>
 </template>
 

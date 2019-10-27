@@ -110,7 +110,6 @@ export default {
         text,
         topics,
         visible,
-        version,
         version: newVersion,
         lastUpdatedAt: moment().format(),
       };
@@ -227,7 +226,7 @@ export default {
       </v-container>
     </v-form>
 
-    <AdminManageTranslations v-if="savedId" enId="savedId" />
+    <AdminManageTranslations v-if="savedId" :enId="savedId" />
   </div>
 </template>
 

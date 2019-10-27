@@ -1,5 +1,5 @@
 <script>
-import moment, { lang } from 'moment';
+import moment from 'moment';
 import { mapState } from 'vuex';
 import fb from '@/firebaseConfig';
 import AdminEditTranslation from '@/components/admin/AdminEditTranslation.vue';
@@ -76,13 +76,39 @@ export default {
           }
         );
     },
+
+    addTranslation() {
+      const { enId, newLang } = this;
+      const id = `${newLang}-${enId}`;
+      const data = {
+        id,
+        lang: newLang,
+        enId,
+        createdAt: moment().format(),
+        lastUpdatedAt: moment().format(),
+        version: 0,
+      };
+      fb.db
+        .collection('phrases')
+        .doc(enId)
+        .collection('translations')
+        .doc(id)
+        .set(data, { merge: true })
+        .then(() => {
+          this.newLang = '';
+          console.log('Translation doc created');
+        })
+        .catch(error => {
+          console.error('Error writing document: ', error);
+        });
+    },
   },
 };
 </script>
 
 <template>
-  <div>
-    <h3 class="display-2 mt-4 mb-5">Translations</h3>
+  <div class="mt-6">
+    <h3 class="display-2 mb-5">Translations</h3>
     <v-container v-if="availableLangs.length > 0">
       <v-row class="justify-stretch align-stretch">
         <v-select
@@ -93,10 +119,24 @@ export default {
           color="secondary"
         ></v-select>
 
-        <v-btn color="secondary" height="56" class="ml-5" :disabled="!newLang">Add</v-btn>
+        <v-btn
+          color="secondary"
+          height="56"
+          class="ml-5"
+          :disabled="!newLang"
+          @click.prevent="addTranslation"
+        >Add</v-btn>
       </v-row>
     </v-container>
-    <AdminEditTranslation v-for="doc in translations" :enId="enId" :doc="doc" />
+
+    <v-divider class="my-3" />
+
+    <AdminEditTranslation
+      v-for="doc in translations"
+      :id="doc.id"
+      :doc="doc"
+      :lang-name="langNames[doc.lang]"
+    />
   </div>
 </template>
 
