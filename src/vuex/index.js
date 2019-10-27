@@ -1,12 +1,14 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 
+import languages from './modules/languages';
 import phrases from './modules/phrases';
 
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
   modules: {
+    languages,
     phrases,
   },
   strict: process.env.NODE_ENV !== 'production',

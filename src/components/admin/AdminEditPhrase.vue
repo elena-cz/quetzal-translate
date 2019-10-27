@@ -2,13 +2,13 @@
 import moment from 'moment';
 import fb from '@/firebaseConfig';
 import { mapState, mapGetters, mapActions } from 'vuex';
-// import HelloWorld from '@/components/HelloWorld.vue';
+import AdminManageTranslations from '@/components/admin/AdminManageTranslations.vue';
 
 export default {
-  name: 'AdminEditPhrases',
+  name: 'AdminEditPhrase',
 
   components: {
-    // HelloWorld,
+    AdminManageTranslations,
   },
 
   props: {
@@ -150,16 +150,18 @@ export default {
 </script>
 
 <template>
-  <div>
-    <v-form class="form">
+  <div class="form-container">
+    <v-form>
       <h2 class="display-3 mb-6">{{ (savedId) ? 'Edit Phrase' : 'New Phrase' }}</h2>
       <v-container>
         <v-row class="mb-3">
           <p class="caption">ID: {{id}}</p>
         </v-row>
+
         <v-row>
           <v-textarea
             outlined
+            auto-grow
             name="text"
             label="Text"
             v-model.trim="text"
@@ -178,6 +180,7 @@ export default {
             color="primary"
           ></v-select>
         </v-row>
+
         <v-row>
           <v-switch
             v-model="visible"
@@ -187,6 +190,7 @@ export default {
             @input="setHasUnsavedChanges"
           ></v-switch>
         </v-row>
+
         <v-row>
           <v-col class="pa-0">
             <p class="grey--text">Version: {{ version }}</p>
@@ -199,7 +203,7 @@ export default {
           </v-col>
         </v-row>
 
-        <v-row class="save-container justify-space-between">
+        <v-row class="save-container justify-space-between align-center">
           <span>
             <v-icon
               small
@@ -223,12 +227,12 @@ export default {
       </v-container>
     </v-form>
 
-    <h3 class="display-2 mt-4">Translations</h3>
+    <AdminManageTranslations v-if="savedId" enId="savedId" />
   </div>
 </template>
 
 <style lang="scss" scoped>
-.form {
+.form-container {
   max-width: 600px;
 }
 </style>

@@ -1,18 +1,19 @@
 <script>
 import fb from '@/firebaseConfig';
-import AdminEditPhrases from '@/components/admin/AdminEditPhrases.vue';
+import AdminEditPhrase from '@/components/admin/AdminEditPhrase.vue';
 
 export default {
   name: 'AdminView',
 
   components: {
-    AdminEditPhrases,
+    AdminEditPhrase,
   },
 
   data() {
     return {
       currentId: '',
       docs: {},
+      currentIndex: null,
     };
   },
 
@@ -95,8 +96,8 @@ export default {
 
           <v-list shaped dense>
             <v-subheader>PHRASES</v-subheader>
-            <v-list-item-group v-model="currentId" color="primary">
-              <v-list-item v-for="(doc, i) in docs" :key="doc.id" @click="setCurrentId(doc.id)">
+            <v-list-item-group v-model="currentIndex" color="primary">
+              <v-list-item v-for="doc in docs" :key="doc.id" @click="setCurrentId(doc.id)">
                 <v-list-item-content>
                   <v-list-item-title v-text="doc.text"></v-list-item-title>
                 </v-list-item-content>
@@ -105,7 +106,7 @@ export default {
           </v-list>
         </aside>
         <div class="main">
-          <AdminEditPhrases :saved-id="currentId" :doc="currentDoc" :set-current-id="setCurrentId" />
+          <AdminEditPhrase :saved-id="currentId" :doc="currentDoc" :set-current-id="setCurrentId" />
         </div>
       </v-container>
     </v-content>
@@ -122,6 +123,7 @@ export default {
   align-content: flex-start;
   min-height: 100%;
   width: 100%;
+  max-width: 100%;
   box-sizing: border-box;
   padding: 1rem;
 }

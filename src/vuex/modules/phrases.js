@@ -133,7 +133,7 @@ const actions = {
         .where('topics', 'array-contains', 'dentistry')
         .get();
       snapshot.forEach(doc => {
-        console.log(doc.data());
+        // console.log(doc.data());
       });
     } catch (error) {
       console.log('Error getting phrases: ', error);
