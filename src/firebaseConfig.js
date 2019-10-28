@@ -3,7 +3,7 @@ import * as firebase from 'firebase/app';
 import 'firebase/firestore';
 // import 'firebase/functions';
 // import 'firebase/performance';
-// import 'firebase/storage';
+import 'firebase/storage';
 
 // Firebase init
 const config = {
@@ -21,14 +21,21 @@ firebase.initializeApp(config);
 // Firestore
 const db = firebase.firestore();
 
+const dbFieldValue = firebase.firestore.FieldValue;
+
 const phrasesCollection = db.collection('phrases');
 const topicsCollection = db.collection('topics');
+
+// Storage
+const storage = firebase.storage();
 
 // Export
 const fb = {
   db,
+  dbFieldValue,
   phrasesCollection,
   topicsCollection,
+  storage,
 };
 
 export default fb;

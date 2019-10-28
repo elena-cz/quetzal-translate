@@ -1,10 +1,14 @@
 <script>
 import moment from 'moment';
+import fb from '@/firebaseConfig';
+import AdminUploadAudio from '@/components/admin/AdminUploadAudio.vue';
 
 export default {
   name: 'AdminEditTranslation',
 
-  components: {},
+  components: {
+    AdminUploadAudio,
+  },
 
   props: {
     id: {
@@ -19,11 +23,14 @@ export default {
       type: String,
       default: '',
     },
+    updateLangArray: {
+      type: Function,
+      required: true,
+    },
   },
 
   data() {
     return {
-      id: '',
       enId: '',
       lang: '',
       text: '',
@@ -34,6 +41,7 @@ export default {
       version: 0,
       lastUpdatedAt: null,
       createdAt: null,
+      tags: ['mp3', 'webm'], // Tags are the format for each file
       hasUnsavedChanges: false,
     };
   },
@@ -69,8 +77,6 @@ export default {
         lastUpdatedAt,
         createdAt,
       } = doc;
-      console.log('createdAt', createdAt);
-      this.id = id || '';
       this.enId = enId || '';
       this.lang = lang || '';
       this.text = text || '';
@@ -90,6 +96,54 @@ export default {
 
     setHasUnsavedChanges() {
       this.hasUnsavedChanges = true;
+    },
+
+    updateFileData({ tag, ref, url }) {
+      this.hasUnsavedChanges = true;
+      this[`${tag}_ref`] = ref;
+      this[`${tag}_url`] = url;
+    },
+
+    saveToDb() {
+      const { updateLangArray, setUnsavedData } = this;
+      const {
+        id,
+        enId,
+        lang,
+        text,
+        mp3_ref,
+        mp3_url,
+        webm_ref,
+        webm_url,
+        version,
+      } = this;
+      const newVersion = version + 1;
+
+      const data = {
+        text,
+        mp3_ref,
+        mp3_url,
+        webm_ref,
+        webm_url,
+        version: newVersion,
+        lastUpdatedAt: moment().format(),
+      };
+
+      fb.phrasesCollection
+        .doc(enId)
+        .collection('translations')
+        .doc(id)
+        .set(data, { merge: true })
+        .then(() => {
+          if (mp3_url) {
+            updateLangArray(lang);
+          }
+          setUnsavedData();
+          console.log('Doc updated');
+        })
+        .catch(error => {
+          console.error('Error writing document: ', error);
+        });
     },
   },
 };
@@ -115,6 +169,19 @@ export default {
             v-model.trim="text"
             @input="setHasUnsavedChanges"
           ></v-textarea>
+        </v-row>
+
+        <v-row>
+          <AdminUploadAudio
+            :id="id"
+            :updateFileData="updateFileData"
+            :mp3_ref="mp3_ref"
+            :mp3_url="mp3_url"
+            :webm_ref="webm_ref"
+            :webm_url="webm_url"
+            :tags="tags"
+            :hasUnsavedChanges="hasUnsavedChanges"
+          />
         </v-row>
 
         <v-row>

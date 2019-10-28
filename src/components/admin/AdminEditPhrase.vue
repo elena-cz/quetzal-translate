@@ -32,7 +32,7 @@ export default {
       id: '',
       text: '',
       topics: [],
-      languages: [],
+      langs: [],
       visible: true,
       version: 0,
       lastUpdatedAt: null,
@@ -77,7 +77,7 @@ export default {
         text,
         topics,
         visible,
-        languages,
+        langs,
         version,
         lastUpdatedAt,
         createdAt,
@@ -86,7 +86,7 @@ export default {
       this.text = text || '';
       this.topics = topics || [];
       this.visible = visible || true;
-      this.languages = languages || [];
+      this.langs = langs || [];
       this.version = version || 0;
       this.lastUpdatedAt = lastUpdatedAt
         ? moment(lastUpdatedAt).format('MMM Do YYYY, h:mm')
@@ -119,8 +119,7 @@ export default {
       }
 
       if (isNewDoc) {
-        fb.db
-          .collection('phrases')
+        fb.phrasesCollection
           .add(data)
           .then(docRef => {
             let { id } = docRef;
@@ -131,8 +130,7 @@ export default {
             console.error('Error writing document: ', error);
           });
       } else {
-        fb.db
-          .collection('phrases')
+        fb.phrasesCollection
           .doc(id)
           .set(data, { merge: true })
           .then(() => {
@@ -153,8 +151,14 @@ export default {
     <v-form>
       <h2 class="display-3 mb-6">{{ (savedId) ? 'Edit Phrase' : 'New Phrase' }}</h2>
       <v-container>
-        <v-row class="mb-3">
-          <p class="caption">ID: {{id}}</p>
+        <v-row class="mb-6" align="center">
+          <v-col justify="center">
+            <span class="caption">ID: {{id}}</span>
+          </v-col>
+          <v-col>
+            <span class="caption mr-3">Languages:</span>
+            <v-chip v-for="lang in langs" class="mr-2" color="secondary">{{ lang }}</v-chip>
+          </v-col>
         </v-row>
 
         <v-row>
@@ -226,7 +230,7 @@ export default {
       </v-container>
     </v-form>
 
-    <AdminManageTranslations v-if="savedId" :enId="savedId" />
+    <AdminManageTranslations v-if="savedId" :enId="savedId" :langs="langs" />
   </div>
 </template>
 

@@ -16,6 +16,10 @@ export default {
       type: String,
       required: true,
     },
+    langs: {
+      type: Array,
+      default: [],
+    },
   },
 
   data() {
@@ -58,8 +62,7 @@ export default {
   methods: {
     getTranslations() {
       const { enId } = this;
-      fb.db
-        .collection('phrases')
+      fb.phrasesCollection
         .doc(enId)
         .collection('translations')
         .onSnapshot(
@@ -69,7 +72,6 @@ export default {
               translations[doc.id] = doc.data();
             });
             this.translations = translations;
-            console.log('Done getting translations');
           },
           error => {
             console.error('Error getting translations', error);
@@ -88,8 +90,7 @@ export default {
         lastUpdatedAt: moment().format(),
         version: 0,
       };
-      fb.db
-        .collection('phrases')
+      fb.phrasesCollection
         .doc(enId)
         .collection('translations')
         .doc(id)
@@ -100,6 +101,18 @@ export default {
         })
         .catch(error => {
           console.error('Error writing document: ', error);
+        });
+    },
+
+    updateLangArray(lang) {
+      const { enId } = this;
+      fb.phrasesCollection
+        .doc(enId)
+        .update({
+          langs: fb.dbFieldValue.arrayUnion(lang),
+        })
+        .catch(error => {
+          console.error('Error updating languages', error);
         });
     },
   },
@@ -136,6 +149,7 @@ export default {
       :id="doc.id"
       :doc="doc"
       :lang-name="langNames[doc.lang]"
+      :updateLangArray="updateLangArray"
     />
   </div>
 </template>
