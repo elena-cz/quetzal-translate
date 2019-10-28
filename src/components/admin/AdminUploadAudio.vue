@@ -1,6 +1,5 @@
 <script>
 import moment from 'moment';
-import axios from 'axios';
 import fb from '@/firebaseConfig';
 import { mapState, mapGetters, mapActions } from 'vuex';
 

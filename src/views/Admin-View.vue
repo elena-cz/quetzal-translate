@@ -1,12 +1,14 @@
 <script>
 import fb from '@/firebaseConfig';
 import AdminEditPhrase from '@/components/admin/AdminEditPhrase.vue';
+import AdminEditTopic from '@/components/admin/AdminEditTopic.vue';
 
 export default {
   name: 'AdminView',
 
   components: {
     AdminEditPhrase,
+    AdminEditTopic,
   },
 
   data() {
@@ -84,9 +86,15 @@ export default {
 <template>
   <div class="app-container">
     <v-app-bar app flat color="transparent">
-      <v-toolbar-title class="headline white--text">
-        <span>Quetzal Admin</span>
-      </v-toolbar-title>
+      <v-toolbar-title class="headline white--text">Quetzal Admin</v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-btn
+        v-if="page === 'phrases'"
+        text
+        color="white"
+        @click="$router.push('/admin/topics')"
+      >Topics</v-btn>
+      <v-btn v-else text color="white" @click="$router.push('/admin/phrases')">Phrases</v-btn>
     </v-app-bar>
 
     <v-content>
@@ -95,18 +103,29 @@ export default {
           <v-btn color="primary" rounded @click="setCurrentId('')">{{ newButtonText }}</v-btn>
 
           <v-list shaped dense>
-            <v-subheader>PHRASES</v-subheader>
+            <v-subheader class="text-uppercase">{{ collection }}</v-subheader>
             <v-list-item-group v-model="currentIndex" color="primary">
               <v-list-item v-for="doc in docs" :key="doc.id" @click="setCurrentId(doc.id)">
                 <v-list-item-content>
-                  <v-list-item-title v-text="doc.text"></v-list-item-title>
+                  <v-list-item-title v-text="page === 'phrases' ? doc.text : doc.id"></v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
             </v-list-item-group>
           </v-list>
         </aside>
         <div class="main">
-          <AdminEditPhrase :saved-id="currentId" :doc="currentDoc" :set-current-id="setCurrentId" />
+          <AdminEditTopic
+            v-if="page === 'topics'"
+            :saved-id="currentId"
+            :doc="currentDoc"
+            :set-current-id="setCurrentId"
+          />
+          <AdminEditPhrase
+            v-else
+            :saved-id="currentId"
+            :doc="currentDoc"
+            :set-current-id="setCurrentId"
+          />
         </div>
       </v-container>
     </v-content>

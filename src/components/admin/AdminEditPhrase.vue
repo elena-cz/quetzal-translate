@@ -38,8 +38,6 @@ export default {
       lastUpdatedAt: null,
       createdAt: null,
       hasUnsavedChanges: false,
-      topicSearch: null,
-      topicNoData: true,
     };
   },
 
@@ -47,11 +45,6 @@ export default {
     disabled() {
       const { text, hasUnsavedChanges } = this;
       return !text || !hasUnsavedChanges;
-    },
-
-    unsavedDraft() {
-      const { text, topics, visible } = this;
-      return { text, topics, visible };
     },
   },
 
