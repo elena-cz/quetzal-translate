@@ -3,13 +3,13 @@ import moment from 'moment';
 import fb from '@/firebaseConfig';
 import { mapState, mapGetters, mapActions } from 'vuex';
 import { sluggify } from '@/helpers/helpers';
-// import HelloWorld from '@/components/HelloWorld.vue';
+import AdminManageSubtopics from '@/components/admin/AdminManageSubtopics.vue';
 
 export default {
   name: 'AdminEditTopic',
 
   components: {
-    // HelloWorld,
+    AdminManageSubtopics,
   },
 
   props: {
@@ -124,6 +124,17 @@ export default {
       this.hasUnsavedChanges = true;
     },
 
+    updateSubtopicIds(subtopicIds) {
+      this.subtopicIds = subtopicIds;
+      this.hasUnsavedChanges = true;
+    },
+
+    updateSubtopic(id, data) {
+      const subtopic = this.subtopics[id];
+      this.subtopics[id] = { ...subtopic, ...data };
+      this.hasUnsavedChanges = true;
+    },
+
     saveToDb() {
       let { id } = this;
       const { title, subtopicIds, subtopics, version, createdAt } = this;
@@ -191,6 +202,12 @@ export default {
             @input="updateId($event.target.value)"
           ></v-text-field>
         </v-row>
+        <AdminManageSubtopics
+          :subtopic-ids="subtopicIds"
+          :subtopics="subtopics"
+          :update-subtopic-ids="updateSubtopicIds"
+          :update-subtopic="updateSubtopic"
+        />
       </v-container>
     </v-form>
   </div>

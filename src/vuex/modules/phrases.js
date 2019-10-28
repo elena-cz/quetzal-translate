@@ -122,10 +122,10 @@ const getters = {
  */
 
 const actions = {
-  exampleAction(
-    { commit, dispatch, state, getters, rootState, rootGetters },
-    otherParams
-  ) {},
+  // exampleAction(
+  //   { commit, dispatch, state, getters, rootState, rootGetters },
+  //   otherParams
+  // ) {},
 
   async init() {
     try {
@@ -148,9 +148,9 @@ const actions = {
  */
 
 const mutations = {
-  exampleMutation(state, data) {
-    state.property = data;
-  },
+  // exampleMutation(state, data) {
+  //   state.property = data;
+  // },
 };
 
 export default {
