@@ -10,6 +10,7 @@
   "dependencies": {
     "core-js": "^2.6.5",
     "firebase": "^7.2.1",
+    "howler": "^2.1.2",
     "lodash.clone": "^4.5.0",
     "lodash.clonedeep": "^4.5.0",
     "moment": "^2.24.0",

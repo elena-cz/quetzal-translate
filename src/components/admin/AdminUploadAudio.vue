@@ -1,13 +1,13 @@
 <script>
 import moment from 'moment';
 import fb from '@/firebaseConfig';
-import { mapState, mapGetters, mapActions } from 'vuex';
+import AudioPlayer from '@/components/AudioPlayer.vue';
 
 export default {
   name: 'AdminUploadAudio',
 
   components: {
-    // HelloWorld,
+    AudioPlayer,
   },
 
   filters: {
@@ -242,7 +242,7 @@ export default {
 
         <!-- Play -->
         <td>
-          <!-- <AudioPlayer :playlist="[[$props[`${tag}_url`]]]" height="36" /> -->
+          <AudioPlayer :playlist="[[$props[`${tag}_url`]]]" height="36" />
         </td>
       </tr>
     </table>
