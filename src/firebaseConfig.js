@@ -21,6 +21,14 @@ firebase.initializeApp(config);
 // Firestore
 const db = firebase.firestore();
 
+db.enablePersistence({ synchronizeTabs: true })
+  .then(() => {
+    // console.log('Woohoo! Multi-Tab Persistence!');
+  })
+  .catch(error => {
+    console.log('No offline capability', error);
+  });
+
 const dbFieldValue = firebase.firestore.FieldValue;
 
 const phrasesCollection = db.collection('phrases');

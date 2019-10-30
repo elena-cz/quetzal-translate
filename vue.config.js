@@ -1,11 +1,16 @@
 module.exports = {
-  transpileDependencies: ["vuetify"],
+  transpileDependencies: ['vuetify'],
   pwa: {
-    name: "Quetzal Translate",
-    themeColor: "#00CEE6",
-    msTileColor: "#00CEE6",
-    appleMobileWebAppCapable: "yes",
-    appleMobileWebAppStatusBarStyle: "default"
+    name: 'Quetzal',
+    themeColor: '#00CEE6',
+    msTileColor: '#00CEE6',
+    appleMobileWebAppCapable: 'yes',
+    appleMobileWebAppStatusBarStyle: 'default',
+    workboxPluginMode: 'InjectManifest',
+    workboxOptions: {
+      swSrc: 'src/service-worker.js',
+      excludeChunks: ['admin'],
+    },
   },
   css: {
     loaderOptions: {
@@ -18,7 +23,7 @@ module.exports = {
         // Here we can use the newer SCSS flavor of Sass.
         // Note that there *is* a semicolon at the end of the below line
         // data: `@import "@/styles/variables.scss";`
-      }
-    }
-  }
+      },
+    },
+  },
 };
