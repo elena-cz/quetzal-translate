@@ -13,6 +13,22 @@
   overflow: scroll;
 }
 
+// TRANSITIONS
+
+.flip-list-move {
+  transition: transform 0.5s;
+  transition: opacity 0.5s;
+}
+
+.flip-list-enter-active,
+.flip-list-leave-active {
+  transition: all 0.5s;
+}
+.flip-list-enter, .flip-list-leave-to /* .list-leave-active below version 2.1.8 */ {
+  opacity: 0;
+  transform: translateX(30px);
+}
+
 // VUETIFY OVERRIDES //
 .theme--light {
   color: $black;

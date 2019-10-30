@@ -10,6 +10,8 @@
   "dependencies": {
     "core-js": "^2.6.5",
     "firebase": "^7.2.1",
+    "lodash.clone": "^4.5.0",
+    "lodash.clonedeep": "^4.5.0",
     "moment": "^2.24.0",
     "node": "^12.12.0",
     "register-service-worker": "^1.6.2",

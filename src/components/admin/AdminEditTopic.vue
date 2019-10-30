@@ -1,5 +1,7 @@
 <script>
 import moment from 'moment';
+import clonedeep from 'lodash.clonedeep';
+import draggable from 'vuedraggable';
 import fb from '@/firebaseConfig';
 import { mapState, mapGetters, mapActions } from 'vuex';
 import { sluggify } from '@/helpers/helpers';
@@ -9,6 +11,7 @@ export default {
   name: 'AdminEditTopic',
 
   components: {
+    draggable,
     AdminManageSubtopics,
   },
 
@@ -38,14 +41,26 @@ export default {
       lastUpdatedAt: null,
       createdAt: null,
       hasUnsavedChanges: false,
-      phrases: [],
+      phraseIds: [],
+      phrases: {},
+      drag: false,
     };
   },
 
   computed: {
     disabled() {
-      const { text, hasUnsavedChanges } = this;
+      const { title, hasUnsavedChanges } = this;
       return !title || !hasUnsavedChanges;
+    },
+
+    dragOptions() {
+      return {
+        animation: 200,
+        group: 'description',
+        disabled: false,
+        ghostClass: 'ghost',
+        dragClass: 'drag',
+      };
     },
   },
 
@@ -54,14 +69,12 @@ export default {
       handler() {
         this.isNewDoc = !this.savedId;
         this.setUnsavedData();
-        this.getPhrases();
       },
       immediate: true,
     },
     doc: {
       handler() {
         this.setUnsavedData();
-        this.getPhrases();
       },
     },
   },
@@ -79,8 +92,8 @@ export default {
       } = doc;
       this.id = savedId || '';
       this.title = title || '';
-      this.subtopicIds = subtopicIds || [];
-      this.subtopics = subtopics || {};
+      this.subtopicIds = subtopicIds ? [...subtopicIds] : [];
+      this.subtopics = subtopics ? clonedeep(subtopics) : {};
       this.version = version || 0;
       this.lastUpdatedAt = lastUpdatedAt
         ? moment(lastUpdatedAt).format('MMM Do YYYY, h:mm')
@@ -89,6 +102,8 @@ export default {
         ? moment(createdAt).format('MMM Do YYYY')
         : null;
       this.hasUnsavedChanges = false;
+
+      this.getPhrases();
     },
 
     setHasUnsavedChanges() {
@@ -96,21 +111,38 @@ export default {
     },
 
     async getPhrases() {
-      const { savedId } = this;
+      const { savedId, getUnsortedPhrasesIds } = this;
       try {
-        const phrases = [];
+        const phrases = {};
+        const phraseIds = [];
         const snapshot = await fb.phrasesCollection
           .where('topics', 'array-contains', savedId)
           .orderBy('text')
           .get();
         snapshot.forEach(doc => {
-          phrases.push(doc.data());
+          const { id } = doc;
+          phrases[id] = doc.data();
+          phraseIds.push(id);
         });
-        console.log(phrases);
         this.phrases = phrases;
+        getUnsortedPhrasesIds(phraseIds);
       } catch (error) {
         console.error('Error getting phrases', error);
       }
+    },
+
+    // Get phraseIds that haven't been sorted into a subtopic yet
+    getUnsortedPhrasesIds(allIds) {
+      const { subtopics } = this;
+      const sortedIds = {};
+      Object.values(subtopics).forEach(subtopic => {
+        const ids = subtopic.phraseIds || [];
+        ids.forEach(id => {
+          sortedIds[id] = true;
+        });
+      });
+      const phraseIds = allIds.filter(id => !sortedIds[id]);
+      this.phraseIds = phraseIds;
     },
 
     updateTitle(title) {
@@ -175,44 +207,153 @@ export default {
 </script>
 
 <template>
-  <div class="form-container">
-    <v-form autocomplete="off">
-      <h2 class="display-3 mb-6">{{ (savedId) ? 'Edit Topic' : 'New Topic' }}</h2>
-      <v-container>
-        <v-row class="mb-6">
-          <v-text-field
-            :value="title"
-            label="Title"
-            outlined
-            @input="updateTitle($event.target.value)"
-          ></v-text-field>
-        </v-row>
+  <div class="admin-content-grid">
+    <div class="content">
+      <v-form autocomplete="off">
+        <h2 class="display-3 mb-6">{{ (savedId) ? 'Edit Topic' : 'New Topic' }}</h2>
+        <v-container>
+          <v-row class="d-flex justify-space-between align-center mb-6">
+            <v-text-field
+              :value="title"
+              label="Title"
+              outlined
+              hide-details
+              class="mr-6 title-input"
+              @input="updateTitle($event)"
+            ></v-text-field>
+            <span v-if="!isNewDoc">
+              ID:
+              <span class="caption">{{ savedId }}</span>
+            </span>
 
-        <v-row class="mb-6">
-          <span v-if="!isNewDoc">
-            ID:
-            <span class="caption">{{ savedId }}</span>
-          </span>
-          <v-text-field
-            v-else
-            :value="id"
-            label="ID"
-            outlined
-            autocomplete="off"
-            @input="updateId($event.target.value)"
-          ></v-text-field>
-        </v-row>
-        <AdminManageSubtopics
-          :subtopic-ids="subtopicIds"
-          :subtopics="subtopics"
-          :update-subtopic-ids="updateSubtopicIds"
-          :update-subtopic="updateSubtopic"
-        />
-      </v-container>
-    </v-form>
+            <v-text-field
+              v-else
+              :value="id"
+              label="ID"
+              outlined
+              autocomplete="off"
+              hide-details
+              @input="updateId($event)"
+            ></v-text-field>
+          </v-row>
+
+          <AdminManageSubtopics
+            :subtopic-ids="subtopicIds"
+            :subtopics="subtopics"
+            :phrases="phrases"
+            :set-has-unsaved-changes="setHasUnsavedChanges"
+            :update-subtopic-ids="updateSubtopicIds"
+            :update-subtopic="updateSubtopic"
+          />
+
+          <v-row>
+            <v-col class="pa-0">
+              <p class="grey--text">Version: {{ version }}</p>
+
+              <p class="caption grey--text">
+                Updated At: {{ lastUpdatedAt }}
+                <br />
+                Created At: {{ createdAt }}
+              </p>
+            </v-col>
+          </v-row>
+
+          <v-row class="save-container justify-space-between align-center">
+            <span>
+              <v-icon
+                small
+                :color="(hasUnsavedChanges || isNewDoc) ? 'grey' : 'primary'"
+                class="mr-2"
+              >lens</v-icon>
+              {{ (hasUnsavedChanges || isNewDoc) ? 'Not Saved' : 'Saved' }}
+            </span>
+
+            <div class="save-buttons">
+              <v-btn rounded class="mr-4" @click.prevent="setUnsavedData()">Cancel</v-btn>
+              <v-btn
+                rounded
+                color="primary"
+                type="submit"
+                :disabled="disabled"
+                @click.prevent="saveToDb"
+              >Save Topic</v-btn>
+            </div>
+          </v-row>
+        </v-container>
+      </v-form>
+    </div>
+
+    <div class="right-sidebar">
+      <div class="v-subheader text-uppercase theme--light">Unsorted Phrases</div>
+
+      <draggable
+        :list="phraseIds"
+        group="phrases"
+        class="drag-container"
+        direction="vertical"
+        v-bind="dragOptions"
+        @start="drag = true"
+        @end="drag = false"
+      >
+        <transition-group type="transition" :name="!drag ? 'flip-list' : null" class="phrase-list">
+          <v-list-item
+            v-for="(id, index) in phraseIds"
+            :key="id"
+            dense
+            class="flex flex-column align-stretch py-2"
+          >
+            <span class="pl-1">{{ phrases[id].text || id }}</span>
+            <v-divider class="mt-2" />
+          </v-list-item>
+        </transition-group>
+      </draggable>
+    </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
-// @import '@/design/colors.scss';
+.admin-content-grid {
+  display: grid;
+  grid-template-columns: auto 300px;
+  grid-template-rows: auto;
+  grid-template-areas: 'content right-sidebar';
+  grid-gap: 1rem;
+  align-content: flex-start;
+  min-height: 100%;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.right-sidebar {
+  grid-area: right-sidebar;
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: calc(300px + 1rem);
+  height: 100%;
+  max-height: 100%;
+  padding: 1rem;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.content {
+  grid-area: content;
+  width: 100%;
+}
+
+.title-input {
+  max-width: 400px;
+}
+
+.phrase-list:empty {
+  display: block;
+  min-width: 100%;
+  min-height: 400px;
+  box-sizing: border-box;
+}
 </style>

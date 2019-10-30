@@ -148,6 +148,7 @@ export default {
 }
 
 .sidebar {
+  grid-area: sidebar;
   position: absolute;
   top: 0;
   left: 0;

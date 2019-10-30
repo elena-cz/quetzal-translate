@@ -133,6 +133,7 @@ export default {
         ></v-select>
 
         <v-btn
+          outlined
           color="secondary"
           height="56"
           class="ml-5"
