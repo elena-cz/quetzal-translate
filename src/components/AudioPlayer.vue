@@ -211,7 +211,7 @@ export default {
 </script>
 
 <template>
-  <v-btn text icon x-large color="primary" @click.prevent="playOrPause">
+  <v-btn text icon x-large :color="color" max-width="52" @click.prevent="playOrPause">
     <v-icon v-if="playing" key="stop" x-large class="material-icons-round">stop</v-icon>
     <v-icon v-else-if="!soundLoading" key="play" x-large class="material-icons-round">play_arrow</v-icon>
   </v-btn>

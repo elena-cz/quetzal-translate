@@ -3,6 +3,7 @@ import Vuex from 'vuex';
 
 import languages from './modules/languages';
 import phrases from './modules/phrases';
+import topics from './modules/topics';
 
 Vue.use(Vuex);
 
@@ -10,10 +11,12 @@ const store = new Vuex.Store({
   modules: {
     languages,
     phrases,
+    topics,
   },
   strict: process.env.NODE_ENV !== 'production',
 });
 
+store.dispatch('topics/init');
 store.dispatch('phrases/init');
 
 export default store;

@@ -11,22 +11,12 @@ export default {
 
 <template>
   <div class="app-container">
-    <v-app-bar app flat color="transparent">
-      <v-toolbar-title class="headline white--text">
-        <span>Quetzal</span>
-      </v-toolbar-title>
-      <!-- <v-toolbar-title class="headline text-uppercase">
-        <span>Vuetify</span>
-        <span class="font-weight-light">MATERIAL DESIGN</span>
-      </v-toolbar-title>
+    <v-app-bar app flat color="transparent" class="d-flex justify-stretch align-center">
+      <v-toolbar-title class="headline white--text app-headline">Quetzal</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn
-        text
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-      >
-        <span class="mr-2">Latest Release</span>
-      </v-btn>-->
+      <v-btn icon color="white" large>
+        <v-icon class="material-icons-round">download</v-icon>
+      </v-btn>
     </v-app-bar>
 
     <v-content>
@@ -36,4 +26,8 @@ export default {
 </template>
 
 <style lang="scss" scoped>
+.app-headline {
+  font-weight: 600 !important;
+  letter-spacing: 2px !important;
+}
 </style>
