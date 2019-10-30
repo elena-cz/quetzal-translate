@@ -49,6 +49,8 @@ export default {
       </v-tab-item>
       <v-tab-item key="lang2" class="tab-item">Spanish Content</v-tab-item>
     </v-tabs-items>
+
+    <p>Version 1</p>
     <v-layout text-center wrap></v-layout>
   </v-container>
 </template>

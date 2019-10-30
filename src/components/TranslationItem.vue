@@ -37,7 +37,10 @@ export default {
     playlist() {
       const { translation } = this;
       const { mp3_url, webm_url } = translation;
-      return [mp3_url || '', webm_url || ''];
+      const playlist = [];
+      if (webm_url) playlist.push(webm_url);
+      if (mp3_url) playlist.push(mp3_url);
+      return playlist;
     },
   },
 
