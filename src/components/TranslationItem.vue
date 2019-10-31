@@ -42,7 +42,7 @@ export default {
 
     playlist() {
       const { translation } = this;
-      const { mp3_url, webm_url } = translation;
+      const { mp3_url = '', webm_url = '' } = translation;
       const playlist = [];
       if (webm_url) playlist.push(webm_url);
       if (mp3_url) playlist.push(mp3_url);
@@ -54,7 +54,7 @@ export default {
 };
 </script>
 
-<template v-if="translation">
+<template v-if="translation.lang">
   <v-expansion-panel class="inner-panel">
     <v-expansion-panel-header hide-actions class="d-flex justify-space-between align-center">
       <span>{{ phrase.text || '' }}</span>

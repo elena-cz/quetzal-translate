@@ -1,4 +1,8 @@
-import { Howl, Howler } from 'howler';
+import { openDB, deleteDB, wrap, unwrap } from 'idb';
+import { Howler } from 'howler';
+import { Store, set, get, keys, del, clear } from 'idb-keyval';
+
+const idbStore = new Store('quetzal-audio', 'cache-details');
 
 // Check which codec is supported
 // Get all current audio files per language with given file type
@@ -19,7 +23,11 @@ import { Howl, Howler } from 'howler';
 
  */
 
-const state = {};
+const state = {
+  format: null,
+  cacheItems: {},
+  isCacheLoaded: false,
+};
 
 /*
 
@@ -28,13 +36,52 @@ const state = {};
  */
 
 const getters = {
-  // allTranslations: state, getters, rootState => {
-  //   // const { phrases } = rootstate.phrases;
-  //   // const translations = {};
-  //   // Object.keys(phrases).forEach({ translations } => {
-  //   //   Object.keys(translations).forEach(translation)
-  //   // });
-  // },
+  // Get all translation items & current urls that should be cached
+  // Webm is default because smaller filesize, with mp3 backup
+  dbItems: (state, getters, rootState) => {
+    const { format } = state;
+    const { translations } = rootState.phrases;
+    const items = {};
+    if (format) {
+      Object.keys(translations).forEach(id => {
+        const item = translations[id];
+        const { lang, webm_ref, webm_url, mp3_ref, mp3_url } = item;
+        const url = format === 'webm' ? webm_url || mp3_url : mp3_url;
+        const ref = format === 'webm' ? webm_ref || mp3_ref : mp3_ref;
+        if (url) {
+          items[id] = { id, lang, url, ref };
+        }
+      });
+    }
+    return items;
+  },
+
+  itemsToUpdateInCache: (state, getters) => {
+    const { cacheItems, isCacheLoaded } = state;
+    const { dbItems } = getters;
+    const items = {
+      toAdd: [], // Not in cache
+      toReplace: [], // Wrong version in cache
+      toDelete: [], // Translation item no longer used
+    };
+    if (isCacheLoaded) {
+      Object.keys(dbItems).forEach(id => {
+        if (cacheItems[id]) {
+          if (cacheItems[id].ref !== dbItems[id].ref) {
+            items.toReplace.push(id);
+          }
+        } else {
+          items.toAdd.push(id);
+        }
+      });
+      Object.keys(cacheItems).forEach(id => {
+        if (!dbItems[id]) {
+          items.toDelete.push(id);
+        }
+      });
+    }
+    return items;
+  },
 };
 
 /*
@@ -49,10 +96,10 @@ const actions = {
     otherParams
   ) {},
 
-  init({ dispatch }) {
-    const isWebmSupported = Howler.codecs('webm');
-    console.log('Webm supported?', isWebmSupported);
-    dispatch('getCacheKeys');
+  init({ commit, dispatch }) {
+    const format = Howler.codecs('webm') ? 'webm' : 'mp3';
+    commit('setFormat', format);
+    dispatch('getCacheDetails');
   },
 
   async getCacheKeys() {
@@ -78,6 +125,29 @@ const actions = {
     const audioCache = await window.caches.open('quetzal-audio-cache');
     // await audioCache.add(Howler.load(url));
     await audioCache.addAll(urls);
+    // const idbStore = new Store('quetzal-audio', 'cache-details');
+    console.log(idbStore);
+    await set(
+      'es-VzNQvMN7OSv9N3GN0Tgc',
+      { lang: 'es', id: 'es-VzNQvMN7OSv9N3GN0Tgc', url: urls[0] },
+      idbStore
+    );
+    const testVal = await get('es-VzNQvMN7OSv9N3GN0Tgc', idbStore);
+    console.log('testVal', testVal);
+  },
+
+  async getCacheDetails({ commit }) {
+    try {
+      const cacheKeys = await keys(idbStore);
+      const items = {};
+      for (const key of cacheKeys) {
+        const val = await get(key, idbStore);
+        items[key] = val;
+      }
+      commit('setCacheItems', items);
+    } catch (error) {
+      console.error('Error getting items from cache', error);
+    }
   },
 };
 
@@ -90,6 +160,15 @@ const actions = {
 const mutations = {
   exampleMutation(state, data) {
     state.property = data;
+  },
+
+  setFormat(state, format) {
+    state.format = format;
+  },
+
+  setCacheItems(state, cacheItems) {
+    state.cacheItems = cacheItems;
+    state.isCacheLoaded = true;
   },
 };
 

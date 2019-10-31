@@ -18,6 +18,15 @@ export default {
     ...mapState('topics', ['subtopicIds', 'subtopics']),
     ...mapState('phrases', ['phrases', 'translations']),
   },
+
+  methods: {
+    getTranslation(lang, phraseId) {
+      const { phrases = {}, translations = {} } = this;
+      const phrase = phrases[phraseId] || {};
+      const id = phrase[`${lang}Id`] || '';
+      return translations[id];
+    },
+  },
 };
 </script>
 
@@ -39,7 +48,7 @@ export default {
                   v-for="(phraseId) in subtopics[subtopicId].phraseIds"
                   :key="phraseId"
                   :phrase="phrases[phraseId]"
-                  :translation="translations[phrases[phraseId][`${lang}Id`]]"
+                  :translation="getTranslation(lang, phraseId)"
                   :lang="lang"
                   :index="index"
                 />

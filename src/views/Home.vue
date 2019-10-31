@@ -34,6 +34,8 @@ export default {
           type="audio/webm"
         />Your browser does not support the audio element.
       </audio>
+
+      <v-btn color="primary" @click="$store.dispatch('audio/getCacheDetails')">Get Cache Vals</v-btn>
     </v-content>
   </div>
 </template>
