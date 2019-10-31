@@ -1,9 +1,9 @@
 /* eslint-disable no-restricted-globals, no-underscore-dangle */
 /* global workbox */
 
-// workbox.setConfig({
-//   debug: true,
-// });
+workbox.setConfig({
+  debug: true,
+});
 
 workbox.routing.registerNavigationRoute('/index.html');
 
@@ -13,6 +13,18 @@ workbox.routing.setCatchHandler(({ event }) => {
   }
   return Response.error();
 });
+
+workbox.routing.registerRoute(
+  /^https:\/\/firebasestorage\.googleapis\.com/,
+  new workbox.strategies.CacheFirst({
+    cacheName: 'audio-cache',
+    plugins: [
+      new workbox.expiration.Plugin({
+        maxAgeSeconds: 60 * 60 * 24 * 180,
+      }),
+    ],
+  })
+);
 
 // workbox.routing.registerRoute(
 //   new RegExp('.(jpe?g|png|webp|svg)$'),

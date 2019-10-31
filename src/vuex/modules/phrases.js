@@ -8,6 +8,7 @@ import fb from '@/firebaseConfig';
 
 const state = {
   phrases: {},
+  translations: {},
 };
 
 /*
@@ -27,9 +28,11 @@ const getters = {
  */
 
 const actions = {
-  async init({ commit }) {
+  // Get phrases, then translations, and dispatch audio init
+  async init({ commit, dispatch }) {
     try {
       const phrases = {};
+      const translations = {};
       const phrasesSnapshot = await fb.phrasesCollection
         .where('topics', 'array-contains', 'dentistry')
         .get();
@@ -41,11 +44,15 @@ const actions = {
         .collectionGroup('translations')
         .get();
       translationSnapshot.forEach(doc => {
+        const { id } = doc;
         const translation = doc.data();
         const { enId, lang } = translation;
-        phrases[enId].translations[lang] = translation;
+        phrases[enId][`${lang}Id`] = id;
+        translations[id] = translation;
+        // phrases[enId].translations[lang] = translation;
       });
-      commit('setPhrases', phrases);
+      commit('setPhrases', { phrases, translations });
+      dispatch('audio/init', null, { root: true });
     } catch (error) {
       console.log('Error getting phrases: ', error);
     }
@@ -59,8 +66,9 @@ const actions = {
  */
 
 const mutations = {
-  setPhrases(state, phrases) {
+  setPhrases(state, { phrases, translations }) {
     state.phrases = phrases;
+    state.translations = translations;
   },
 };
 

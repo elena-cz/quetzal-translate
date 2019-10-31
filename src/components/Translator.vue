@@ -16,7 +16,7 @@ export default {
 
   computed: {
     ...mapState('topics', ['subtopicIds', 'subtopics']),
-    ...mapState('phrases', ['phrases']),
+    ...mapState('phrases', ['phrases', 'translations']),
   },
 };
 </script>
@@ -39,6 +39,7 @@ export default {
                   v-for="(phraseId) in subtopics[subtopicId].phraseIds"
                   :key="phraseId"
                   :phrase="phrases[phraseId]"
+                  :translation="translations[phrases[phraseId][`${lang}Id`]]"
                   :lang="lang"
                   :index="index"
                 />
@@ -47,10 +48,8 @@ export default {
           </v-expansion-panel>
         </v-expansion-panels>
       </v-tab-item>
-      <v-tab-item key="lang2" class="tab-item">Spanish Content</v-tab-item>
     </v-tabs-items>
 
-    <p>Version 1</p>
     <v-layout text-center wrap></v-layout>
   </v-container>
 </template>

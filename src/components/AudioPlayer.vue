@@ -92,6 +92,7 @@ export default {
           src: source,
           // html5: !isIOS,
           html5: false,
+          // preload: false, // Added to make cache work
           onload: () => {
             this.endLoadingTimer();
           },
@@ -130,6 +131,7 @@ export default {
         // sound.pause();
         reset();
       } else {
+        // sound.load(); // Added to make cache work
         sound.play();
         this.startLoadingTimer();
       }

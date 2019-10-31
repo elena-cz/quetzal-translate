@@ -14,6 +14,12 @@ export default {
       type: Object,
       required: true,
     },
+    translation: {
+      type: Object,
+      default() {
+        return {};
+      },
+    },
     lang: {
       type: String,
       required: true,
@@ -29,10 +35,10 @@ export default {
   },
 
   computed: {
-    translation() {
-      const { phrase, lang } = this;
-      return phrase.translations[lang] || {};
-    },
+    // translation() {
+    //   const { phrase, lang } = this;
+    //   return phrase.translations[lang] || {};
+    // },
 
     playlist() {
       const { translation } = this;
@@ -44,16 +50,11 @@ export default {
     },
   },
 
-  methods: {
-    // ...mapActions('module', [
-    //   'foo',
-    // ]),
-    // method() {},
-  },
+  methods: {},
 };
 </script>
 
-<template>
+<template v-if="translation">
   <v-expansion-panel class="inner-panel">
     <v-expansion-panel-header hide-actions class="d-flex justify-space-between align-center">
       <span>{{ phrase.text || '' }}</span>
