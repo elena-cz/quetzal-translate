@@ -103,8 +103,25 @@
   }
 }
 
+// Buttons
+
+.v-btn__content {
+  letter-spacing: 1px;
+}
+
 // Chips
 
 .v-chip--select {
   background-color: var(--v-primary-lighten5) !important;
+}
+
+// Badge
+
+.small-badge {
+  .v-badge__badge {
+    width: 14px;
+    min-width: 14px;
+    height: 14px;
+    min-height: 14px;
+  }
 }

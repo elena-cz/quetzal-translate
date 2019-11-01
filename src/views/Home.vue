@@ -1,4 +1,5 @@
 <script>
+import { mapState, mapGetters, mapActions } from 'vuex';
 import Translator from '../components/Translator';
 
 export default {
@@ -6,9 +7,19 @@ export default {
     Translator,
   },
 
+  computed: {
+    ...mapGetters('audio', [
+      'showDownloadNotification',
+      'downloadTooltip',
+      'userCacheIsUpToDate',
+    ]),
+
+    ...mapState('sw', ['updateNotification']),
+  },
+
   methods: {
     addAudioToCache() {
-      this.$store.dispatch('audio/addAudioToCache');
+      this.$store.dispatch('audio/updateAudioCache');
     },
   },
 };
@@ -20,22 +31,29 @@ export default {
     <v-app-bar app flat color="transparent" class="d-flex justify-stretch align-center">
       <v-toolbar-title class="headline white--text app-headline">Quetzal</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn icon color="white" large @click.prevent="addAudioToCache">
-        <v-icon class="material-icons-round">download</v-icon>
-      </v-btn>
+      <v-tooltip bottom>
+        <template v-slot:activator="{ on }">
+          <v-btn icon color="white" large v-on="on" @click.prevent="addAudioToCache">
+            <v-badge :value="showDownloadNotification" color="accent" overlap class="small-badge">
+              <template v-slot:badge>
+                <span></span>
+              </template>
+              <v-icon v-if="userCacheIsUpToDate" class="material-icons-round" large>check</v-icon>
+              <v-icon v-else class="material-icons-round" large>download</v-icon>
+            </v-badge>
+          </v-btn>
+        </template>
+        <span>{{ downloadTooltip }}</span>
+      </v-tooltip>
     </v-app-bar>
 
     <v-content>
       <Translator />
 
-      <audio controls>
-        <source
-          src="https://firebasestorage.googleapis.com/v0/b/quetzal-translate.appspot.com/o/es-VzNQvMN7OSv9N3GN0Tgc%2Fes-VzNQvMN7OSv9N3GN0Tgc-201910301337.webm?alt=media&token=9b3295e2-3329-44fd-adce-da246faf1018"
-          type="audio/webm"
-        />Your browser does not support the audio element.
-      </audio>
-
-      <v-btn color="primary" @click="$store.dispatch('audio/getCacheDetails')">Get Cache Vals</v-btn>
+      <v-snackbar :value="updateNotification.text" :timeout="0">
+        {{ updateNotification.text }}
+        <v-btn color="#b1ffff" text @click="updateNotification.handler">Refresh</v-btn>
+      </v-snackbar>
     </v-content>
   </div>
 </template>

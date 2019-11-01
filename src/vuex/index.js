@@ -4,6 +4,7 @@ import Vuex from 'vuex';
 import audio from './modules/audio';
 import languages from './modules/languages';
 import phrases from './modules/phrases';
+import sw from './modules/sw';
 import topics from './modules/topics';
 
 Vue.use(Vuex);
@@ -13,6 +14,7 @@ const store = new Vuex.Store({
     audio,
     languages,
     phrases,
+    sw,
     topics,
   },
   strict: process.env.NODE_ENV !== 'production',

@@ -1,21 +1,12 @@
-import { openDB, deleteDB, wrap, unwrap } from 'idb';
 import { Howler } from 'howler';
 import { Store, set, get, keys, del, clear } from 'idb-keyval';
 
 const idbStore = new Store('quetzal-audio', 'cache-details');
 
-// Check which codec is supported
-// Get all current audio files per language with given file type
-// Get the keys for all files in the cache
-// See which files need to be added
-// See which files should be deleted
-// Download all files for language not in cache already
-// Update IndexDB for each file
-//  Show download status?
-// Option to clear cache for a language
-
-// IndexDB
-// 'translationId': { lang, url}
+// TO DO
+// Clear downloads
+// Split by language
+// Add downloading status
 
 /*
 
@@ -56,9 +47,11 @@ const getters = {
     return items;
   },
 
+  cacheIds: state => Object.keys(state.cacheItems),
+
   itemsToUpdateInCache: (state, getters) => {
     const { cacheItems, isCacheLoaded } = state;
-    const { dbItems } = getters;
+    const { dbItems, cacheIds } = getters;
     const items = {
       toAdd: [], // Not in cache
       toReplace: [], // Wrong version in cache
@@ -74,13 +67,42 @@ const getters = {
           items.toAdd.push(id);
         }
       });
-      Object.keys(cacheItems).forEach(id => {
+      cacheIds.forEach(id => {
         if (!dbItems[id]) {
           items.toDelete.push(id);
         }
       });
     }
     return items;
+  },
+
+  userHasDownloadedBefore: (state, getters) => getters.cacheIds.length > 0,
+
+  userHasItemsToUpdate: (state, getters) => {
+    const { itemsToUpdateInCache } = getters;
+    const hasItemsToAdd = itemsToUpdateInCache.toAdd.length > 0;
+    const hasItemsToReplace = itemsToUpdateInCache.toReplace.length > 0;
+    return hasItemsToAdd || hasItemsToReplace;
+  },
+
+  userCacheIsUpToDate: (state, getters) => {
+    const { userHasDownloadedBefore, userHasItemsToUpdate } = getters;
+    return userHasDownloadedBefore && !userHasItemsToUpdate;
+  },
+
+  showDownloadNotification: (state, getters) => {
+    const { userHasDownloadedBefore, userHasItemsToUpdate } = getters;
+    return userHasDownloadedBefore && userHasItemsToUpdate;
+  },
+
+  downloadTooltip: (state, getters) => {
+    const { userCacheIsUpToDate, showDownloadNotification } = getters;
+    if (showDownloadNotification) {
+      return 'New Audio To Download';
+    } else if (userCacheIsUpToDate) {
+      return 'Audio Downloaded';
+    }
+    return 'Download Audio for Offline Translations';
   },
 };
 
@@ -91,58 +113,76 @@ const getters = {
  */
 
 const actions = {
-  exampleAction(
-    { commit, dispatch, state, getters, rootState, rootGetters },
-    otherParams
-  ) {},
-
   init({ commit, dispatch }) {
     const format = Howler.codecs('webm') ? 'webm' : 'mp3';
     commit('setFormat', format);
     dispatch('getCacheDetails');
   },
 
-  async getCacheKeys() {
-    const audioCache = await window.caches.open('quetzal-audio-cache');
-    const keys = await audioCache.keys();
-    console.log('cache keys', keys);
-    // keys.forEach((request, index, array) => {
-    //   console.log('request', request, 'index', index, 'array', array);
-    // });
-    const url =
-      'https://firebasestorage.googleapis.com/v0/b/quetzal-translate.appspot.com/o/es-VzNQvMN7OSv9N3GN0Tgc%2Fes-VzNQvMN7OSv9N3GN0Tgc-201910301337.webm?alt=media&token=9b3295e2-3329-44fd-adce-da246faf1018';
-    const matchingKey = await audioCache.match(url);
-    console.log('matchingKey', matchingKey);
+  async updateAudioCache({ dispatch, state, getters }) {
+    const { cacheItems } = state;
+    const { dbItems, itemsToUpdateInCache } = getters;
+
+    const idsToReplace = itemsToUpdateInCache.toReplace;
+    const idsToAdd = [...itemsToUpdateInCache.toAdd, ...idsToReplace];
+    const idsToDelete = [...itemsToUpdateInCache.toDelete];
+
+    const urlsToAdd = idsToAdd.map(id => dbItems[id].url);
+    const urlsToDelete = [...idsToDelete, ...idsToReplace].map(id => {
+      return cacheItems[id].url;
+    });
+
+    await dispatch('addToCacheAndIdb', { ids: idsToAdd, urls: urlsToAdd });
+    await dispatch('deleteFromCache', urlsToDelete);
+    await dispatch('deleteFromIdb', idsToDelete);
+    dispatch('getCacheDetails');
   },
 
-  async addAudioToCache() {
-    const urls = [
-      'https://firebasestorage.googleapis.com/v0/b/quetzal-translate.appspot.com/o/es-VzNQvMN7OSv9N3GN0Tgc%2Fes-VzNQvMN7OSv9N3GN0Tgc-201910301337.webm?alt=media&token=9b3295e2-3329-44fd-adce-da246faf1018',
-    ];
-    const url =
-      'https://firebasestorage.googleapis.com/v0/b/quetzal-translate.appspot.com/o/es-xfbDNRnWQ3AO6nH5f76v%2Fes-xfbDNRnWQ3AO6nH5f76v-201910301343.webm?alt=media&token=8899e760-c2a5-4b56-8b2d-28d45881e471';
-    console.log('adding cache');
-    const audioCache = await window.caches.open('quetzal-audio-cache');
-    // await audioCache.add(Howler.load(url));
-    await audioCache.addAll(urls);
-    // const idbStore = new Store('quetzal-audio', 'cache-details');
-    console.log(idbStore);
-    await set(
-      'es-VzNQvMN7OSv9N3GN0Tgc',
-      { lang: 'es', id: 'es-VzNQvMN7OSv9N3GN0Tgc', url: urls[0] },
-      idbStore
-    );
-    const testVal = await get('es-VzNQvMN7OSv9N3GN0Tgc', idbStore);
-    console.log('testVal', testVal);
+  async addToCacheAndIdb({ getters }, { ids, urls }) {
+    if (!ids.length) return;
+    const { dbItems } = getters;
+    try {
+      const audioCache = await window.caches.open('quetzal-audio-cache');
+      await audioCache.addAll(urls);
+      for (const id of ids) {
+        const data = JSON.stringify(dbItems[id]);
+        await set(id, data, idbStore);
+      }
+    } catch (error) {
+      console.error('Error adding audio to cache', error);
+    }
+  },
+
+  async deleteFromCache(context, urls) {
+    if (!urls.length) return;
+    try {
+      const audioCache = await window.caches.open('quetzal-audio-cache');
+      for (const url of urls) {
+        await audioCache.delete(url);
+      }
+    } catch (error) {
+      console.error('Error deleting audio from cache', error);
+    }
+  },
+
+  async deleteFromIdb(context, ids) {
+    if (!ids.length) return;
+    for (const id of ids) {
+      await del(id, idbStore);
+    }
   },
 
   async getCacheDetails({ commit }) {
     try {
-      const cacheKeys = await keys(idbStore);
       const items = {};
-      for (const key of cacheKeys) {
-        const val = await get(key, idbStore);
-        items[key] = val;
+      const audioCache = await window.caches.open('quetzal-audio-cache');
+      const cacheKeys = await audioCache.keys(); // Check that cache wasn't cleared
+      if (cacheKeys.length) {
+        const idbKeys = await keys(idbStore);
+        for (const key of idbKeys) {
+          const val = await get(key, idbStore);
+          items[key] = JSON.parse(val);
+        }
       }
       commit('setCacheItems', items);
     } catch (error) {
@@ -158,10 +198,6 @@ const actions = {
  */
 
 const mutations = {
-  exampleMutation(state, data) {
-    state.property = data;
-  },
-
   setFormat(state, format) {
     state.format = format;
   },
