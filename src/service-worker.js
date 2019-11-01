@@ -1,9 +1,9 @@
 /* eslint-disable no-restricted-globals, no-underscore-dangle */
 /* global workbox */
 
-workbox.setConfig({
-  debug: true,
-});
+// workbox.setConfig({
+//   debug: true,
+// });
 
 workbox.routing.registerNavigationRoute('/index.html');
 
