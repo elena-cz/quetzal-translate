@@ -28,6 +28,15 @@ export default {
       return this.page;
     },
 
+    docIds() {
+      const { docs, collection } = this;
+      const docIds = Object.keys(docs);
+      if (collection === 'phrases') {
+        return docIds.sort((a, b) => (docs[a].text > docs[b].text ? 1 : -1));
+      }
+      return docIds;
+    },
+
     currentDoc() {
       const { currentId, docs } = this;
       return currentId ? docs[currentId] || {} : {};
@@ -105,9 +114,12 @@ export default {
           <v-list shaped dense>
             <v-subheader class="text-uppercase">{{ collection }}</v-subheader>
             <v-list-item-group v-model="currentIndex" color="primary">
-              <v-list-item v-for="doc in docs" :key="doc.id" @click="setCurrentId(doc.id)">
+              <v-list-item v-for="id in docIds" :key="id" @click="setCurrentId(id)">
                 <v-list-item-content>
-                  <v-list-item-title v-text="page === 'phrases' ? doc.text : doc.id"></v-list-item-title>
+                  <v-list-item-title
+                    v-text="page === 'phrases' ? docs[id].text : id"
+                    :class="(docs[id].visible) ? '' : 'grey--text'"
+                  ></v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
             </v-list-item-group>
@@ -160,7 +172,7 @@ export default {
   max-height: 100%;
   padding: 1rem;
   box-sizing: border-box;
-  overflow: hidden;
+  overflow: scroll;
 }
 
 .main {

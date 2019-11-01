@@ -78,7 +78,7 @@ export default {
       this.id = savedId || '';
       this.text = text || '';
       this.topics = topics || ['dentistry']; // Default to dentistry for now
-      this.visible = visible || true;
+      this.visible = !!visible;
       this.langs = langs || [];
       this.version = version || 0;
       this.lastUpdatedAt = lastUpdatedAt
@@ -184,7 +184,7 @@ export default {
             label="Visible"
             color="primary"
             class="pl-1"
-            @input="setHasUnsavedChanges"
+            @change="setHasUnsavedChanges"
           ></v-switch>
         </v-row>
 

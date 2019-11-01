@@ -35,11 +35,6 @@ export default {
   },
 
   computed: {
-    // translation() {
-    //   const { phrase, lang } = this;
-    //   return phrase.translations[lang] || {};
-    // },
-
     playlist() {
       const { translation } = this;
       const { mp3_url = '', webm_url = '' } = translation;
@@ -48,14 +43,19 @@ export default {
       if (mp3_url) playlist.push(mp3_url);
       return playlist;
     },
+
+    showTranslation() {
+      const { playlist, translation, phrase } = this;
+      return phrase.visible && (translation.text || playlist.length > 0);
+    },
   },
 
   methods: {},
 };
 </script>
 
-<template v-if="translation.lang">
-  <v-expansion-panel class="inner-panel">
+<template>
+  <v-expansion-panel v-if="showTranslation" class="inner-panel">
     <v-expansion-panel-header hide-actions class="d-flex justify-space-between align-center">
       <span>{{ phrase.text || '' }}</span>
       <AudioPlayer :playlist="[playlist]" :color="index === 0 ? 'primary' : 'secondary'" />
