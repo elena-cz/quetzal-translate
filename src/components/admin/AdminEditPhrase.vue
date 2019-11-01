@@ -77,7 +77,7 @@ export default {
       } = doc;
       this.id = savedId || '';
       this.text = text || '';
-      this.topics = topics || [];
+      this.topics = topics || ['dentistry']; // Default to dentistry for now
       this.visible = visible || true;
       this.langs = langs || [];
       this.version = version || 0;
@@ -174,6 +174,7 @@ export default {
             multiple
             outlined
             color="primary"
+            @input="setHasUnsavedChanges"
           ></v-select>
         </v-row>
 
