@@ -59,6 +59,7 @@ export default {
       webm_task: null,
       webm_progress: 0,
       webm_error: '',
+      formatError: '',
     };
   },
 
@@ -79,25 +80,30 @@ export default {
 
   methods: {
     // Get file from input for uploading
-    getFileFromInput(files, tag) {
-      const { db, id, updateFileData, uploadFile } = this;
-      // Add example file from input
-      const file = files[0];
-      const filename = file.name;
-      const format = tag;
-      const fileFormat = file.type.split('/')[1]; // ex: "audio/mp3"
-      if (fileFormat !== format) {
-        this[`${tag}_error`] = `Incorrect format, should be ${format}`;
-        return;
+    getFilesFromInput(files) {
+      const { db, id, updateFileData, uploadFile, tags } = this;
+      this.formatError = '';
+
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const filename = file.name;
+        const fileFormat = file.type.split('/')[1]; // ex: "audio/mp3" ==> "mp3"
+        if (tags.indexOf(fileFormat) < 0) {
+          this.formatError = `Incorrect format, should be one of ${
+            tags[0]
+          } or ${tags[1]}`;
+          return;
+        }
+        const tag = fileFormat;
+
+        this[`${tag}_error`] = '';
+        this[`${tag}_filename`] = filename;
+        updateFileData({ tag, ref: '', url: '' });
+
+        const timestamp = moment().format('YYYYMMDDHHmm');
+        const ref = `${id}/${id}-${timestamp}.${fileFormat}`;
+        uploadFile(tag, file, filename, ref);
       }
-
-      this[`${tag}_error`] = '';
-      this[`${tag}_filename`] = filename;
-      updateFileData({ tag, ref: '', url: '' });
-
-      const timestamp = moment().format('YYYYMMDDHHmm');
-      const ref = `${id}/${id}-${timestamp}.${format}`;
-      uploadFile(tag, file, filename, ref);
     },
 
     uploadFile(tag, file, filename, ref) {
@@ -185,9 +191,10 @@ export default {
           <input
             ref="fileUpload"
             type="file"
+            multiple
             class="fileButton"
             value="upload"
-            @input="getFileFromInput($event.target.files, tag)"
+            @input="getFilesFromInput($event.target.files)"
           />
           <v-btn
             v-if="$data[`${tag}_progress`]"
@@ -248,9 +255,9 @@ export default {
     </table>
 
     <!-- Errors -->
-    <p v-if="mp3_error" class="red-text">{{ mp3_error }}</p>
-
-    <p v-if="webm_error" class="red-text">{{ webm_error }}</p>
+    <p v-if="formatError" class="red--text">{{ formatError }}</p>
+    <p v-if="mp3_error" class="red--text">{{ mp3_error }}</p>
+    <p v-if="webm_error" class="red--text">{{ webm_error }}</p>
   </div>
 </template>
 

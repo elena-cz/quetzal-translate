@@ -7,7 +7,7 @@
 const state = {
   langNames: {
     es: 'Spanish',
-    kek: `Q'echi'`,
+    kek: `Q'eqchi'`,
   },
 };
 
