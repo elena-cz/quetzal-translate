@@ -78,7 +78,7 @@ export default {
       this.id = savedId || '';
       this.text = text || '';
       this.topics = topics || ['dentistry']; // Default to dentistry for now
-      this.visible = !!visible;
+      this.visible = visible === false ? false : true;
       this.langs = langs || [];
       this.version = version || 0;
       this.lastUpdatedAt = lastUpdatedAt
