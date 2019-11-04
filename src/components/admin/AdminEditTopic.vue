@@ -338,7 +338,7 @@ export default {
   max-height: 100%;
   padding: 1rem;
   box-sizing: border-box;
-  overflow: hidden;
+  overflow: scroll;
 }
 
 .content {
