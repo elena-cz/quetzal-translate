@@ -218,6 +218,7 @@ export default {
     icon
     x-large
     :color="color"
+    min-width="52"
     max-width="52"
     :disabled="disabled"
     @click.prevent="playOrPause"
