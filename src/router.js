@@ -1,10 +1,11 @@
 import Vue from 'vue';
+import fb from '@/firebaseConfig';
 import Router from 'vue-router';
 import Home from './views/Home.vue';
 
 Vue.use(Router);
 
-export default new Router({
+const router = new Router({
   mode: 'history',
   routes: [
     {
@@ -12,6 +13,12 @@ export default new Router({
       name: 'home',
       component: Home,
       alias: '/index.html',
+    },
+    {
+      path: '/auth',
+      name: 'Auth',
+      component: () =>
+        import(/* webpackChunkName: "auth" */ './views/Auth-View.vue'),
     },
     {
       path: '/about',
@@ -37,3 +44,34 @@ export default new Router({
     return { x: 0, y: 0 };
   },
 });
+
+// router.beforeEach((to, from, next) => {
+//   const requiresAuth = to.matched.some(route => route.meta.requiresAuth);
+//   const isAdminView = to.matched.some(route => route.meta.isAdminView);
+//   const { currentUser } = fb.auth;
+
+//   if (requiresAuth && !currentUser) {
+//     next({ name: 'Auth', query: { redirect: to.path } });
+//   } else if (isAdminView) {
+//     const { uid } = currentUser;
+//     fb.usersCollection.doc(uid).get()
+//       .then((doc) => {
+//         const role = doc.data().role || 'viewer';
+//         if (role === 'admin') {
+//           next();
+//         } else {
+//           next('/');
+//         }
+//       })
+//       .catch((error) => {
+//         next('/');
+//         console.log('Error getting user role', error);
+//       });
+//   } else if (requiresAuth && currentUser) {
+//     next();
+//   } else {
+//     next();
+//   }
+// });
+
+export default router;

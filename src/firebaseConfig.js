@@ -1,9 +1,10 @@
 import * as firebase from 'firebase/app';
-// import 'firebase/auth';
+import 'firebase/auth';
 import 'firebase/firestore';
-// import 'firebase/functions';
+import 'firebase/functions';
 // import 'firebase/performance';
 import 'firebase/storage';
+import * as firebaseui from 'firebaseui';
 
 // Firebase init
 const config = {
@@ -17,6 +18,16 @@ const config = {
   measurementId: process.env.VUE_APP_MEASUREMENTID,
 };
 firebase.initializeApp(config);
+
+// Firebase Auth
+const auth = firebase.auth();
+const { currentUser } = auth;
+const authUi = new firebaseui.auth.AuthUI(auth);
+
+const authValues = {
+  googleAuth: firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+  credentialHelper: firebaseui.auth.CredentialHelper.NONE,
+};
 
 // Firestore
 const db = firebase.firestore();
@@ -39,6 +50,10 @@ const storage = firebase.storage();
 
 // Export
 const fb = {
+  auth,
+  authUi,
+  authValues,
+  currentUser,
   db,
   dbFieldValue,
   phrasesCollection,
