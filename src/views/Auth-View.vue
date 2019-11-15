@@ -38,7 +38,7 @@ export default {
           // User successfully signed in.
           // Return type determines whether we continue the redirect automatically
           // or whether we leave that to developer to handle.
-          return true;
+          return false;
         },
         uiShown: function() {
           // The widget is rendered.
@@ -47,7 +47,7 @@ export default {
         },
       },
       // Will use popup for IDP Providers sign-in flow instead of the default, redirect.
-      signInFlow: 'popup',
+      signInFlow: 'redirect',
       // signInSuccessUrl: '<url-to-redirect-to-on-success>',
       signInOptions: [
         // Leave the lines as is for the providers you want to offer your users.
@@ -63,8 +63,7 @@ export default {
       // Privacy policy url.
       // privacyPolicyUrl: '<your-privacy-policy-url>',
     };
-
-    // ui.start('#firebaseui-auth-container', uiConfig);
+    fb.authUi.start('#firebaseui-auth-container', authUiConfig);
   },
 
   methods: {
@@ -77,9 +76,15 @@ export default {
 </script>
 
 <template>
-  <div>
-    <div id="firebaseui-auth-container"></div>
-    <div id="loader">Loading...</div>
+  <div class="app-container">
+    <v-app-bar app flat color="transparent">
+      <v-toolbar-title class="headline white--text">Quetzal</v-toolbar-title>
+    </v-app-bar>
+
+    <v-content>
+      <div id="firebaseui-auth-container"></div>
+      <div id="loader">Loading...</div>
+    </v-content>
   </div>
 </template>
 

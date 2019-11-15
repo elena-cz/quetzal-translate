@@ -10,6 +10,8 @@ module.exports = {
     workboxOptions: {
       swSrc: 'src/service-worker.js',
       excludeChunks: ['admin'],
+      navigateFallbackBlacklist: [/^\/_/, /admin/],
+      // navigateFallbackWhitelist: [/^(?!\/__).*/],
     },
   },
   css: {
