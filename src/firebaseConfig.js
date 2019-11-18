@@ -21,7 +21,9 @@ firebase.initializeApp(config);
 
 // Firebase Auth
 const auth = firebase.auth();
+// const { auth } = firebase;
 const { currentUser } = auth;
+// const { currentUser } = firebase.auth();
 const authUi = new firebaseui.auth.AuthUI(auth);
 
 const authValues = {
@@ -44,6 +46,7 @@ const dbFieldValue = firebase.firestore.FieldValue;
 
 const phrasesCollection = db.collection('phrases');
 const topicsCollection = db.collection('topics');
+const usersCollection = db.collection('users');
 
 // Storage
 const storage = firebase.storage();
@@ -58,6 +61,7 @@ const fb = {
   dbFieldValue,
   phrasesCollection,
   topicsCollection,
+  usersCollection,
   storage,
 };
 

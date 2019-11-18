@@ -10,13 +10,6 @@ export default {
     // HelloWorld,
   },
 
-  props: {
-    // thing: {
-    //   type: Array,
-    //   required: true,
-    // },
-  },
-
   data() {
     return {};
   },
@@ -47,8 +40,8 @@ export default {
         },
       },
       // Will use popup for IDP Providers sign-in flow instead of the default, redirect.
-      signInFlow: 'redirect',
-      // signInSuccessUrl: '<url-to-redirect-to-on-success>',
+      signInFlow: 'popup',
+      // signInSuccessUrl: '/admin',
       signInOptions: [
         // Leave the lines as is for the providers you want to offer your users.
         fb.authValues.googleAuth,
@@ -67,10 +60,11 @@ export default {
   },
 
   methods: {
-    // ...mapActions('module', [
-    //   'foo',
-    // ]),
-    // method() {},
+    signOut() {
+      fb.auth.signOut();
+      window.location.reload();
+      console.log('Signed out');
+    },
   },
 };
 </script>
@@ -82,8 +76,12 @@ export default {
     </v-app-bar>
 
     <v-content>
-      <div id="firebaseui-auth-container"></div>
-      <div id="loader">Loading...</div>
+      <v-container class="d-flex flex-column align-center">
+        <div id="firebaseui-auth-container"></div>
+        <div id="loader">Loading...</div>
+
+        <v-btn outlined color="primary" class="mt-6" @click.prevent="signOut">Sign Out</v-btn>
+      </v-container>
     </v-content>
   </div>
 </template>

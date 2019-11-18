@@ -45,33 +45,42 @@ const router = new Router({
   },
 });
 
-// router.beforeEach((to, from, next) => {
-//   const requiresAuth = to.matched.some(route => route.meta.requiresAuth);
-//   const isAdminView = to.matched.some(route => route.meta.isAdminView);
-//   const { currentUser } = fb.auth;
+router.beforeEach((to, from, next) => {
+  const requiresAuth = to.matched.some(route => route.meta.requiresAuth);
+  const isAdminView = to.matched.some(route => route.meta.isAdminView);
+  // console.log('auth', fb.auth);
+  const { currentUser } = fb.auth;
+  // const { currentUser } = fb.auth();
+  // console.log('auth currentUser', fb.auth.currentUser);
+  console.log('currentUser', currentUser);
 
-//   if (requiresAuth && !currentUser) {
-//     next({ name: 'Auth', query: { redirect: to.path } });
-//   } else if (isAdminView) {
-//     const { uid } = currentUser;
-//     fb.usersCollection.doc(uid).get()
-//       .then((doc) => {
-//         const role = doc.data().role || 'viewer';
-//         if (role === 'admin') {
-//           next();
-//         } else {
-//           next('/');
-//         }
-//       })
-//       .catch((error) => {
-//         next('/');
-//         console.log('Error getting user role', error);
-//       });
-//   } else if (requiresAuth && currentUser) {
-//     next();
-//   } else {
-//     next();
-//   }
-// });
+  if (requiresAuth && !currentUser) {
+    next({ name: 'Auth', query: { redirect: to.path } });
+  } else if (isAdminView) {
+    const { uid } = currentUser;
+    console.log('uid', uid);
+    fb.usersCollection
+      .doc(uid)
+      .get()
+      .then(doc => {
+        console.log(doc);
+        const role = doc.data().role || 'viewer';
+        console.log('role', role);
+        if (role === 'admin') {
+          next();
+        } else {
+          next('/');
+        }
+      })
+      .catch(error => {
+        next('/');
+        console.log('Error getting user role', error);
+      });
+  } else if (requiresAuth && currentUser) {
+    next();
+  } else {
+    next();
+  }
+});
 
 export default router;
