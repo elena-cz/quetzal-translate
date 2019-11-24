@@ -40,7 +40,8 @@ export default {
         },
       },
       // Will use popup for IDP Providers sign-in flow instead of the default, redirect.
-      signInFlow: 'popup',
+      signInFlow: 'redirect',
+      // signInFlow: 'popup',
       // signInSuccessUrl: '/admin',
       signInOptions: [
         // Leave the lines as is for the providers you want to offer your users.

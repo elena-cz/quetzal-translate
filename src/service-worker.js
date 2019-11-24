@@ -5,7 +5,9 @@
 //   debug: true,
 // });
 
-workbox.routing.registerNavigationRoute('/index.html');
+workbox.routing.registerNavigationRoute('/index.html', {
+  blacklist: [/^\/_/, /^\/__/],
+});
 
 workbox.routing.setCatchHandler(({ event }) => {
   if (event.request.mode === 'navigate') {
