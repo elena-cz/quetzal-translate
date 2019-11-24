@@ -28,7 +28,6 @@ const actions = {
   init({ commit }) {
     fb.auth.onAuthStateChanged(function(user) {
       if (user) {
-        console.log('user signed in', user);
         // User is signed in.
       } else {
         // No user is signed in.
