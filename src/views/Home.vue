@@ -1,9 +1,11 @@
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex';
-import Translator from '../components/Translator';
+import Layout from '@/components/Layout';
+import Translator from '@/components/Translator';
 
 export default {
   components: {
+    Layout,
     Translator,
   },
 
@@ -27,10 +29,8 @@ export default {
 
 
 <template>
-  <div class="app-container">
-    <v-app-bar app flat color="transparent" class="d-flex justify-stretch align-center">
-      <v-toolbar-title class="headline white--text app-headline">Quetzal</v-toolbar-title>
-      <v-spacer></v-spacer>
+  <Layout page-title="Dentistry">
+    <template v-slot:right-icons>
       <v-tooltip bottom>
         <template v-slot:activator="{ on }">
           <v-btn icon color="white" large v-on="on" @click.prevent="addAudioToCache">
@@ -45,22 +45,18 @@ export default {
         </template>
         <span>{{ downloadTooltip }}</span>
       </v-tooltip>
-    </v-app-bar>
+    </template>
 
-    <v-content>
+    <template v-slot:main-content>
       <Translator />
+    </template>
 
-      <v-snackbar :value="updateNotification.text" :timeout="0">
-        {{ updateNotification.text }}
-        <v-btn color="#b1ffff" text @click="updateNotification.handler">Refresh</v-btn>
-      </v-snackbar>
-    </v-content>
-  </div>
+    <v-snackbar :value="updateNotification.text" :timeout="0">
+      {{ updateNotification.text }}
+      <v-btn color="#b1ffff" text @click="updateNotification.handler">Refresh</v-btn>
+    </v-snackbar>
+  </Layout>
 </template>
 
 <style lang="scss" scoped>
-.app-headline {
-  font-weight: 600 !important;
-  letter-spacing: 2px !important;
-}
 </style>

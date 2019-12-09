@@ -1,39 +1,47 @@
 <script>
-// import { mapState, mapGetters, mapActions } from 'vuex';
 import NavMenu from '@/components/NavMenu.vue';
+import NavMenuIcon from '@/components/NavMenuIcon.vue';
 
 export default {
   name: 'Layout',
 
   components: {
     NavMenu,
+    NavMenuIcon,
   },
 
   props: {
-    navType: {
-      type: String,
-      default: 'menu',
-    },
-    defaultTitle: {
-      type: String,
-      default: '',
-    },
-    openTitle: {
+    // navType: {
+    //   type: String,
+    //   default: 'menu',
+    // },
+    pageTitle: {
       type: String,
       default: '',
     },
+    // openTitle: {
+    //   type: String,
+    //   default: '',
+    // },
   },
 
   data() {
     return {
       isBackLayerActive: false,
       usingCloseTransition: false,
+      showMenu: false,
       openHeight: 0,
-      defaultHeight: 60,
+      defaultHeight: 56,
+      appTitle: 'Quetzal',
     };
   },
 
   computed: {
+    title() {
+      const { pageTitle, appTitle, isBackLayerActive, showMenu } = this;
+      return isBackLayerActive && showMenu ? appTitle : pageTitle;
+    },
+
     frontTranslateStyle() {
       const { openHeight, defaultHeight } = this;
       return {
@@ -49,27 +57,25 @@ export default {
   },
 
   created() {
-    const { $root, openBackLayer, closeBackLayer } = this;
-    // $children.$on('openBackLayer', openBackLayer);
+    const { $root, openBackLayer, closeBackLayer, toggleBackLayer } = this;
+    $root.$on('openBackLayer', openBackLayer);
     $root.$on('closeBackLayer', closeBackLayer);
+    $root.$on('toggleBackLayer', toggleBackLayer);
   },
 
   methods: {
-    toggleBackLayer() {
+    toggleBackLayer(type = '') {
+      this.showMenu = type === 'menu';
       this.isBackLayerActive = !this.isBackLayerActive;
     },
 
-    openBackLayer() {
+    openBackLayer(type = '') {
+      this.showMenu = type === 'menu';
       this.isBackLayerActive = true;
     },
 
     closeBackLayer() {
-      console.log('close back layer');
       this.isBackLayerActive = false;
-    },
-
-    testButton() {
-      console.log('clicked test button - stop');
     },
 
     onBackLayerContentEnter() {
@@ -91,15 +97,25 @@ export default {
 
 <template>
   <div class="app-container">
-    <div class="back-layer pa-4">
-      <h4 @click="openBackLayer">Quetzal</h4>
+    <div class="back-layer">
+      <v-app-bar flat dark color="transparent">
+        <NavMenuIcon :is-back-layer-active="isBackLayerActive" />
+
+        <v-toolbar-title class="back-layer-title">{{ title }}</v-toolbar-title>
+
+        <v-spacer></v-spacer>
+
+        <slot name="right-icons" />
+      </v-app-bar>
+
       <transition
         name="fade"
         v-on:enter="onBackLayerContentEnter"
         v-on:leave="onBackLayerContentLeave"
       >
-        <div v-if="isBackLayerActive" ref="backLayerContent" class="back-layer-content">
-          <NavMenu />
+        <div v-if="isBackLayerActive" ref="backLayerContent" class="back-layer-content pa-3 pt-0">
+          <NavMenu v-if="showMenu" />
+          <slot name="back-layer-content" />
         </div>
       </transition>
     </div>
@@ -119,10 +135,12 @@ export default {
 </template>
 
 <style lang="scss" scoped>
-// @import '@/design/colors.scss';
-
 .back-layer {
   color: white;
+}
+
+.back-layer-title {
+  padding-left: 16px !important;
 }
 
 .front-layer {

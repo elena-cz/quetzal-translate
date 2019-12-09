@@ -42,7 +42,7 @@
 
 .v-toolbar__content {
   width: 100%;
-  padding: 4px 24px;
+  padding: 4px 16px;
 }
 
 .v-content {
@@ -107,6 +107,12 @@
 
 .v-btn__content {
   letter-spacing: 1px;
+}
+
+@media (max-width: 960px) {
+  .v-btn:hover::before {
+    opacity: 0 !important;
+  }
 }
 
 // Chips

@@ -1,19 +1,18 @@
 <script>
-import { mapState, mapGetters, mapActions } from 'vuex';
 // import HelloWorld from '@/components/HelloWorld.vue';
 
 export default {
-  name: '',
+  name: 'NavMenuIcon',
 
   components: {
     // HelloWorld,
   },
 
   props: {
-    // thing: {
-    //   type: Array,
-    //   required: true,
-    // },
+    isBackLayerActive: {
+      type: Boolean,
+      required: true,
+    },
   },
 
   data() {
@@ -40,9 +39,21 @@ export default {
 </script>
 
 <template>
-  <div></div>
+  <v-btn
+    text
+    icon
+    :retain-focus-on-click="false"
+    dark
+    class="hamburger hamburger--collapse"
+    :class="{'is-active': isBackLayerActive }"
+    @click="$root.$emit('toggleBackLayer', 'menu')"
+  >
+    <span class="hamburger-box">
+      <span class="hamburger-inner" />
+    </span>
+  </v-btn>
 </template>
 
 <style lang="scss" scoped>
-// @import '@/styles/colors.scss';
+@import '@/styles/hamburger.scss';
 </style>

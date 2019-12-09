@@ -31,7 +31,7 @@ export default {
 </script>
 
 <template>
-  <v-container class="px-5">
+  <v-container class="pa-0">
     <v-tabs v-model="tab" background-color="transparent" color="primary" grow>
       <v-tab key="kek" class="lang1-tab">Q'eqchi'</v-tab>
       <v-tab key="es" class="lang2-tab">Spanish</v-tab>

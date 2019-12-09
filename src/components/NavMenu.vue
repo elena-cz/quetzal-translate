@@ -41,7 +41,7 @@ export default {
 
 <template>
   <div>
-    <v-list shaped color="transparent" dark class="ml-n4" width="fit-content">
+    <v-list shaped color="transparent" dark class="ml-n4 pa-0" width="fit-content">
       <v-list-item-group tile="false" @change="$root.$emit('closeBackLayer')">
         <v-list-item color="white">
           <v-list-item-icon>
@@ -71,6 +71,6 @@ export default {
 }
 
 .v-list-item__title {
-  font-size: 1rem;
+  font-size: 1rem !important;
 }
 </style>

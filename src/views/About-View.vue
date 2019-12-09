@@ -41,7 +41,7 @@ export default {
 
 <template>
   <div>
-    <Layout>
+    <Layout page-title="About">
       <template v-slot:main-content>
         <v-btn rounded color="primary" @click.stop="testButton">Test</v-btn>
         <ol>
