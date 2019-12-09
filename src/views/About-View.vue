@@ -1,12 +1,12 @@
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex';
-import BackLayer from '@/components/BackLayer.vue';
+import Layout from '@/components/Layout.vue';
 
 export default {
   name: 'About-View',
 
   components: {
-    BackLayer,
+    Layout,
   },
 
   props: {
@@ -41,7 +41,32 @@ export default {
 
 <template>
   <div>
-    <BackLayer />
+    <Layout>
+      <template v-slot:main-content>
+        <v-btn rounded color="primary" @click.stop="testButton">Test</v-btn>
+        <ol>
+          <li>Good day!</li>
+          <li>Please sit here.</li>
+          <li>I am your dentist today</li>
+          <li>Are you allergic to any medicines?</li>
+          <li>Where does it hurt?</li>
+          <li>When does it hurt?</li>
+          <li>All the time?</li>
+          <li>Or now and then?</li>
+          <li>Does the cold water or air hurt you?</li>
+          <li>Does it wake you up at night?</li>
+          <li>Does it hurt when you bite?</li>
+          <li>We need to fix your broken tooth</li>
+          <li>We need to take x-rays.</li>
+          <li>We need to remove this tooth.</li>
+          <li>You have some cavities that we must treat.</li>
+          <li>We need to fill ____ teeth. (show fingers)</li>
+          <li>We need to extract ____ teeth. (show fingers)</li>
+          <li>This tooth cannot be repaired. We must extract it.</li>
+          <li>This tooth is loose.</li>
+        </ol>
+      </template>
+    </Layout>
   </div>
 </template>
 
