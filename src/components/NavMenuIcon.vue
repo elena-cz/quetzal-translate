@@ -1,14 +1,12 @@
 <script>
-// import HelloWorld from '@/components/HelloWorld.vue';
-
 export default {
   name: 'NavMenuIcon',
 
-  components: {
-    // HelloWorld,
-  },
-
   props: {
+    navType: {
+      type: String,
+      default: 'menu',
+    },
     isBackLayerActive: {
       type: Boolean,
       required: true,
@@ -16,37 +14,46 @@ export default {
   },
 
   data() {
-    return {};
+    return {
+      type: 'menu',
+    };
   },
 
-  computed: {
-    // ...mapState('module', [
-    //   'foo',
-    // ]),
-    // ...mapGetters('module', [
-    //   'foo',
-    // ]),
-    // property() {},
-  },
-
-  methods: {
-    // ...mapActions('module', [
-    //   'foo',
-    // ]),
-    // method() {},
+  watch: {
+    navType(newType) {
+      setTimeout(() => {
+        this.type = newType;
+      }, 110);
+    },
   },
 };
 </script>
 
 <template>
   <v-btn
+    v-if="type === 'menu'"
     text
     icon
     :retain-focus-on-click="false"
     dark
-    class="hamburger hamburger--collapse"
+    class="hamburger hamburger--squeeze"
     :class="{'is-active': isBackLayerActive }"
     @click="$root.$emit('toggleBackLayer', 'menu')"
+  >
+    <span class="hamburger-box">
+      <span class="hamburger-inner" />
+    </span>
+  </v-btn>
+
+  <v-btn
+    v-else
+    text
+    icon
+    :retain-focus-on-click="false"
+    dark
+    class="hamburger hamburger--arrowalt"
+    :class="{'is-active': !isBackLayerActive }"
+    @click="$router.go(-1)"
   >
     <span class="hamburger-box">
       <span class="hamburger-inner" />

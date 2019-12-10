@@ -1,5 +1,5 @@
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 import NavMenu from '@/components/NavMenu.vue';
 import NavMenuIcon from '@/components/NavMenuIcon.vue';
 
@@ -11,20 +11,7 @@ export default {
     NavMenuIcon,
   },
 
-  props: {
-    // navType: {
-    //   type: String,
-    //   default: 'menu',
-    // },
-    pageTitle: {
-      type: String,
-      default: '',
-    },
-    // openTitle: {
-    //   type: String,
-    //   default: '',
-    // },
-  },
+  props: {},
 
   data() {
     return {
@@ -33,11 +20,12 @@ export default {
       showMenu: false,
       openHeight: 0,
       defaultHeight: 56,
-      appTitle: 'Quetzal',
     };
   },
 
   computed: {
+    ...mapState('ui', ['appTitle']),
+    ...mapGetters('ui', ['pageTitle', 'navType']),
     ...mapState('sw', ['updateNotification']),
 
     title() {
@@ -102,7 +90,7 @@ export default {
   <div class="app-container">
     <div class="back-layer">
       <v-app-bar flat dark color="transparent">
-        <NavMenuIcon :is-back-layer-active="isBackLayerActive" />
+        <NavMenuIcon :nav-type="navType" :is-back-layer-active="isBackLayerActive" />
 
         <v-toolbar-title class="back-layer-title">{{ title }}</v-toolbar-title>
 

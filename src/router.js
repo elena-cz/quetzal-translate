@@ -16,7 +16,7 @@ const router = new Router({
     },
     {
       path: '/auth',
-      name: 'Auth',
+      name: 'auth',
       component: () =>
         import(/* webpackChunkName: "auth" */ './views/Auth-View.vue'),
     },
@@ -31,7 +31,7 @@ const router = new Router({
     },
     {
       path: '/admin/:page?',
-      name: 'Admin',
+      name: 'admin',
       component: () =>
         import(/* webpackChunkName: "admin" */ './views/Admin-View.vue'),
       meta: {

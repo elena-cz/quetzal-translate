@@ -43,7 +43,7 @@ export default {
   <div>
     <v-list shaped color="transparent" dark class="ml-n4 pa-0" width="fit-content">
       <v-list-item-group tile="false" @change="$root.$emit('closeBackLayer')">
-        <v-list-item>
+        <v-list-item :to="'/'">
           <v-list-item-icon>
             <v-icon class="material-icons-round">home</v-icon>
           </v-list-item-icon>
@@ -61,7 +61,7 @@ export default {
           </v-list-item-content>
         </v-list-item>
 
-        <v-list-item>
+        <v-list-item :to="'/about'">
           <v-list-item-icon>
             <v-icon class="material-icons-round">info</v-icon>
           </v-list-item-icon>

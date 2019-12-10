@@ -6,6 +6,7 @@ import languages from './modules/languages';
 import phrases from './modules/phrases';
 import sw from './modules/sw';
 import topics from './modules/topics';
+import ui from './modules/ui';
 import user from './modules/user';
 
 Vue.use(Vuex);
@@ -17,6 +18,7 @@ const store = new Vuex.Store({
     phrases,
     sw,
     topics,
+    ui,
     user,
   },
   strict: process.env.NODE_ENV !== 'production',

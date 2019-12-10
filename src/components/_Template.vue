@@ -16,9 +16,9 @@ export default {
     // },
   },
 
-  data() {
-    return {};
-  },
+  data: () => ({
+    //
+  }),
 
   computed: {
     // ...mapState('module', [

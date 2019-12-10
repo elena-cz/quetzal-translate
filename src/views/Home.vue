@@ -1,11 +1,11 @@
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex';
-import Layout from '@/components/Layout';
+// import Layout from '@/components/Layout';
 import Translator from '@/components/Translator';
 
 export default {
   components: {
-    Layout,
+    // Layout,
     Translator,
   },
 
@@ -27,7 +27,7 @@ export default {
 
 
 <template>
-  <Layout page-title="Dentistry">
+  <!-- <Layout page-title="Dentistry">
     <template v-slot:right-icons>
       <v-tooltip bottom>
         <template v-slot:activator="{ on }">
@@ -43,12 +43,12 @@ export default {
         </template>
         <span>{{ downloadTooltip }}</span>
       </v-tooltip>
-    </template>
+  </template>-->
 
-    <template v-slot:main-content>
-      <Translator />
-    </template>
-  </Layout>
+  <!-- <template v-slot:main-content> -->
+  <Translator />
+  <!-- </template> -->
+  <!-- </Layout> -->
 </template>
 
 <style lang="scss" scoped>
