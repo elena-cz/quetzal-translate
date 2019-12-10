@@ -61,6 +61,7 @@ export default {
 
   mounted() {
     Howler.autoUnlock = false;
+    Howler.volume(1);
     this.setPlayerId();
     this.setSounds();
   },

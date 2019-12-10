@@ -157,7 +157,9 @@ export default {
   width: 100%;
   height: 100%;
   background-color: white;
-  border-radius: 24px 24px 0 0;
+  border-radius: 16px 16px 0 0;
+  box-shadow: 0px 5px 5px -3px rgba(0, 0, 0, 0.2),
+    0px 8px 10px 1px rgba(0, 0, 0, 0.14), 0px 3px 14px 2px rgba(0, 0, 0, 0.12) !important;
   transition: transform 300ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -170,7 +172,7 @@ export default {
   height: 100%;
   width: 100%;
   background-color: rgba(255, 255, 255, 0.7);
-  border-radius: 24px 24px 0 0;
+  border-radius: 16px 16px 0 0;
   z-index: 10;
 }
 

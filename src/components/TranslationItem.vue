@@ -63,7 +63,11 @@ export default {
 </script>
 
 <template>
-  <v-expansion-panel v-if="showTranslation" class="inner-panel">
+  <v-expansion-panel
+    v-if="showTranslation"
+    class="inner-panel"
+    :class="langIndex === 0 ? 'primary-theme' : 'secondary-theme'"
+  >
     <v-expansion-panel-header hide-actions class="d-flex justify-space-between align-center">
       <span>{{ phrase.text || '' }}</span>
       <AudioPlayer
@@ -81,5 +85,10 @@ export default {
 </template>
 
 <style lang="scss" scoped>
-// @import '@/design/colors.scss';
+// @import '@/styles/colors.scss';
+//
+// .v-item--active {
+//   background-color: $green-transparent !important;
+//   padding: 8px 0;
+// }
 </style>

@@ -34,8 +34,21 @@ export default {
     },
 
     setOpenItemIndex(index) {
-      console.log('setting index', index);
       this.openItemIndex = index;
+    },
+
+    handleSubtopicClick(subtopicId) {
+      const { $el } = this.$refs[subtopicId][0];
+      this.$nextTick(() => {
+        $el.scrollIntoView();
+      });
+      setTimeout(() => {
+        $el.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start',
+        });
+      }, 400);
+      this.setOpenItemIndex(null);
     },
   },
 };
@@ -51,8 +64,15 @@ export default {
     <v-tabs-items v-model="tab" class="tab-items pt-5">
       <v-tab-item v-for="(lang, langIndex) in langs" :key="lang" class="tab-item pb-12">
         <v-expansion-panels accordion elevation="0">
-          <v-expansion-panel v-for="(subtopicId) in subtopicIds" :key="subtopicId">
-            <v-expansion-panel-header class="outer-header pr-3">{{ subtopics[subtopicId].title }}</v-expansion-panel-header>
+          <v-expansion-panel
+            v-for="(subtopicId) in subtopicIds"
+            :key="subtopicId"
+            @click="handleSubtopicClick(subtopicId)"
+          >
+            <v-expansion-panel-header
+              :ref="subtopicId"
+              class="outer-header pr-3"
+            >{{ subtopics[subtopicId].title }}</v-expansion-panel-header>
             <v-expansion-panel-content>
               <v-expansion-panels accordion v-model="openItemIndex">
                 <TranslationItem

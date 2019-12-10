@@ -93,23 +93,42 @@
 
 .v-expansion-panel-header.outer-header {
   padding: 24px 8px;
-  font-size: 1.1rem;
-  letter-spacing: 1px;
+  font-size: 1.15rem;
+  letter-spacing: 0px;
   font-weight: 600;
+
+  .v-item--active & {
+    font-weight: 700;
+    font-size: 1.2rem;
+  }
 }
 
 .v-expansion-panel-content__wrap {
-  padding: 0 0 16px 16px;
+  padding: 0 0 16px 0px;
 }
 
 .inner-panel {
+  &.v-item--active {
+    background-color: $blue-transparent !important;
+    padding: 12px 0;
+    margin-bottom: 8px;
+
+    &.secondary-theme {
+      background-color: $green-transparent !important;
+    }
+  }
+  &.v-expansion-panel::after {
+    height: 8px;
+    background-color: white;
+  }
   .v-expansion-panel-header {
-    padding: 8px 0 8px 18px;
+    padding: 8px 0 8px 14px;
     font-size: 1rem;
     line-height: normal;
   }
   .v-expansion-panel-content__wrap {
-    padding-left: 18px;
+    padding-left: 14px;
+    padding-bottom: 10px;
   }
 }
 
