@@ -15,8 +15,6 @@ export default {
       'downloadTooltip',
       'userCacheIsUpToDate',
     ]),
-
-    ...mapState('sw', ['updateNotification']),
   },
 
   methods: {
@@ -50,11 +48,6 @@ export default {
     <template v-slot:main-content>
       <Translator />
     </template>
-
-    <v-snackbar :value="updateNotification.text" :timeout="0">
-      {{ updateNotification.text }}
-      <v-btn color="#b1ffff" text @click="updateNotification.handler">Refresh</v-btn>
-    </v-snackbar>
   </Layout>
 </template>
 

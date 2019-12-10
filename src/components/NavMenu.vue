@@ -1,5 +1,5 @@
 <script>
-import { mapState, mapGetters, mapActions } from 'vuex';
+// import { mapState, mapGetters, mapActions } from 'vuex';
 // import HelloWorld from '@/components/HelloWorld.vue';
 
 export default {
@@ -43,11 +43,20 @@ export default {
   <div>
     <v-list shaped color="transparent" dark class="ml-n4 pa-0" width="fit-content">
       <v-list-item-group tile="false" @change="$root.$emit('closeBackLayer')">
-        <v-list-item color="white">
+        <v-list-item>
+          <v-list-item-icon>
+            <v-icon class="material-icons-round">home</v-icon>
+          </v-list-item-icon>
+          <v-list-item-content>
+            <v-list-item-title>Home</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+
+        <v-list-item>
           <v-list-item-icon>
             <v-icon class="material-icons-round">share</v-icon>
           </v-list-item-icon>
-          <v-list-item-content color="white">
+          <v-list-item-content>
             <v-list-item-title>Share App</v-list-item-title>
           </v-list-item-content>
         </v-list-item>

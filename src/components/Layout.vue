@@ -1,4 +1,5 @@
 <script>
+import { mapState } from 'vuex';
 import NavMenu from '@/components/NavMenu.vue';
 import NavMenuIcon from '@/components/NavMenuIcon.vue';
 
@@ -37,6 +38,8 @@ export default {
   },
 
   computed: {
+    ...mapState('sw', ['updateNotification']),
+
     title() {
       const { pageTitle, appTitle, isBackLayerActive, showMenu } = this;
       return isBackLayerActive && showMenu ? appTitle : pageTitle;
@@ -127,10 +130,15 @@ export default {
       <transition name="fade">
         <div v-if="isBackLayerActive" class="front-overlay" @click="closeBackLayer"></div>
       </transition>
-      <div class="front-content pa-4" :style="frontHeightStyle">
-        <slot name="main-content"></slot>
+      <div class="front-content pa-4 pb-0" :style="frontHeightStyle">
+        <slot name="main-content" class="main-content" />
       </div>
     </div>
+
+    <v-snackbar :value="updateNotification.text" :timeout="0">
+      {{ updateNotification.text }}
+      <v-btn color="#b1ffff" text @click="updateNotification.handler">Refresh</v-btn>
+    </v-snackbar>
   </div>
 </template>
 
@@ -168,7 +176,6 @@ export default {
 
 .front-content {
   height: 100%;
-  overflow: scroll;
 }
 
 .fade-enter-active {

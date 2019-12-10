@@ -68,8 +68,18 @@
     font-weight: 700;
   }
 }
+
+.v-tabs-slider-wrapper {
+  height: 2.5px !important;
+}
+
 .v-tabs-slider {
   background-color: $red;
+}
+@media (max-width: 960px) {
+  .v-tab--active::before {
+    opacity: 0 !important;
+  }
 }
 
 // Expansion Panel

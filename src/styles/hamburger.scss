@@ -43,7 +43,7 @@ $hamburger-types: (collapse, collapse-r) !default;
   cursor: pointer;
 
   transition-property: opacity, filter;
-  transition-duration: 150ms;
+  transition-duration: 0.15s;
   transition-timing-function: linear;
 
   // Normalize (<button>)

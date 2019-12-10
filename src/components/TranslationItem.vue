@@ -24,7 +24,11 @@ export default {
       type: String,
       required: true,
     },
-    index: {
+    langIndex: {
+      type: Number,
+      required: true,
+    },
+    itemIndex: {
       type: Number,
       required: true,
     },
@@ -50,7 +54,11 @@ export default {
     },
   },
 
-  methods: {},
+  methods: {
+    testEvent() {
+      console.log('play or pause fired');
+    },
+  },
 };
 </script>
 
@@ -58,7 +66,11 @@ export default {
   <v-expansion-panel v-if="showTranslation" class="inner-panel">
     <v-expansion-panel-header hide-actions class="d-flex justify-space-between align-center">
       <span>{{ phrase.text || '' }}</span>
-      <AudioPlayer :playlist="[playlist]" :color="index === 0 ? 'primary' : 'secondary'" />
+      <AudioPlayer
+        :playlist="[playlist]"
+        :color="langIndex === 0 ? 'primary' : 'secondary'"
+        :item-index="itemIndex"
+      />
     </v-expansion-panel-header>
 
     <v-expansion-panel-content

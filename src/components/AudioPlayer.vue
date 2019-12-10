@@ -15,6 +15,10 @@ export default {
       type: String,
       default: 'primary',
     },
+    itemIndex: {
+      type: Number,
+      default: null,
+    },
   },
 
   data() {
@@ -135,6 +139,7 @@ export default {
         sound.play();
         this.startLoadingTimer();
       }
+      this.$root.$emit('playingIndex', this.itemIndex);
     },
 
     onPlay() {
@@ -221,7 +226,7 @@ export default {
     min-width="52"
     max-width="52"
     :disabled="disabled"
-    @click.prevent="playOrPause"
+    @click.prevent.stop="playOrPause"
   >
     <v-icon v-if="playing" key="stop" x-large class="material-icons-round">stop</v-icon>
     <v-icon v-else-if="!soundLoading" key="play" x-large class="material-icons-round">play_arrow</v-icon>
