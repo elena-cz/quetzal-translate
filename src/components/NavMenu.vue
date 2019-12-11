@@ -9,13 +9,6 @@ export default {
     ShareMenuWidget,
   },
 
-  props: {
-    // thing: {
-    //   type: Array,
-    //   required: true,
-    // },
-  },
-
   data() {
     return {};
   },
@@ -41,7 +34,7 @@ export default {
 
 <template>
   <div>
-    <v-list shaped color="transparent" dark class="ml-n4 pa-0" width="fit-content">
+    <v-list shaped color="transparent" dark class="ml-n4 pa-0" width="fit-content" min-width="200">
       <v-list-item-group tile="false" @change="$root.$emit('closeBackLayer')">
         <v-list-item :to="'/'">
           <v-list-item-icon>
@@ -49,6 +42,15 @@ export default {
           </v-list-item-icon>
           <v-list-item-content>
             <v-list-item-title>Home</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+
+        <v-list-item :to="'/offline'">
+          <v-list-item-icon>
+            <v-icon class="material-icons-round">offline_pin</v-icon>
+          </v-list-item-icon>
+          <v-list-item-content>
+            <v-list-item-title>Offline Audio</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
 

@@ -23,7 +23,7 @@ export default {
     navType(newType) {
       setTimeout(() => {
         this.type = newType;
-      }, 140);
+      }, 120);
     },
   },
 };
