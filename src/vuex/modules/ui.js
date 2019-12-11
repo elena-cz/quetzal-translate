@@ -23,7 +23,9 @@ const getters = {
     const titles = {
       about: 'About',
       admin: 'Admin',
+      auth: 'Sign In',
       home: 'Dentistry',
+      offline: 'Offline Audio',
     };
     return titles[routeName] || appTitle;
   },
@@ -33,7 +35,9 @@ const getters = {
     const types = {
       about: 'back',
       admin: 'menu',
+      auth: 'back',
       home: 'menu',
+      offline: 'back',
     };
     return types[routeName] || 'menu';
   },
