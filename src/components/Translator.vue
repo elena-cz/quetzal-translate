@@ -1,12 +1,12 @@
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex';
-import TranslationItem from '@/components/TranslationItem.vue';
+import PhraseItem from '@/components/PhraseItem.vue';
 
 export default {
   name: 'Translator',
 
   components: {
-    TranslationItem,
+    PhraseItem,
   },
 
   data: () => ({
@@ -75,7 +75,7 @@ export default {
             >{{ subtopics[subtopicId].title }}</v-expansion-panel-header>
             <v-expansion-panel-content>
               <v-expansion-panels accordion v-model="openItemIndex">
-                <TranslationItem
+                <PhraseItem
                   v-for="(phraseId, itemIndex) in subtopics[subtopicId].phraseIds"
                   :key="phraseId"
                   :phrase="phrases[phraseId]"

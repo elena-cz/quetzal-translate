@@ -3,7 +3,7 @@ import { mapState, mapGetters, mapActions } from 'vuex';
 import AudioPlayer from '@/components/AudioPlayer.vue';
 
 export default {
-  name: 'TranslationItem',
+  name: 'PhraseItem',
 
   components: {
     AudioPlayer,
@@ -50,15 +50,17 @@ export default {
 
     showTranslation() {
       const { playlist, translation, phrase } = this;
-      return phrase.visible && (translation.text || playlist.length > 0);
+      return (
+        phrase && phrase.visible && (translation.text || playlist.length > 0)
+      );
+    },
+
+    translationId() {
+      return this.translation.id || 'no-id';
     },
   },
 
-  methods: {
-    testEvent() {
-      console.log('play or pause fired');
-    },
-  },
+  methods: {},
 };
 </script>
 
@@ -77,18 +79,51 @@ export default {
       />
     </v-expansion-panel-header>
 
-    <v-expansion-panel-content
-      v-if="translation.text"
-      class="font-weight-bold"
-    >{{ translation.text }}</v-expansion-panel-content>
+    <v-expansion-panel-content>
+      <span :id="translationId" class="translation-text font-weight-bold">{{ translation.text }}</span>
+
+      <div class="d-flex justify-end align-center">
+        <!-- <v-tooltip bottom>
+          <template v-slot:activator="{ on }">
+            <v-btn
+              icon
+              text
+              v-on="on"
+              class="phrase-action"
+              @click.prevent="copyText(translationId)"
+            >
+              <v-icon class="material-icons-round">copy</v-icon>
+            </v-btn>
+          </template>
+          <span>Copy</span>
+        </v-tooltip>-->
+
+        <!-- <v-tooltip bottom>
+          <template v-slot:activator="{ on }">
+            <v-btn icon text v-on="on" class="phrase-action" @click.prevent>
+              <v-icon class="material-icons-round star">star_border</v-icon>
+            </v-btn>
+          </template>
+          <span>Favorite</span>
+        </v-tooltip>-->
+      </div>
+    </v-expansion-panel-content>
   </v-expansion-panel>
 </template>
 
 <style lang="scss" scoped>
 // @import '@/styles/colors.scss';
-//
-// .v-item--active {
-//   background-color: $green-transparent !important;
-//   padding: 8px 0;
-// }
+.translation-text {
+  display: block;
+  margin-block-start: 8px;
+  margin-block-end: 16px;
+}
+
+.phrase-action {
+  margin-right: 8px;
+}
+
+.star {
+  font-size: 32px !important;
+}
 </style>

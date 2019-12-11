@@ -8,10 +8,6 @@ export default {
     Layout,
   },
 
-  data: () => ({
-    //
-  }),
-
   watch: {
     $route: {
       handler: 'getRoute',
@@ -37,16 +33,22 @@ export default {
   <v-app>
     <Layout>
       <template v-slot:main-content>
-        <router-view />
+        <transition name="fade">
+          <router-view />
+        </transition>
       </template>
     </Layout>
   </v-app>
 </template>
 
 <style lang="scss" scoped>
-// .v-content--wrap {
-//   background-color: white;
-//   border-top-left-radius: 24px;
-//   border-top-right-radius: 24px;
-// }
+.fade-enter-active {
+  transition: opacity 400ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+.fade-leave-active {
+  transition: opacity 200ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
+}
 </style>
