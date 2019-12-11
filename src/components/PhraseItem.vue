@@ -12,7 +12,9 @@ export default {
   props: {
     phrase: {
       type: Object,
-      required: true,
+      default() {
+        return {};
+      },
     },
     translation: {
       type: Object,

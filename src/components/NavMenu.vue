@@ -1,12 +1,12 @@
 <script>
 // import { mapState, mapGetters, mapActions } from 'vuex';
-// import HelloWorld from '@/components/HelloWorld.vue';
+import ShareMenuWidget from '@/components/ShareMenuWidget.vue';
 
 export default {
   name: 'NavMenu',
 
   components: {
-    // HelloWorld,
+    ShareMenuWidget,
   },
 
   props: {
@@ -52,14 +52,7 @@ export default {
           </v-list-item-content>
         </v-list-item>
 
-        <v-list-item>
-          <v-list-item-icon>
-            <v-icon class="material-icons-round">share</v-icon>
-          </v-list-item-icon>
-          <v-list-item-content>
-            <v-list-item-title>Share App</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
+        <ShareMenuWidget />
 
         <v-list-item :to="'/about'">
           <v-list-item-icon>
