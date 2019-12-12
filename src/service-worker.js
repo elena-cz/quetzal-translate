@@ -19,7 +19,7 @@ workbox.routing.setCatchHandler(({ event }) => {
 workbox.routing.registerRoute(
   /^https:\/\/firebasestorage\.googleapis\.com/,
   new workbox.strategies.CacheFirst({
-    cacheName: 'audio-cache',
+    cacheName: 'quetzal-audio-cache',
     plugins: [
       new workbox.expiration.Plugin({
         maxAgeSeconds: 60 * 60 * 24 * 180,

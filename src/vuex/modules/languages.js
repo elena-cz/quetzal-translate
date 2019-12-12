@@ -5,9 +5,10 @@
  */
 
 const state = {
+  langs: ['kek', 'es'],
   langNames: {
-    es: 'Spanish',
     kek: `Q'eqchi'`,
+    es: 'Spanish',
   },
 };
 

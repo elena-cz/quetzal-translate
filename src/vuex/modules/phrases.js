@@ -52,7 +52,7 @@ const actions = {
         // phrases[enId].translations[lang] = translation;
       });
       commit('setPhrases', { phrases, translations });
-      dispatch('audio/init', null, { root: true });
+      dispatch('audio/init', translations, { root: true });
     } catch (error) {
       console.log('Error getting phrases: ', error);
     }

@@ -9,6 +9,7 @@ import vuetify from './plugins/vuetify';
 import '@/styles/index.scss';
 
 Vue.config.productionTip = false;
+// Vue.config.performance = true;
 
 let app;
 fb.auth.onAuthStateChanged(() => {

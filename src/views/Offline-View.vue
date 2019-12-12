@@ -34,13 +34,17 @@ export default {
     // ...mapActions('module', [
     //   'foo',
     // ]),
-    // method() {},
+    testWorker() {
+      this.$store.dispatch('audio/testWorker');
+    },
   },
 };
 </script>
 
 <template>
-  <div>Offline</div>
+  <div>
+    <v-btn rounded color="primary" @click="testWorker">Test Worker</v-btn>
+  </div>
 </template>
 
 <style lang="scss" scoped>

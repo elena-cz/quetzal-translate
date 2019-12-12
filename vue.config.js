@@ -1,4 +1,16 @@
+const WorkerPlugin = require('worker-plugin');
+const webpack = require('webpack');
+
 module.exports = {
+  configureWebpack: {
+    plugins: [
+      new WorkerPlugin(),
+      new webpack.IgnorePlugin({
+        resourceRegExp: /^\.\/locale$/,
+        contextRegExp: /moment$/,
+      }),
+    ],
+  },
   transpileDependencies: ['vuetify'],
   pwa: {
     name: 'Quetzal',
