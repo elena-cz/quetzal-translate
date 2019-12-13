@@ -14,9 +14,8 @@ const audioCacheWorker = new Worker('@/workers/audioCacheWorker.js', {
  */
 
 const state = {
-  // format: null,
-  downloadedLangs: [],
-  langsToUpdate: [],
+  langStatus: {}, // { es: { isDownloaded: true, hasUpdates: true, isUpdating: false } }
+  updatesAvailable: false,
 };
 
 /*
@@ -26,7 +25,22 @@ const state = {
  */
 
 const getters = {
-  exampleGetter: state => {},
+  downloadedLangs: (state, getters, rootState) => {
+    const { langStatus } = state;
+    const { langs } = rootState.languages;
+    // Keeping list in alphabetical order
+    return langs.filter(
+      lang => langStatus[lang] && langStatus[lang].isDownloaded
+    );
+  },
+
+  availableLangs: (state, getters, rootState) => {
+    const { langStatus } = state;
+    const { langs } = rootState.languages;
+    return langs.filter(
+      lang => !langStatus[lang] || !langStatus[lang].isDownloaded
+    );
+  },
 };
 
 /*
@@ -59,6 +73,14 @@ const actions = {
       console.error('Error from worker', error.message);
     };
   },
+
+  downloadLang(context, lang) {
+    audioCacheWorker.postMessage({ type: 'DOWNLOAD_LANG', lang });
+  },
+
+  updateLang(context, lang) {
+    audioCacheWorker.postMessage({ type: 'UPDATE_LANG', lang });
+  },
 };
 
 /*
@@ -69,11 +91,18 @@ const actions = {
 
 const mutations = {
   setDownloadedLangs(state, langs) {
-    state.downloadedLangs = langs || [];
+    langs.forEach(lang => {
+      state.langStatus[lang].isDownloaded = true;
+    });
   },
 
   setLangsToUpdate(state, langs) {
-    state.langsToUpdate = langs || [];
+    if (langs.length) {
+      state.updatesAvailable = true;
+    }
+    langs.forEach(lang => {
+      state.langStatus[lang].hasUpdates = true;
+    });
   },
 };
 
