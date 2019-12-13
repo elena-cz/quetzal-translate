@@ -19,7 +19,7 @@ const state = {
  */
 
 const getters = {
-  exampleGetter: state => {},
+  // exampleGetter: state => {},
 };
 
 /*
@@ -29,10 +29,10 @@ const getters = {
  */
 
 const actions = {
-  exampleAction(
-    { commit, dispatch, state, getters, rootState, rootGetters },
-    otherParams
-  ) {},
+  // exampleAction(
+  //   { commit, dispatch, state, getters, rootState, rootGetters },
+  //   otherParams
+  // ) {},
 };
 
 /*
@@ -42,9 +42,9 @@ const actions = {
  */
 
 const mutations = {
-  exampleMutation(state, data) {
-    state.property = data;
-  },
+  // exampleMutation(state, data) {
+  //   state.property = data;
+  // },
 };
 
 export default {
