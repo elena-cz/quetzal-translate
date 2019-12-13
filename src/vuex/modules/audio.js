@@ -91,7 +91,7 @@ const actions = {
 
   deleteLang({ commit }, lang) {
     audioCacheWorker.postMessage({ type: 'DELETE_LANG', lang });
-    // commit('setLangUpdatingStatus', { lang, isUpdating: true });
+    commit('setDeletedLangs', lang);
   },
 };
 
@@ -133,6 +133,12 @@ const mutations = {
 
   setLangUpdatingStatus(state, { lang, isUpdating }) {
     state.langStatus[lang].isUpdating = isUpdating;
+  },
+
+  setDeletedLangs(state, lang) {
+    state.langStatus[lang].isDownloaded = false;
+    state.langStatus[lang].hasUpdates = true;
+    state.langStatus[lang].isUpdating = false;
   },
 };
 

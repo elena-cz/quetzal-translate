@@ -1,5 +1,5 @@
 <script>
-import { mapState, mapGetters, mapActions } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 // import HelloWorld from '@/components/HelloWorld.vue';
 
 export default {
@@ -7,13 +7,6 @@ export default {
 
   components: {
     // HelloWorld,
-  },
-
-  props: {
-    // thing: {
-    //   type: Array,
-    //   required: true,
-    // },
   },
 
   data: () => ({
@@ -26,13 +19,6 @@ export default {
     ...mapState('audio', ['langStatus']),
 
     ...mapGetters('audio', ['downloadedLangs', 'availableLangs']),
-    // downloadedLangs() {
-    //   return ['kek'];
-    // },
-
-    // langsToUpdate() {
-    //   return ['kek'];
-    // },
   },
 
   methods: {
@@ -55,6 +41,7 @@ export default {
   <div>
     <v-subheader>Downloaded Languages </v-subheader>
     <v-list flat class="mb-5">
+      <!-- <transition-group name="list"> -->
       <v-list-item v-if="!downloadedLangs.length" key="noDownloads">
         <v-list-item-content class="caption">
           No languages downloaded yet
@@ -101,12 +88,14 @@ export default {
         </v-list-item>
         <v-divider :key="index"></v-divider>
       </template>
+      <!-- </transition-group> -->
     </v-list>
 
     <v-subheader>
       Available Languages
     </v-subheader>
     <v-list flat>
+      <!-- <transition-group name="list"> -->
       <v-list-item v-if="!availableLangs.length" key="allDownloaded">
         <v-list-item-content class="caption">
           All languages downloaded
@@ -131,6 +120,7 @@ export default {
         </v-list-item>
         <v-divider :key="index"></v-divider>
       </template>
+      <!-- </transition-group> -->
     </v-list>
   </div>
 </template>
@@ -141,6 +131,10 @@ export default {
   font-weight: 700;
   font-size: 1rem;
   padding: 0;
+}
+
+.v-list-item {
+  min-height: 60px !important;
 }
 
 .v-list-item__title {
@@ -154,4 +148,18 @@ export default {
 .v-btn--outlined {
   border-width: 1px;
 }
+
+// .list-enter {
+//   opacity: 0;
+//   // transform: translateY(8px);
+//   transition: opacity 1s 0s;
+// }
+// .list-leave-to {
+//   opacity: 0;
+//   // transform: translateY(8px);
+//   // transition: opacity 0.25s;
+// }
+// .list-leave-active {
+//   position: absolute;
+// }
 </style>

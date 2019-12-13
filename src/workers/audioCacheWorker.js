@@ -153,9 +153,9 @@ class AudioCacheManager {
   // HANDLE USER ACTIONS
   X;
   downloadLang = async lang => {
-    const { init, updateAudioCache, updateDownloadedLangsInIdb } = this;
+    const { init, updateAudioCache, setDownloadedLangsInIdb } = this;
     await updateAudioCache(lang);
-    await updateDownloadedLangsInIdb(lang);
+    await setDownloadedLangsInIdb(lang, 'add');
     init();
   };
 
@@ -165,7 +165,30 @@ class AudioCacheManager {
     init();
   };
 
-  deleteLang = async lang => {};
+  deleteLang = async lang => {
+    const { cachedItems } = this;
+    const {
+      init,
+      deleteFromCache,
+      deleteFromIdb,
+      setDownloadedLangsInIdb,
+    } = this;
+    const urlsToDelete = [];
+    const idsToDelete = [];
+
+    Object.keys(cachedItems).forEach(id => {
+      const itemLang = cachedItems[id].lang;
+      if (itemLang === lang) {
+        urlsToDelete.push(cachedItems[id].url);
+        idsToDelete.push(id);
+      }
+    });
+
+    await deleteFromCache(urlsToDelete);
+    await deleteFromIdb(idsToDelete);
+    await setDownloadedLangsInIdb(lang, 'delete');
+    init();
+  };
 
   // UPDATE CACHE
   // Add, replace, or delete items for particular language
@@ -202,6 +225,22 @@ class AudioCacheManager {
     }
   };
 
+  setDownloadedLangsInIdb = async (lang, action = 'add') => {
+    const langs = [...this.downloadedLangs];
+    const index = langs.indexOf(lang);
+    try {
+      if (action === 'add' && index == -1) {
+        langs.push(lang);
+        await set('downloadedLangs', JSON.stringify(langs), infoStore);
+      } else if (action === 'delete' && index > -1) {
+        langs.splice(index, 1);
+        await set('downloadedLangs', JSON.stringify(langs), infoStore);
+      }
+    } catch (error) {
+      console.error('Error updating Downloaded Languages in IDB', error);
+    }
+  };
+
   deleteFromCache = async urls => {
     if (!urls.length) return;
     try {
@@ -218,18 +257,6 @@ class AudioCacheManager {
     if (!ids.length) return;
     for (const id of ids) {
       await del(id, itemsStore);
-    }
-  };
-
-  updateDownloadedLangsInIdb = async lang => {
-    const langs = [...this.downloadedLangs];
-    try {
-      if (langs.indexOf(lang) === -1) {
-        langs.push(lang);
-        await set('downloadedLangs', JSON.stringify(langs), infoStore);
-      }
-    } catch (error) {
-      console.error('Error updating Downloaded Languages in IDB', error);
     }
   };
 }
