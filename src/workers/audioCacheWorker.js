@@ -9,37 +9,44 @@ class AudioCacheManager {
     this.allLangs = [];
     this.downloadedLangs = [];
     this.allItems = {};
+    this.isAllItemsLoaded = false;
     this.cachedItems = {};
     this.idsToUpdateInCache = {};
     this.langsToUpdate = [];
   }
 
+  // INIT
+  // Compare what should be cached with what is cached
   init = async (langs, translations, format) => {
     const {
       getDownloadedLangs,
+      isAllItemsLoaded,
       getAllItems,
       getCachedItems,
       getIdsToUpdateInCache,
       getLangsToUpdate,
     } = this;
-    this.allLangs = langs;
+
+    if (langs) {
+      this.allLangs = langs;
+    }
 
     await getDownloadedLangs();
-    if (this.downloadedLangs.length > 0) {
-      self.postMessage({
-        type: 'DOWNLOADED_LANGS_INFO',
-        langs: this.downloadedLangs,
-      });
+    self.postMessage({
+      type: 'DOWNLOADED_LANGS_INFO',
+      langs: this.downloadedLangs,
+    });
 
+    if (!isAllItemsLoaded) {
       getAllItems(translations, format);
-      await getCachedItems();
-      getIdsToUpdateInCache();
-      getLangsToUpdate();
-      self.postMessage({
-        type: 'LANGS_TO_UPDATE_INFO',
-        langs: this.langsToUpdate,
-      });
     }
+    await getCachedItems();
+    getIdsToUpdateInCache();
+    getLangsToUpdate();
+    self.postMessage({
+      type: 'LANGS_TO_UPDATE_INFO',
+      langs: this.langsToUpdate,
+    });
   };
 
   // Init - Step 1
@@ -47,7 +54,7 @@ class AudioCacheManager {
   getDownloadedLangs = async () => {
     try {
       const langs = await get('downloadedLangs', infoStore);
-      const downloadedLangs = langs || [];
+      const downloadedLangs = langs ? JSON.parse(langs) : [];
       this.downloadedLangs = downloadedLangs;
     } catch (error) {
       console.error(error);
@@ -70,6 +77,7 @@ class AudioCacheManager {
       }
     });
     this.allItems = items;
+    this.isAllItemsLoaded = true;
   };
 
   // Init - Step 3
@@ -95,11 +103,11 @@ class AudioCacheManager {
   // Init - Step 4
   // Find out if any items need to be added, replaced, or deleted (per lang)
   getIdsToUpdateInCache = () => {
-    const { allItems, cachedItems, downloadedLangs } = this;
+    const { allItems, cachedItems, allLangs } = this;
     const cachedIds = Object.keys(cachedItems);
 
     const ids = {};
-    downloadedLangs.forEach(lang => {
+    allLangs.forEach(lang => {
       ids[lang] = {
         toAdd: [], // Not in cache
         toReplace: [], // Wrong version in cache
@@ -127,6 +135,8 @@ class AudioCacheManager {
     this.idsToUpdateInCache = ids;
   };
 
+  // Init - Step 5
+  // Summarize available updates
   getLangsToUpdate = () => {
     const { idsToUpdateInCache } = this;
     const langsToUpdate = [];
@@ -139,6 +149,89 @@ class AudioCacheManager {
     });
     this.langsToUpdate = langsToUpdate;
   };
+
+  // HANDLE USER ACTIONS
+  X;
+  downloadLang = async lang => {
+    const { init, updateAudioCache, updateDownloadedLangsInIdb } = this;
+    await updateAudioCache(lang);
+    await updateDownloadedLangsInIdb(lang);
+    init();
+  };
+
+  updateLang = async lang => {
+    const { init, updateAudioCache } = this;
+    await updateAudioCache(lang);
+    init();
+  };
+
+  deleteLang = async lang => {};
+
+  // UPDATE CACHE
+  // Add, replace, or delete items for particular language
+  updateAudioCache = async lang => {
+    const { allItems, cachedItems, idsToUpdateInCache } = this;
+    const { addToCacheAndIdb, deleteFromCache, deleteFromIdb } = this;
+
+    const idsToReplace = idsToUpdateInCache[lang].toReplace;
+    const idsToAdd = [...idsToUpdateInCache[lang].toAdd, ...idsToReplace];
+    const idsToDelete = [...idsToUpdateInCache[lang].toDelete];
+
+    const urlsToAdd = idsToAdd.map(id => allItems[id].url);
+    const urlsToDelete = [...idsToDelete, ...idsToReplace].map(id => {
+      return cachedItems[id].url;
+    });
+
+    await addToCacheAndIdb(idsToAdd, urlsToAdd);
+    await deleteFromCache(urlsToDelete);
+    await deleteFromIdb(idsToDelete);
+  };
+
+  addToCacheAndIdb = async (ids, urls) => {
+    if (!ids.length) return;
+    const { allItems } = this;
+    try {
+      const audioCache = await self.caches.open('quetzal-audio-cache');
+      await audioCache.addAll(urls);
+      for (const id of ids) {
+        const data = JSON.stringify(allItems[id]);
+        await set(id, data, itemsStore);
+      }
+    } catch (error) {
+      console.error('Error adding audio to cache', error);
+    }
+  };
+
+  deleteFromCache = async urls => {
+    if (!urls.length) return;
+    try {
+      const audioCache = await self.caches.open('quetzal-audio-cache');
+      for (const url of urls) {
+        await audioCache.delete(url);
+      }
+    } catch (error) {
+      console.error('Error deleting audio from cache', error);
+    }
+  };
+
+  deleteFromIdb = async ids => {
+    if (!ids.length) return;
+    for (const id of ids) {
+      await del(id, itemsStore);
+    }
+  };
+
+  updateDownloadedLangsInIdb = async lang => {
+    const langs = [...this.downloadedLangs];
+    try {
+      if (langs.indexOf(lang) === -1) {
+        langs.push(lang);
+        await set('downloadedLangs', JSON.stringify(langs), infoStore);
+      }
+    } catch (error) {
+      console.error('Error updating Downloaded Languages in IDB', error);
+    }
+  };
 }
 
 // EVENT LISTENERS
@@ -146,12 +239,16 @@ const audioCacheManager = new AudioCacheManager();
 
 self.onmessage = async ({ data }) => {
   const { type } = data;
-  console.log('in onmessage in worker', type || data);
   // console.log('caches in self', 'caches' in self);
   if (type === 'INIT') {
     const { langs, translations, format } = data;
     audioCacheManager.init(langs, translations, format);
-    // init(translations, format);
+  } else if (type === 'DOWNLOAD_LANG') {
+    audioCacheManager.downloadLang(data.lang);
+  } else if (type === 'UPDATE_LANG') {
+    audioCacheManager.updateLang(data.lang);
+  } else if (type === 'DELETE_LANG') {
+    audioCacheManager.deleteLang(data.lang);
   } else {
     throw new Error(`Unknown message type`);
   }

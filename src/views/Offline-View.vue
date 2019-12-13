@@ -39,6 +39,14 @@ export default {
     downloadLang(lang) {
       this.$store.dispatch('audio/downloadLang', lang);
     },
+
+    updateLang(lang) {
+      this.$store.dispatch('audio/updateLang', lang);
+    },
+
+    deleteLang(lang) {
+      this.$store.dispatch('audio/deleteLang', lang);
+    },
   },
 };
 </script>
@@ -59,24 +67,36 @@ export default {
           </v-list-item-content>
 
           <v-list-item-action class="d-flex flex-row align-center">
-            <v-btn
-              v-if="langStatus[lang].hasUpdates"
-              color="accent"
-              rounded
-              outlined
-              small
-              class="mr-4"
+            <v-progress-circular
+              v-if="langStatus[lang].isUpdating"
+              indeterminate
+              color="primary"
             >
-              Update
-            </v-btn>
-            <v-tooltip bottom>
-              <template v-slot:activator="{ on }">
-                <v-btn icon v-on="on" @click.prevent="">
-                  <v-icon class="material-icons-round">delete</v-icon>
-                </v-btn>
-              </template>
-              <span>Remove</span>
-            </v-tooltip>
+              <v-icon class="material-icons-round">download</v-icon>
+            </v-progress-circular>
+
+            <template v-else>
+              <v-btn
+                v-if="langStatus[lang].hasUpdates"
+                color="accent"
+                rounded
+                outlined
+                small
+                class="mr-4"
+                @click.prevent="updateLang(lang)"
+              >
+                Update
+              </v-btn>
+
+              <v-tooltip bottom>
+                <template v-slot:activator="{ on }">
+                  <v-btn icon v-on="on" @click.prevent="deleteLang(lang)">
+                    <v-icon class="material-icons-round">delete</v-icon>
+                  </v-btn>
+                </template>
+                <span>Remove</span>
+              </v-tooltip>
+            </template>
           </v-list-item-action>
         </v-list-item>
         <v-divider :key="index"></v-divider>
@@ -101,7 +121,7 @@ export default {
           <v-list-item-action>
             <v-tooltip bottom>
               <template v-slot:activator="{ on }">
-                <v-btn icon v-on="on" @click.prevent="">
+                <v-btn icon v-on="on" @click.prevent="downloadLang(lang)">
                   <v-icon class="material-icons-round">download</v-icon>
                 </v-btn>
               </template>
@@ -132,6 +152,6 @@ export default {
 }
 
 .v-btn--outlined {
-  border-width: unset;
+  border-width: 1px;
 }
 </style>

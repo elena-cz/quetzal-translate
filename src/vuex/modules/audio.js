@@ -5,6 +5,8 @@ const audioCacheWorker = new Worker('@/workers/audioCacheWorker.js', {
 });
 
 // TO DO
+// Add snackbar notifications
+// Add back notification for hasUpdates
 // Detect feature compatibility & add error messages & analytics
 
 /*
@@ -29,17 +31,19 @@ const getters = {
     const { langStatus } = state;
     const { langs } = rootState.languages;
     // Keeping list in alphabetical order
-    return langs.filter(
-      lang => langStatus[lang] && langStatus[lang].isDownloaded
-    );
+    return langs.filter(lang => {
+      const status = langStatus[lang] || {};
+      return status.isDownloaded || status.isUpdating;
+    });
   },
 
   availableLangs: (state, getters, rootState) => {
     const { langStatus } = state;
     const { langs } = rootState.languages;
-    return langs.filter(
-      lang => !langStatus[lang] || !langStatus[lang].isDownloaded
-    );
+    return langs.filter(lang => {
+      const status = langStatus[lang] || {};
+      return !status.isDownloaded && !status.isUpdating;
+    });
   },
 };
 
@@ -53,6 +57,7 @@ const actions = {
   // Triggered by phrases module when translations are loaded
   init({ commit, dispatch, rootState }, translations) {
     const { langs } = rootState.languages;
+    commit('setInitialLangStatus', langs);
     dispatch('setUpWorkerListeners');
     const format = Howler.codecs('webm') ? 'webm' : 'mp3';
     // commit('setFormat', format);
@@ -74,12 +79,19 @@ const actions = {
     };
   },
 
-  downloadLang(context, lang) {
+  downloadLang({ commit }, lang) {
     audioCacheWorker.postMessage({ type: 'DOWNLOAD_LANG', lang });
+    commit('setLangUpdatingStatus', { lang, isUpdating: true });
   },
 
-  updateLang(context, lang) {
+  updateLang({ commit }, lang) {
     audioCacheWorker.postMessage({ type: 'UPDATE_LANG', lang });
+    commit('setLangUpdatingStatus', { lang, isUpdating: true });
+  },
+
+  deleteLang({ commit }, lang) {
+    audioCacheWorker.postMessage({ type: 'DELETE_LANG', lang });
+    // commit('setLangUpdatingStatus', { lang, isUpdating: true });
   },
 };
 
@@ -90,9 +102,23 @@ const actions = {
  */
 
 const mutations = {
+  setInitialLangStatus(state, langs) {
+    const langStatus = {};
+    langs.forEach(lang => {
+      langStatus[lang] = {
+        isDownloaded: false,
+        hasUpdates: false,
+        isUpdating: false,
+      };
+    });
+    state.langStatus = langStatus;
+  },
+
   setDownloadedLangs(state, langs) {
     langs.forEach(lang => {
       state.langStatus[lang].isDownloaded = true;
+      state.langStatus[lang].hasUpdates = false;
+      state.langStatus[lang].isUpdating = false;
     });
   },
 
@@ -103,6 +129,10 @@ const mutations = {
     langs.forEach(lang => {
       state.langStatus[lang].hasUpdates = true;
     });
+  },
+
+  setLangUpdatingStatus(state, { lang, isUpdating }) {
+    state.langStatus[lang].isUpdating = isUpdating;
   },
 };
 
