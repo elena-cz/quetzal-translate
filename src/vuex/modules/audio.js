@@ -6,8 +6,13 @@ const audioCacheWorker = new Worker('@/workers/audioCacheWorker.js', {
 
 // TO DO
 // Add snackbar notifications
-// Add back notification for hasUpdates
+// Add badge notification for hasUpdates
 // Detect feature compatibility & add error messages & analytics
+
+// FUTURE
+// Show size of download
+// Show modal confirmations
+// Handle case of downloading languge that hasn't been loaded yet
 
 /*
 
@@ -60,7 +65,6 @@ const actions = {
     commit('setInitialLangStatus', langs);
     dispatch('setUpWorkerListeners');
     const format = Howler.codecs('webm') ? 'webm' : 'mp3';
-    // commit('setFormat', format);
     audioCacheWorker.postMessage({ type: 'INIT', langs, translations, format });
   },
 

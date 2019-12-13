@@ -151,7 +151,7 @@ class AudioCacheManager {
   };
 
   // HANDLE USER ACTIONS
-  X;
+
   downloadLang = async lang => {
     const { init, updateAudioCache, setDownloadedLangsInIdb } = this;
     await updateAudioCache(lang);
@@ -261,8 +261,9 @@ class AudioCacheManager {
   };
 }
 
-// EVENT LISTENERS
 const audioCacheManager = new AudioCacheManager();
+
+// EVENT LISTENERS
 
 self.onmessage = async ({ data }) => {
   const { type } = data;
