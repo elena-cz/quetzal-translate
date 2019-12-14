@@ -20,7 +20,7 @@ const state = {
  */
 
 const getters = {
-  exampleGetter: state => {},
+  // exampleGetter: state => {},
 };
 
 /*

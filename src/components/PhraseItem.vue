@@ -41,6 +41,8 @@ export default {
   },
 
   computed: {
+    ...mapGetters('favorites', ['indexInFavorites']),
+
     playlist() {
       const { translation } = this;
       const { mp3_url = '', webm_url = '' } = translation;
@@ -62,7 +64,17 @@ export default {
     },
   },
 
-  methods: {},
+  methods: {
+    handlePhraseClick() {
+      const { phrase, lang, $store } = this;
+      const { id } = phrase;
+      $store.dispatch('ui/updateCurrentId', { id, lang });
+    },
+
+    toggleFavorite() {
+      this.$store.dispatch('favorites/toggleFavorite');
+    },
+  },
 };
 </script>
 
@@ -71,18 +83,26 @@ export default {
     v-if="showTranslation"
     class="inner-panel"
     :class="langIndex === 0 ? 'primary-theme' : 'secondary-theme'"
+    @change="handlePhraseClick"
   >
-    <v-expansion-panel-header hide-actions class="d-flex justify-space-between align-center">
+    <v-expansion-panel-header
+      hide-actions
+      class="d-flex justify-space-between align-center"
+    >
       <span>{{ phrase.text || '' }}</span>
       <AudioPlayer
         :playlist="[playlist]"
         :color="langIndex === 0 ? 'primary' : 'secondary'"
         :item-index="itemIndex"
+        :lang="lang"
+        :phrase-id="phrase.id"
       />
     </v-expansion-panel-header>
 
     <v-expansion-panel-content>
-      <span :id="translationId" class="translation-text font-weight-bold">{{ translation.text }}</span>
+      <span :id="translationId" class="translation-text font-weight-bold">{{
+        translation.text
+      }}</span>
 
       <div class="d-flex justify-end align-center">
         <!-- <v-tooltip bottom>
@@ -100,14 +120,30 @@ export default {
           <span>Copy</span>
         </v-tooltip>-->
 
-        <!-- <v-tooltip bottom>
+        <v-tooltip bottom>
           <template v-slot:activator="{ on }">
-            <v-btn icon text v-on="on" class="phrase-action" @click.prevent>
-              <v-icon class="material-icons-round star">star_border</v-icon>
+            <v-btn
+              icon
+              text
+              v-on="on"
+              class="phrase-action"
+              @click.stop="toggleFavorite"
+            >
+              <v-icon
+                v-if="indexInFavorites > -1"
+                class="material-icons-round star"
+                color="yellow"
+                >star</v-icon
+              >
+              <v-icon v-else class="material-icons-round star"
+                >star_border</v-icon
+              >
             </v-btn>
           </template>
-          <span>Favorite</span>
-        </v-tooltip>-->
+          <span>{{
+            indexInFavorites > -1 ? 'Remove Favorite' : 'Favorite'
+          }}</span>
+        </v-tooltip>
       </div>
     </v-expansion-panel-content>
   </v-expansion-panel>

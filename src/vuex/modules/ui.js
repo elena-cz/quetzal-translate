@@ -9,6 +9,8 @@ const state = {
   routeName: '',
   routeParams: {},
   routeMeta: {},
+  currentId: '',
+  currentLang: '',
 };
 
 /*
@@ -50,10 +52,12 @@ const getters = {
  */
 
 const actions = {
-  // exampleAction({ commit, dispatch, state, getters, rootState, rootGetters }, otherParams) { },
-
   parseRoute({ commit }, { name, params, meta }) {
     commit('setCurrentRoute', { name, params, meta });
+  },
+
+  updateCurrentId({ commit }, idAndLang) {
+    commit('setCurrentId', idAndLang);
   },
 };
 
@@ -68,6 +72,11 @@ const mutations = {
     state.routeName = name;
     state.routeParams = params;
     state.routeMeta = meta;
+  },
+
+  setCurrentId(state, { id, lang }) {
+    state.currentId = id;
+    state.currentLang = lang;
   },
 };
 

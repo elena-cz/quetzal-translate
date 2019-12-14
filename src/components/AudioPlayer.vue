@@ -19,6 +19,14 @@ export default {
       type: Number,
       default: null,
     },
+    lang: {
+      type: String,
+      default: '',
+    },
+    phraseId: {
+      type: String,
+      default: '',
+    },
   },
 
   data() {
@@ -128,6 +136,7 @@ export default {
 
     playOrPause() {
       const { disabled, playing, sound, reset } = this;
+      const { $root, $store, itemIndex, phraseId, lang } = this;
       // if (disabled) {
       // this.$store.dispatch('ui/showSnack', 'Audio not available');
       // return;
@@ -140,7 +149,9 @@ export default {
         sound.play();
         this.startLoadingTimer();
       }
-      this.$root.$emit('playingIndex', this.itemIndex);
+
+      $root.$emit('playingIndex', itemIndex);
+      $store.dispatch('ui/updateCurrentId', { id: phraseId, lang });
     },
 
     onPlay() {
@@ -229,8 +240,16 @@ export default {
     :disabled="disabled"
     @click.prevent.stop="playOrPause"
   >
-    <v-icon v-if="playing" key="stop" x-large class="material-icons-round">stop</v-icon>
-    <v-icon v-else-if="!soundLoading" key="play" x-large class="material-icons-round">play_arrow</v-icon>
+    <v-icon v-if="playing" key="stop" x-large class="material-icons-round"
+      >stop</v-icon
+    >
+    <v-icon
+      v-else-if="!soundLoading"
+      key="play"
+      x-large
+      class="material-icons-round"
+      >play_arrow</v-icon
+    >
   </v-btn>
 </template>
 

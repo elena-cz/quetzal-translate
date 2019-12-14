@@ -18,6 +18,7 @@ export default {
   computed: {
     ...mapState('topics', ['subtopicIds', 'subtopics']),
     ...mapState('phrases', ['phrases', 'translations']),
+    ...mapState('favorites', ['favoritePhrases']),
   },
 
   created() {
@@ -62,21 +63,63 @@ export default {
     </v-tabs>
 
     <v-tabs-items v-model="tab" class="tab-items pt-5">
-      <v-tab-item v-for="(lang, langIndex) in langs" :key="lang" class="tab-item pb-12">
+      <v-tab-item
+        v-for="(lang, langIndex) in langs"
+        :key="lang"
+        class="tab-item pb-12"
+      >
         <v-expansion-panels accordion elevation="0">
           <v-expansion-panel
-            v-for="(subtopicId) in subtopicIds"
+            :key="`${lang}Favorites`"
+            @click="handleSubtopicClick(`${lang}Favorites`)"
+          >
+            <v-expansion-panel-header
+              :ref="`${lang}Favorites`"
+              class="outer-header pr-2"
+            >
+              Favorites
+              <v-icon class="material-icons-round ml-2 star" color="yellow"
+                >star</v-icon
+              >
+            </v-expansion-panel-header>
+            <v-expansion-panel-content>
+              <v-expansion-panels
+                v-if="favoritePhrases[lang]"
+                accordion
+                v-model="openItemIndex"
+              >
+                <PhraseItem
+                  v-for="(phraseId, itemIndex) in favoritePhrases[lang]"
+                  :key="phraseId"
+                  :phrase="phrases[phraseId]"
+                  :translation="getTranslation(lang, phraseId)"
+                  :lang="lang"
+                  :langIndex="langIndex"
+                  :itemIndex="itemIndex"
+                />
+              </v-expansion-panels>
+              <div v-else class="caption pl-4">
+                No favorites added
+              </div>
+            </v-expansion-panel-content>
+          </v-expansion-panel>
+
+          <v-expansion-panel
+            v-for="subtopicId in subtopicIds"
             :key="subtopicId"
             @click="handleSubtopicClick(subtopicId)"
           >
             <v-expansion-panel-header
               :ref="subtopicId"
               class="outer-header pr-3"
-            >{{ subtopics[subtopicId].title }}</v-expansion-panel-header>
+            >
+              {{ subtopics[subtopicId].title }}
+            </v-expansion-panel-header>
             <v-expansion-panel-content>
               <v-expansion-panels accordion v-model="openItemIndex">
                 <PhraseItem
-                  v-for="(phraseId, itemIndex) in subtopics[subtopicId].phraseIds"
+                  v-for="(phraseId, itemIndex) in subtopics[subtopicId]
+                    .phraseIds"
                   :key="phraseId"
                   :phrase="phrases[phraseId]"
                   :translation="getTranslation(lang, phraseId)"
@@ -111,6 +154,11 @@ export default {
   height: 100%;
   max-height: 100%;
   overflow-y: auto;
+}
+
+.star {
+  flex-grow: 0;
+  font-size: 28px !important;
 }
 
 // .tab-item {

@@ -10,11 +10,11 @@ export default {
   },
 
   computed: {
-    ...mapGetters('audio', [
-      'showDownloadNotification',
-      'downloadTooltip',
-      'userCacheIsUpToDate',
-    ]),
+    // ...mapGetters('audio', [
+    //   'showDownloadNotification',
+    //   'downloadTooltip',
+    //   'userCacheIsUpToDate',
+    // ]),
   },
 
   methods: {
@@ -24,7 +24,6 @@ export default {
   },
 };
 </script>
-
 
 <template>
   <!-- <Layout page-title="Dentistry">
@@ -51,5 +50,4 @@ export default {
   <!-- </Layout> -->
 </template>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

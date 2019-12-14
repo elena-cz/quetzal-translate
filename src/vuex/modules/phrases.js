@@ -80,97 +80,39 @@ export default {
   mutations,
 };
 
-// const testData = {
-//   subtopicIds: ['intake', 'chairside', 'postop'],
-//   subtopics: {
-//     intake: {
-//       id: 'intake',
-//       title: 'Intake',
-//       phraseIds: [1, 2, 3],
-//     },
-//     chairside: {
-//       id: 'chairside',
-//       title: 'Chairside',
-//       phraseIds: [4, 5, 6, 7],
-//     },
-//     postop: {
-//       id: 'postop',
-//       title: 'Post Op',
-//       phraseIds: [8, 9],
-//     },
-//   },
-//   phrases: {
-//     1: {
-//       id: '1',
-//       text: 'Good day!',
-//       es: {
-//         id: 'es-1',
-//         text: '¡Buenos días!',
-//       },
-//     },
-//     2: {
-//       id: '2',
-//       text: 'I am your dentist',
-//       es: {
-//         id: 'es-2',
-//         text: 'Soy su dentista',
-//       },
-//     },
-//     3: {
-//       id: '3',
-//       text: 'We need to fix your broken tooth',
-//       es: {
-//         id: 'es-3',
-//         text: 'Tenemos que reparar su diente roto',
-//       },
-//     },
-//     4: {
-//       id: '4',
-//       text: 'Open your mouth, please.',
-//       es: {
-//         id: 'es-4',
-//         text: 'Abra la boca, por favor.',
-//       },
-//     },
-//     5: {
-//       id: '5',
-//       text: 'Lift your hand to signal to me if you have pain.',
-//       es: {
-//         id: 'es-5',
-//         text: 'Levante su mano para señalarme si tiene dolor.',
-//       },
-//     },
-//     6: {
-//       id: '6',
-//       text: 'Close your mouth a little, please.',
-//       es: {
-//         id: 'es-6',
-//         text: 'Cierre la boca un poco, por favor.',
-//       },
-//     },
-//     7: {
-//       id: '7',
-//       text: "I'm going to clean your teeth.",
-//       es: {
-//         id: 'es-7',
-//         text: 'Le voy a limpiar los dientes.',
-//       },
-//     },
-//     8: {
-//       id: '8',
-//       text: 'Do not eat or drink for 30 minutes.',
-//       es: {
-//         id: 'es-8',
-//         text: 'No coma ni beba por 30 minutos.',
-//       },
-//     },
-//     9: {
-//       id: '9',
-//       text: 'Do not brush tonight.',
-//       es: {
-//         id: 'es-9',
-//         text: 'No se cepille esta noche.',
-//       },
-//     },
-//   },
-// };
+/*
+
+State Examples:
+
+phrases: {
+  1gZjiK5sEDCzouYl46LB: {
+    createdAt: "2019-11-03T17:12:03-06:00",
+    esId: "es-1gZjiK5sEDCzouYl46LB",
+    id: "1gZjiK5sEDCzouYl46LB",
+    kekId: "kek-1gZjiK5sEDCzouYl46LB",
+    langs: ['es', 'kek'],
+    lastUpdatedAt: "2019-11-03T17:12:03-06:00",
+    text: "Does it hurt anymore?",
+    topics: ['dentistry'],
+    version:1,
+    visible:true
+  }
+};
+
+translations: {
+  es-0fnCd566NShivvjokGnt: {
+    createdAt: "2019-11-01T22:31:12-07:00",
+    enId: "0fnCd566NShivvjokGnt",
+    id: "es-0fnCd566NShivvjokGnt",
+    lang: "es",
+    lastUpdatedAt: "2019-11-03T18:15:02-06:00",
+    mp3_ref: "es-0fnCd566NShivvjokGnt/es-0fnCd566NShivvjokGnt-201911031814.mp3",
+    mp3_url: "https://firebasestorage.googleapis.com/v0/b/quetzal-translate.appspot.com/o/es-0fnCd566NShivvjokGnt%2Fes-0fnCd566NShivvjokGnt-201911031814.mp3?alt=media&token=05febe28-1449-44f1-a68f-10f2f3294c78",
+    text: "Será solo una punzadita.",
+    version:2 ,
+    webm_ref: "es-0fnCd566NShivvjokGnt/es-0fnCd566NShivvjokGnt-201911031814.webm",
+    webm_url: "https://firebasestorage.googleapis.com/v0/b/quetzal-translate.appspot.com/o/es-0fnCd566NShivvjokGnt%2Fes-0fnCd566NShivvjokGnt-201911031814.webm?alt=media&token=ab35ace6-d3f9-4da0-8e8b-d81f75b9350e",
+  }
+}
+
+*/

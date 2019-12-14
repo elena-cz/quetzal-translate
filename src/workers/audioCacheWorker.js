@@ -1,6 +1,6 @@
-import { Store, set, get, keys, del, clear } from 'idb-keyval';
+import { Store, set, get, keys, del } from 'idb-keyval';
 const itemsStore = new Store('quetzal-audio-items', 'cached-items');
-const infoStore = new Store('quetzal-audio-info', 'cache-info');
+const infoStore = new Store('quetzal-info', 'user-settings');
 
 // CLASS DEFINITION
 

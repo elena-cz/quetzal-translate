@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 
 import audio from './modules/audio';
+import favorites from './modules/favorites';
 import languages from './modules/languages';
 import phrases from './modules/phrases';
 import sw from './modules/sw';
@@ -14,6 +15,7 @@ Vue.use(Vuex);
 const store = new Vuex.Store({
   modules: {
     audio,
+    favorites,
     languages,
     phrases,
     sw,
@@ -27,7 +29,7 @@ const store = new Vuex.Store({
 store.dispatch('user/init');
 store.dispatch('topics/init');
 store.dispatch('phrases/init');
-// store.dispatch('audio/init');
+store.dispatch('favorites/init');
 
 export default store;
 
