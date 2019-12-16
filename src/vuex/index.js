@@ -3,6 +3,7 @@ import Vuex from 'vuex';
 
 import analytics from './modules/analytics';
 import audio from './modules/audio';
+import device from './modules/device';
 import favorites from './modules/favorites';
 import languages from './modules/languages';
 import phrases from './modules/phrases';
@@ -17,6 +18,7 @@ const store = new Vuex.Store({
   modules: {
     analytics,
     audio,
+    device,
     favorites,
     languages,
     phrases,
@@ -32,6 +34,7 @@ store.dispatch('user/init');
 store.dispatch('topics/init');
 store.dispatch('phrases/init');
 store.dispatch('favorites/init');
+store.dispatch('device/init');
 
 export default store;
 
