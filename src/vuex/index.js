@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 
+import analytics from './modules/analytics';
 import audio from './modules/audio';
 import favorites from './modules/favorites';
 import languages from './modules/languages';
@@ -14,6 +15,7 @@ Vue.use(Vuex);
 
 const store = new Vuex.Store({
   modules: {
+    analytics,
     audio,
     favorites,
     languages,

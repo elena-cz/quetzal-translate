@@ -4,6 +4,7 @@ import 'firebase/firestore';
 import 'firebase/functions';
 // import 'firebase/performance';
 import 'firebase/storage';
+import 'firebase/analytics';
 import * as firebaseui from 'firebaseui';
 
 // Firebase init
@@ -51,8 +52,12 @@ const usersCollection = db.collection('users');
 // Storage
 const storage = firebase.storage();
 
+// Analytics
+const analytics = firebase.analytics();
+
 // Export
 const fb = {
+  analytics,
   auth,
   authUi,
   authValues,

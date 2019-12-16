@@ -60,8 +60,10 @@ const actions = {
     if (indexInFavorites === -1) {
       langIds.push(id);
       langIds = sortByText(phrases, langIds);
+      dispatch('analytics/saveFavorite', { id, lang }, { root: true });
     } else {
       langIds.splice(indexInFavorites, 1);
+      dispatch('analytics/removeFavorite', { id, lang }, { root: true });
     }
 
     favoritePhrases[lang] = langIds;
