@@ -30,6 +30,13 @@ export default {
 </script>
 
 <template>
+  <!-- <v-badge :value="showDownloadNotification" color="accent" overlap class="small-badge">
+              <template v-slot:badge>
+                <span></span>
+              </template>
+              <v-icon v-if="userCacheIsUpToDate" class="material-icons-round" large>check</v-icon>
+              <v-icon v-else class="material-icons-round" large>download</v-icon>
+            </v-badge> -->
   <v-btn
     v-if="type === 'menu'"
     text
@@ -37,7 +44,7 @@ export default {
     :retain-focus-on-click="false"
     dark
     class="hamburger hamburger--squeeze"
-    :class="{'is-active': isBackLayerActive }"
+    :class="{ 'is-active': isBackLayerActive }"
     @click="$root.$emit('toggleBackLayer', 'menu')"
   >
     <span class="hamburger-box">
@@ -52,7 +59,7 @@ export default {
     :retain-focus-on-click="false"
     dark
     class="hamburger hamburger--arrowalt"
-    :class="{'is-active': !isBackLayerActive }"
+    :class="{ 'is-active': !isBackLayerActive }"
     @click="$router.go(-1)"
   >
     <span class="hamburger-box">

@@ -11,6 +11,7 @@ const state = {
   routeMeta: {},
   currentId: '',
   currentLang: '',
+  currentTopic: 'dentistry',
   snack: {
     text: '',
     actionText: '',
@@ -58,8 +59,14 @@ const getters = {
  */
 
 const actions = {
-  parseRoute({ commit }, { name, params, meta }) {
+  parseRoute({ commit, dispatch, state }, { name, params, meta, path }) {
+    const { currentTopic } = state;
     commit('setCurrentRoute', { name, params, meta });
+    dispatch(
+      'analytics/sendView',
+      { name, path, topic: currentTopic },
+      { root: true }
+    );
   },
 
   updateCurrentId({ commit }, idAndLang) {

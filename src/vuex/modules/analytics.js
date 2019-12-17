@@ -15,7 +15,7 @@ const state = {};
  */
 
 const getters = {
-  exampleGetter: state => {},
+  // exampleGetter: state => {},
 };
 
 /*
@@ -25,25 +25,32 @@ const getters = {
  */
 
 const actions = {
-  // exampleAction(
-  //   { commit, dispatch, state, getters, rootState, rootGetters },
-  //   otherParams
-  // ) {},
-
-  saveFavorite({ rootGetters }, { id, lang }) {
-    // const category = rootGetters['ui/currentLang'];
-    console.log('in saveFavorite analytics');
-    fb.analytics.logEvent('save_favorite', { phrase_id: id, language: lang });
+  sendView(context, { name, path, topic }) {
+    fb.analytics.logEvent('screen_view', {
+      screen_name: name,
+      path,
+      topic,
+    });
   },
 
-  removeFavorite({ rootGetters }, id) {
-    fb.analytics.logEvent('remove_favorite');
-    // const category = rootGetters['ui/currentCategory'];
-    // gtag('event', 'Remove_Favorite', {
-    //   event_category: category,
-    //   event_label: cardId,
-    //   value: 0,
-    // });
+  saveFavorite({ rootState }, { id, lang }) {
+    const { currentTopic } = rootState.ui;
+    fb.analytics.logEvent('save_favorite', {
+      phrase_id: id,
+      language: lang,
+      topic: currentTopic,
+      value: 1,
+    });
+  },
+
+  removeFavorite({ rootState }, { id, lang }) {
+    const { currentTopic } = rootState.ui;
+    fb.analytics.logEvent('remove_favorite', {
+      phrase_id: id,
+      language: lang,
+      topic: currentTopic,
+      value: 0,
+    });
   },
 };
 
@@ -54,9 +61,9 @@ const actions = {
  */
 
 const mutations = {
-  exampleMutation(state, data) {
-    state.property = data;
-  },
+  // exampleMutation(state, data) {
+  //   state.property = data;
+  // },
 };
 
 export default {
