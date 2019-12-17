@@ -68,9 +68,9 @@ const actions = {
     audioCacheWorker.postMessage({ type: 'INIT', langs, translations, format });
   },
 
-  setUpWorkerListeners({ dispatch, commit }) {
+  setUpWorkerListeners({ commit }) {
     audioCacheWorker.onmessage = ({ data }) => {
-      console.log('worker message:', data);
+      // console.log('worker message:', data);
       const { type } = data;
       if (type === 'DOWNLOADED_LANGS_INFO') {
         commit('setDownloadedLangs', data.langs);

@@ -15,6 +15,23 @@ export default {
     },
   },
 
+  created() {
+    window.addEventListener('beforeinstallprompt', e => {
+      console.log('Stashing installPrompt');
+      // Prevent Chrome 67 and earlier from automatically showing the prompt
+      e.preventDefault();
+      // Stash the event so it can be triggered later.
+      this.$store.dispatch('sw/updateInstallPrompt', e);
+    });
+
+    // window.addEventListener('appinstalled', (e) => {
+    //   console.log('PWA installed');
+    //   // Only relevant if clicked button from prompt
+    //   // this.$store.commit('sw/setAcceptedInstallPrompt', true);
+    //   this.$store.dispatch('analytics/acceptAddToHomeScreen');
+    // });
+  },
+
   methods: {
     getRoute() {
       const { $store, $route } = this;

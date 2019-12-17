@@ -11,6 +11,12 @@ const state = {
   routeMeta: {},
   currentId: '',
   currentLang: '',
+  snack: {
+    text: '',
+    actionText: '',
+    handler: null,
+    keepOpen: false,
+  },
 };
 
 /*
@@ -59,6 +65,13 @@ const actions = {
   updateCurrentId({ commit }, idAndLang) {
     commit('setCurrentId', idAndLang);
   },
+
+  updateSnack(
+    { commit },
+    { text = '', actionText = '', handler = null, keepOpen = false }
+  ) {
+    commit('setSnack', { text, actionText, handler, keepOpen });
+  },
 };
 
 /*
@@ -77,6 +90,10 @@ const mutations = {
   setCurrentId(state, { id, lang }) {
     state.currentId = id;
     state.currentLang = lang;
+  },
+
+  setSnack(state, snack) {
+    state.snack = snack;
   },
 };
 

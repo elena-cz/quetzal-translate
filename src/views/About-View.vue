@@ -34,7 +34,16 @@ export default {
     // ...mapActions('module', [
     //   'foo',
     // ]),
-    // method() {},
+    showSnack() {
+      this.$store.dispatch('ui/updateSnack', {
+        text: 'Test snack',
+        actionText: 'Test',
+        handler: () => {
+          console.log('test handler');
+        },
+        keepOpen: true,
+      });
+    },
   },
 };
 </script>
@@ -43,7 +52,7 @@ export default {
   <div>
     <!-- <Layout page-title="About">
     <template v-slot:main-content>-->
-    <v-btn rounded color="primary" @click.stop="testButton">Test</v-btn>
+    <v-btn rounded color="primary" @click.stop="showSnack">Show Snack</v-btn>
     <ol>
       <li>Good day!</li>
       <li>Please sit here.</li>
