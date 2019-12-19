@@ -1,14 +1,14 @@
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex';
 import PhraseItem from '@/components/PhraseItem.vue';
-import InFeedPromo from '@/components/InFeedPromo';
+import OfflinePromo from '@/components/OfflinePromo';
 
 export default {
   name: 'Home-View',
 
   components: {
     PhraseItem,
-    InFeedPromo,
+    OfflinePromo,
   },
 
   data: () => ({
@@ -134,7 +134,7 @@ export default {
           </v-expansion-panel>
         </v-expansion-panels>
 
-        <InFeedPromo />
+        <OfflinePromo />
       </v-tab-item>
     </v-tabs-items>
   </v-container>

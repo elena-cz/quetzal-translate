@@ -30,6 +30,15 @@ const actions = {
       screen_name: name,
       path,
       topic,
+      value: 1,
+    });
+  },
+
+  playPhrase(context, { id, lang }) {
+    fb.analytics.logEvent('play', {
+      phrase_id: id,
+      language: lang,
+      value: 2,
     });
   },
 
