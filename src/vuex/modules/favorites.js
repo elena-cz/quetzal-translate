@@ -1,7 +1,5 @@
-import { Store, set, get } from 'idb-keyval';
 import { sortByText } from '@/helpers/helpers';
-
-const infoStore = new Store('quetzal-info', 'user-settings');
+import { setIDB, getIDB } from '@/helpers/settings';
 
 /*
 
@@ -40,13 +38,8 @@ const actions = {
   },
 
   async getFavoritesFromIdb({ commit }) {
-    try {
-      const val = await get('favoritePhrases', infoStore);
-      const favorites = val ? JSON.parse(val) : {};
-      commit('setFavoritePhrases', favorites);
-    } catch (error) {
-      console.error('Error getting favorites from IndexedDB', error);
-    }
+    const favorites = await getIDB('favoritePhrases');
+    commit('setFavoritePhrases', favorites || {});
   },
 
   toggleFavorite({ commit, dispatch, state, getters, rootState }) {
@@ -54,28 +47,25 @@ const actions = {
     const { currentId: id, currentLang: lang } = rootState.ui;
     const { indexInFavorites } = getters;
     const favoritePhrases = { ...state.favoritePhrases };
+    const isFavorite = indexInFavorites > -1;
     let langIds = favoritePhrases[lang] || [];
     langIds = [...langIds];
 
-    if (indexInFavorites === -1) {
+    if (!isFavorite) {
       langIds.push(id);
       langIds = sortByText(phrases, langIds);
-      dispatch('analytics/saveFavorite', { id, lang }, { root: true });
     } else {
       langIds.splice(indexInFavorites, 1);
-      dispatch('analytics/removeFavorite', { id, lang }, { root: true });
     }
 
     favoritePhrases[lang] = langIds;
     commit('updateFavoritePhrases', { lang, langIds });
-    dispatch('setFavoritePhrasesInIdb', favoritePhrases);
-  },
+    setIDB('favoritePhrases', favoritePhrases);
 
-  async setFavoritePhrasesInIdb(context, favorites) {
-    try {
-      await set('favoritePhrases', JSON.stringify(favorites), infoStore);
-    } catch (error) {
-      console.error('Error setting favorites in IndexedDB', error);
+    if (!isFavorite) {
+      dispatch('analytics/saveFavorite', { id, lang }, { root: true });
+    } else {
+      dispatch('analytics/removeFavorite', { id, lang }, { root: true });
     }
   },
 };
