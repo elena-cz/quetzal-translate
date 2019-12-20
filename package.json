@@ -5,7 +5,9 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "deploy-functions": "firebase deploy --only functions",
+    "deploy-hosting": "firebase deploy --only hosting"
   },
   "dependencies": {
     "bowser": "^2.7.0",
