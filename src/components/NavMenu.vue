@@ -43,7 +43,7 @@ export default {
       min-width="200"
     >
       <v-list-item-group tile="false" @change="$root.$emit('closeBackLayer')">
-        <v-list-item class="install-item">
+        <!-- <v-list-item class="install-item">
           <v-list-item-icon>
             <svg
               class="install-icon"
@@ -60,7 +60,7 @@ export default {
           <v-list-item-content>
             <v-list-item-title>Install</v-list-item-title>
           </v-list-item-content>
-        </v-list-item>
+        </v-list-item> -->
 
         <!-- <v-list-item :to="'/'">
           <v-list-item-icon>

@@ -93,55 +93,41 @@ export default {
 </script>
 
 <template>
-  <div class="app-container">
-    <v-app-bar app flat color="transparent">
-      <v-toolbar-title class="headline white--text">Quetzal Admin</v-toolbar-title>
-      <v-spacer></v-spacer>
-      <v-btn
-        v-if="page === 'phrases'"
-        text
-        color="white"
-        @click="$router.push('/admin/topics')"
-      >Topics</v-btn>
-      <v-btn v-else text color="white" @click="$router.push('/admin/phrases')">Phrases</v-btn>
-    </v-app-bar>
+  <v-container class="admin-grid">
+    <aside class="sidebar">
+      <v-btn color="primary" rounded @click="setCurrentId('')">{{
+        newButtonText
+      }}</v-btn>
 
-    <v-content>
-      <v-container class="admin-grid">
-        <aside class="sidebar">
-          <v-btn color="primary" rounded @click="setCurrentId('')">{{ newButtonText }}</v-btn>
-
-          <v-list shaped dense>
-            <v-subheader class="text-uppercase">{{ collection }}</v-subheader>
-            <v-list-item-group v-model="currentIndex" color="primary">
-              <v-list-item v-for="id in docIds" :key="id" @click="setCurrentId(id)">
-                <v-list-item-content>
-                  <v-list-item-title
-                    v-text="page === 'phrases' ? docs[id].text : id"
-                    :class="(docs[id].visible) ? '' : 'grey--text'"
-                  ></v-list-item-title>
-                </v-list-item-content>
-              </v-list-item>
-            </v-list-item-group>
-          </v-list>
-        </aside>
-        <div class="main">
-          <AdminEditTopic
-            v-if="page === 'topics'"
-            :saved-id="currentId"
-            :doc="currentDoc"
-            :set-current-id="setCurrentId"
-          />
-          <AdminEditPhrase
-            v-else
-            :saved-id="currentId"
-            :doc="currentDoc"
-            :set-current-id="setCurrentId"
-          />
-        </div>
-      </v-container>
-    </v-content>
-  </div>
+      <v-list shaped dense>
+        <v-subheader class="text-uppercase">{{ collection }}</v-subheader>
+        <v-list-item-group v-model="currentIndex" color="primary">
+          <v-list-item v-for="id in docIds" :key="id" @click="setCurrentId(id)">
+            <v-list-item-content>
+              <v-list-item-title
+                v-text="page === 'phrases' ? docs[id].text : id"
+                :class="docs[id].visible ? '' : 'grey--text'"
+              ></v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list-item-group>
+      </v-list>
+    </aside>
+    <div class="main">
+      <AdminEditTopic
+        v-if="page === 'topics'"
+        :saved-id="currentId"
+        :doc="currentDoc"
+        :set-current-id="setCurrentId"
+      />
+      <AdminEditPhrase
+        v-else
+        :saved-id="currentId"
+        :doc="currentDoc"
+        :set-current-id="setCurrentId"
+      />
+    </div>
+  </v-container>
 </template>
 
 <style lang="scss" scoped>

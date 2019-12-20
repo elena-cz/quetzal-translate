@@ -5,7 +5,7 @@
  */
 
 const state = {
-  appTitle: 'Quetzal',
+  appTitle: 'Quetzal Translate',
   routeName: '',
   routeParams: {},
   routeMeta: {},
@@ -43,7 +43,7 @@ const getters = {
     const { routeName } = state;
     const types = {
       about: 'back',
-      admin: 'menu',
+      admin: 'back',
       auth: 'back',
       home: 'menu',
       offline: 'back',

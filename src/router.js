@@ -54,7 +54,7 @@ router.beforeEach((to, from, next) => {
   const { currentUser } = fb.auth;
 
   if (requiresAuth && !currentUser) {
-    next({ name: 'Auth', query: { redirect: to.path } });
+    next({ name: 'auth', query: { redirect: to.path } });
   } else if (isAdminView) {
     const { uid } = currentUser;
     fb.usersCollection

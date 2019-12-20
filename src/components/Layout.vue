@@ -2,6 +2,7 @@
 import { mapState, mapGetters } from 'vuex';
 import NavMenu from '@/components/NavMenu.vue';
 import NavMenuIcon from '@/components/NavMenuIcon.vue';
+import AdminPageSwitcher from '@/components/admin/AdminPageSwitcher.vue';
 import Snackbar from '@/components/Snackbar.vue';
 
 export default {
@@ -10,10 +11,9 @@ export default {
   components: {
     NavMenu,
     NavMenuIcon,
+    AdminPageSwitcher,
     Snackbar,
   },
-
-  props: {},
 
   data() {
     return {
@@ -26,7 +26,7 @@ export default {
   },
 
   computed: {
-    ...mapState('ui', ['appTitle']),
+    ...mapState('ui', ['appTitle', 'routeName', 'routeParams']),
     ...mapGetters('ui', ['pageTitle', 'navType']),
     ...mapState('sw', ['updateNotification']),
 
@@ -101,7 +101,12 @@ export default {
 
         <v-spacer></v-spacer>
 
-        <slot name="right-icons" />
+        <AdminPageSwitcher
+          v-if="routeName === 'admin'"
+          :page="routeParams.page"
+        />
+
+        <!-- <slot name="right-icons" /> -->
       </v-app-bar>
 
       <transition

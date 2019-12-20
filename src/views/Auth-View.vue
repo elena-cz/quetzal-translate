@@ -1,5 +1,5 @@
 <script>
-import { mapState, mapGetters, mapActions } from 'vuex';
+// import { mapState, mapGetters, mapActions } from 'vuex';
 import fb from '@/firebaseConfig';
 // import HelloWorld from '@/components/HelloWorld.vue';
 
@@ -71,20 +71,14 @@ export default {
 </script>
 
 <template>
-  <div class="app-container">
-    <v-app-bar app flat color="transparent">
-      <v-toolbar-title class="headline white--text">Quetzal</v-toolbar-title>
-    </v-app-bar>
+  <v-container class="d-flex flex-column align-center">
+    <div id="firebaseui-auth-container"></div>
+    <div id="loader">Loading...</div>
 
-    <v-content>
-      <v-container class="d-flex flex-column align-center">
-        <div id="firebaseui-auth-container"></div>
-        <div id="loader">Loading...</div>
-
-        <v-btn outlined color="primary" class="mt-6" @click.prevent="signOut">Sign Out</v-btn>
-      </v-container>
-    </v-content>
-  </div>
+    <v-btn outlined color="primary" class="mt-6" @click.prevent="signOut"
+      >Sign Out</v-btn
+    >
+  </v-container>
 </template>
 
 <style lang="scss" scoped>
