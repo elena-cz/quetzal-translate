@@ -4,6 +4,14 @@
   @include gradient-bkg;
 }
 
+// Typography
+
+.v-application a {
+  color: var(--v-info-darken1) !important;
+}
+
+// Containers
+
 .app-container {
   height: 100vh;
 }
