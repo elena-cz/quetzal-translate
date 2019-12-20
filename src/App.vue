@@ -36,7 +36,7 @@ export default {
     getRoute() {
       const { $store, $route } = this;
       $store.dispatch('ui/parseRoute', $route);
-      console.log($route);
+      // console.log($route);
       // const appContainer = document.getElementById('main-app-container');
       // if (appContainer) {
       //   appContainer.scrollTop = 0;

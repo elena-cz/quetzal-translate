@@ -105,9 +105,8 @@ export default {
           src: source,
           // html5: !isIOS,
           html5: false,
-          // preload: false, // Added to make cache work
           onload: () => {
-            this.endLoadingTimer();
+            // this.endLoadingTimer();
           },
           onloaderror: (id, error) => {
             console.log('Error loading audio', error);
@@ -119,7 +118,7 @@ export default {
             this.onPause();
           },
           onend: () => {
-            this.skipToNext();
+            // this.skipToNext();
           },
           onplayerror: (id, error) => {
             console.log('Error playing audio', error);
@@ -134,30 +133,35 @@ export default {
       this.sounds = sounds;
     },
 
-    playOrPause() {
-      const { disabled, playing, sound, reset } = this;
-      const { $root, $store, itemIndex, phraseId, lang } = this;
+    async playOrPause() {
+      const { disabled, playing, sound, play, reset } = this;
+      const { $root, itemIndex, phraseId, lang } = this;
+
       // if (disabled) {
-      // this.$store.dispatch('ui/showSnack', 'Audio not available');
-      // return;
+      //   this.$store.dispatch('ui/updateSnack', { text: 'Audio not available' });
+      //   return;
       // }
       if (playing) {
         // sound.pause();
         reset();
       } else {
-        // sound.load(); // Added to make cache work
-        sound.play();
-        this.startLoadingTimer();
+        $root.$emit('playingItem', { index: itemIndex, id: phraseId, lang });
+        // Wait until data is set before playing
+        this.$nextTick(() => {
+          play();
+        });
+        // this.startLoadingTimer();
       }
+    },
 
-      $root.$emit('playingIndex', itemIndex);
-      $store.dispatch('ui/updateCurrentId', { id: phraseId, lang });
+    play() {
+      this.sound.play();
     },
 
     onPlay() {
       this.playing = true;
       this.startTimer();
-      this.endLoadingTimer();
+      // this.endLoadingTimer();
     },
 
     onPause() {
@@ -177,49 +181,50 @@ export default {
       clearInterval(window[`progressInterval${this.playerId}`]);
     },
 
-    startLoadingTimer() {
-      const { sound } = this;
-      if (sound.state() === 'loaded') {
-        return;
-      }
+    // startLoadingTimer() {
+    //   const { sound } = this;
+    //   if (sound.state() === 'loaded') {
+    //     return;
+    //   }
 
-      this.soundLoading = true;
-      this.totalSeconds = 100;
-      this.currentSeconds = 0;
-      window[`loadingInterval${this.playerId}`] = setInterval(() => {
-        if (this.soundLoading) {
-          this.currentSeconds += 100;
-        } else {
-          this.endLoadingTimer();
-        }
-      }, 1000);
-    },
+    //   this.soundLoading = true;
+    //   this.totalSeconds = 100;
+    //   this.currentSeconds = 0;
+    //   window[`loadingInterval${this.playerId}`] = setInterval(() => {
+    //     if (this.soundLoading) {
+    //       this.currentSeconds += 100;
+    //     } else {
+    //       this.endLoadingTimer();
+    //     }
+    //   }, 1000);
+    // },
 
-    endLoadingTimer() {
-      this.soundLoading = false;
-      clearInterval(window[`loadingInterval${this.playerId}`]);
-    },
+    // endLoadingTimer() {
+    //   this.soundLoading = false;
+    //   clearInterval(window[`loadingInterval${this.playerId}`]);
+    // },
 
-    skipToNext() {
-      const { playlist, currentIndex, clearTimer, reset } = this;
-      if (currentIndex < playlist.length - 1) {
-        clearTimer();
-        this.currentIndex += 1;
-        this.sound.play();
-        this.startLoadingTimer();
-      } else {
-        reset();
-      }
-    },
+    // skipToNext() {
+    //   const { playlist, currentIndex, clearTimer, reset } = this;
+    //   if (currentIndex < playlist.length - 1) {
+    //     clearTimer();
+    //     this.currentIndex += 1;
+    //     this.sound.play();
+    //     // this.startLoadingTimer();
+    //   } else {
+    //     reset();
+    //   }
+    // },
 
     reset() {
-      const { sound, clearTimer, endLoadingTimer } = this;
+      // const { sound, clearTimer, endLoadingTimer } = this;
+      const { sound, playing, clearTimer } = this;
 
       if ('stop' in sound) {
         sound.stop();
       }
       clearTimer();
-      endLoadingTimer();
+      // endLoadingTimer();
       this.playing = false;
       this.totalSeconds = 100;
       this.currentSeconds = 0;

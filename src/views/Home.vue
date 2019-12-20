@@ -24,8 +24,8 @@ export default {
   },
 
   created() {
-    const { $root, setOpenItemIndex } = this;
-    $root.$on('playingIndex', setOpenItemIndex);
+    const { $root, setOpenPhraseItem } = this;
+    $root.$on('playingItem', setOpenPhraseItem);
   },
 
   methods: {
@@ -36,8 +36,12 @@ export default {
       return translations[id];
     },
 
-    setOpenItemIndex(index) {
+    setOpenPhraseItem({ index, id, lang }) {
+      // console.log(index, id, lang);
       this.openItemIndex = index;
+      if (id) {
+        this.$store.dispatch('ui/updateCurrentId', { id, lang });
+      }
     },
 
     handleSubtopicClick(subtopicId) {
@@ -51,7 +55,7 @@ export default {
           block: 'start',
         });
       }, 400);
-      this.setOpenItemIndex(null);
+      this.setOpenPhraseItem({ index: null });
     },
   },
 };
@@ -134,7 +138,7 @@ export default {
           </v-expansion-panel>
         </v-expansion-panels>
 
-        <OfflinePromo />
+        <!-- <OfflinePromo /> -->
       </v-tab-item>
     </v-tabs-items>
   </v-container>

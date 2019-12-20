@@ -155,6 +155,7 @@ export default {
   display: block;
   margin-block-start: 8px;
   margin-block-end: 16px;
+  margin-right: 52px;
 }
 
 .phrase-action {
