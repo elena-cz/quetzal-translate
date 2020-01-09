@@ -39,12 +39,10 @@ export default {
 
 <template>
   <div>
-    <v-subheader>Downloaded Languages </v-subheader>
+    <v-subheader>Downloaded Languages</v-subheader>
     <v-list flat class="mb-5">
       <v-list-item v-if="!downloadedLangs.length" key="noDownloads">
-        <v-list-item-content class="caption">
-          No languages downloaded yet
-        </v-list-item-content>
+        <v-list-item-content class="caption">No languages downloaded yet</v-list-item-content>
       </v-list-item>
       <template v-for="(lang, index) in downloadedLangs">
         <v-list-item :key="lang">
@@ -53,11 +51,7 @@ export default {
           </v-list-item-content>
 
           <v-list-item-action class="d-flex flex-row align-center">
-            <v-progress-circular
-              v-if="langStatus[lang].isUpdating"
-              indeterminate
-              color="primary"
-            >
+            <v-progress-circular v-if="langStatus[lang].isUpdating" indeterminate color="primary">
               <v-icon class="material-icons-round">download</v-icon>
             </v-progress-circular>
 
@@ -70,9 +64,7 @@ export default {
                 small
                 class="mr-4"
                 @click.prevent="updateLang(lang)"
-              >
-                Update
-              </v-btn>
+              >Update</v-btn>
 
               <v-tooltip bottom>
                 <template v-slot:activator="{ on }">
@@ -89,14 +81,10 @@ export default {
       </template>
     </v-list>
 
-    <v-subheader>
-      Available Languages
-    </v-subheader>
+    <v-subheader>Available Languages</v-subheader>
     <v-list flat>
       <v-list-item v-if="!availableLangs.length" key="allDownloaded">
-        <v-list-item-content class="caption">
-          All languages downloaded
-        </v-list-item-content>
+        <v-list-item-content class="caption">All languages downloaded</v-list-item-content>
       </v-list-item>
       <template v-for="(lang, index) in availableLangs">
         <v-list-item :key="lang" color="primary">
