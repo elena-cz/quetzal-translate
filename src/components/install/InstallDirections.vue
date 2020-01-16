@@ -2,6 +2,7 @@
 import { mapState, mapGetters, mapActions } from 'vuex';
 import PromptInstall from '@/components/install/PromptInstall.vue';
 import AndroidChrome from '@/components/install/AndroidChrome.vue';
+import OtherMobile from '@/components/install/OtherMobile.vue';
 
 export default {
   name: 'InstallDirections',
@@ -9,6 +10,7 @@ export default {
   components: {
     PromptInstall,
     AndroidChrome,
+    OtherMobile,
   },
 
   props: {
@@ -95,6 +97,8 @@ export default {
     <hr />
     <AndroidChrome />
     <!-- <AndroidChrome v-else-if="device === 'Android-Chrome'" /> -->
+    <hr />
+    <OtherMobile />
   </div>
 </template>
 
