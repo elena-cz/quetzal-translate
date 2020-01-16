@@ -25,8 +25,8 @@ const state = {
   // platformModel: '',
   shareSupported: false,
   swSupported: null,
-  deviceInfoSet: false,
   isStandaloneMode: false,
+  deviceInfoSet: false,
 };
 
 /*

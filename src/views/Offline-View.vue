@@ -1,12 +1,12 @@
 <script>
 import { mapState, mapGetters } from 'vuex';
-// import HelloWorld from '@/components/HelloWorld.vue';
+import InstallDirections from '@/components/install/InstallDirections.vue';
 
 export default {
   name: 'Offline-View',
 
   components: {
-    // HelloWorld,
+    InstallDirections,
   },
 
   data: () => ({
@@ -44,7 +44,8 @@ export default {
         <v-stepper-step :complete="step > 1" step="1">Install app</v-stepper-step>
 
         <v-stepper-content step="1">
-          <v-card color="grey lighten-1" class="mb-12" height="200px"></v-card>
+          <InstallDirections />
+
           <v-btn color="primary" @click="step = 2">Continue</v-btn>
           <v-btn text>Cancel</v-btn>
         </v-stepper-content>
