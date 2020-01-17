@@ -3,6 +3,7 @@ import { mapState, mapGetters, mapActions } from 'vuex';
 import PromptInstall from '@/components/install/PromptInstall.vue';
 import AndroidChrome from '@/components/install/AndroidChrome.vue';
 import OtherMobile from '@/components/install/OtherMobile.vue';
+import iOSSafari from '@/components/install/iOSSafari.vue';
 
 export default {
   name: 'InstallDirections',
@@ -11,6 +12,7 @@ export default {
     PromptInstall,
     AndroidChrome,
     OtherMobile,
+    iOSSafari,
   },
 
   props: {
@@ -99,6 +101,8 @@ export default {
     <!-- <AndroidChrome v-else-if="device === 'Android-Chrome'" /> -->
     <hr />
     <OtherMobile />
+    <hr />
+    <iOSSafari />
   </div>
 </template>
 

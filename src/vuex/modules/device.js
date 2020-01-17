@@ -22,7 +22,7 @@ const state = {
   os: '',
   osInfo: {},
   // osVersionNum: null,
-  // platformModel: '',
+  platformModel: '',
   shareSupported: false,
   swSupported: null,
   isStandaloneMode: false,
@@ -39,7 +39,7 @@ const getters = {
   isAndroid: state => state.os === 'Android',
   isIOS: state => state.os === 'iOS',
   // isOlderIOS: state => state.os === 'iOS' && state.osVersionNum < 12.2,
-  // isIPad: state => state.platformModel.toLowerCase().includes('ipad'),
+  isIPad: state => state.platformModel.toLowerCase().includes('ipad'),
 };
 
 /*
@@ -63,7 +63,7 @@ const actions = {
     // info.osVersionNum = getVersionNum(info.osInfo.version);
 
     info.platform = info.bowser.platform || {};
-    // info.platformModel = info.platform.model || '';
+    info.platformModel = info.platform.model || '';
 
     info.shareSupported = navigator.share !== undefined;
     info.swSupported = !!('serviceWorker' in navigator);
@@ -102,7 +102,7 @@ const mutations = {
       os,
       osInfo,
       // osVersionNum,
-      // platformModel,
+      platformModel,
       shareSupported,
       swSupported,
     } = info;
@@ -113,7 +113,7 @@ const mutations = {
     state.os = os;
     state.osInfo = osInfo;
     // state.osVersionNum = osVersionNum;
-    // state.platformModel = platformModel;
+    state.platformModel = platformModel;
     state.shareSupported = shareSupported;
     state.swSupported = swSupported;
     state.deviceInfoSet = true;
