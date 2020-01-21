@@ -51,10 +51,6 @@ export default {
       } else if (isAndroid) {
         if (sw && browser === 'Chrome') {
           device = 'Android-Chrome';
-        } else if (sw && browser.includes('Firefox')) {
-          device = 'Android-Firefox';
-        } else if (sw && browser.includes('Samsung')) {
-          device = 'Android-Samsung';
         } else if (!sw && browser === 'Chrome') {
           device = 'Android-Chrome-NoSW';
         } else {
@@ -95,18 +91,21 @@ export default {
 </script>
 
 <template>
-  <div>
-    <PromptInstall />
-    <!-- <PromptInstall v-if="installPrompt || acceptedInstallPrompt" /> -->
-    <hr />
-    <AndroidChrome />
-    <!-- <AndroidChrome v-else-if="device === 'Android-Chrome'" /> -->
-    <hr />
-    <OtherMobile />
-    <hr />
-    <iOSSafari />
-    <hr />
-    <iOSOther />
+  <div class="text-content">
+    <!-- <PromptInstall /> -->
+    <PromptInstall v-if="installPrompt || acceptedInstallPrompt" />
+
+    <!-- <AndroidChrome /> -->
+    <AndroidChrome v-else-if="device === 'Android-Chrome'" />
+
+    <!-- <OtherMobile /> -->
+    <OtherMobile v-else-if="device === 'OtherMobile'" />
+
+    <!-- <iOSSafari /> -->
+    <IOSSafari v-else-if="device === 'iOS-Safari'" />
+
+    <!-- <iOSOther /> -->
+    <IOSOther v-else-if="device === 'iOS-Other'" />
   </div>
 </template>
 

@@ -7,7 +7,7 @@ export default {
 <template>
   <div>
     <!-- Android Chrome -->
-    <h5>Install on Android</h5>
+
     <ol>
       <li>
         Near the top right corner, open the Chrome menu
@@ -23,9 +23,15 @@ export default {
       </li>
       <li>
         Check out the
-        <b>Quetzal</b> app on your Home screen & enjoy!
+        <b>Quetzal</b> app on your Home screen
       </li>
     </ol>
+
+    <p class="body-2">
+      Note: This is a web app so you can install it right from here. Once you do, it works just like
+      other apps&mdash;even offline. Plus, you never have to install updates and it works on every
+      device.
+    </p>
   </div>
 </template>
 

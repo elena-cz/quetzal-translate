@@ -46,8 +46,10 @@ export default {
         <v-stepper-content step="1">
           <InstallDirections />
 
-          <v-btn color="primary" @click="step = 2">Continue</v-btn>
-          <v-btn text>Cancel</v-btn>
+          <div class="d-flex justify-end py-1">
+            <v-btn text>Cancel</v-btn>
+            <v-btn rounded outlined color="primary" @click="step = 2">Continue</v-btn>
+          </div>
         </v-stepper-content>
 
         <v-stepper-step :complete="step > 2" step="2">Download audio</v-stepper-step>
@@ -140,6 +142,10 @@ export default {
   padding-left: 0;
 }
 
+.v-stepper__label {
+  font-weight: 700;
+}
+
 .v-stepper__content {
   margin-left: 12px;
   margin-right: 0;
@@ -161,9 +167,9 @@ export default {
   font-size: 1rem;
 }
 
-.v-btn {
-  text-transform: none;
-}
+// .v-btn {
+//   text-transform: none;
+// }
 
 .v-btn--outlined {
   border-width: 1px;
