@@ -17,7 +17,9 @@ const state = {
     actionText: '',
     handler: null,
     keepOpen: false,
+    quick: false,
   },
+  textToCopy: '',
 };
 
 /*
@@ -75,9 +77,19 @@ const actions = {
 
   updateSnack(
     { commit },
-    { text = '', actionText = '', handler = null, keepOpen = false }
+    {
+      text = '',
+      actionText = '',
+      handler = null,
+      keepOpen = false,
+      quick = false,
+    }
   ) {
-    commit('setSnack', { text, actionText, handler, keepOpen });
+    commit('setSnack', { text, actionText, handler, keepOpen, quick });
+  },
+
+  copyText({ commit }, text = '') {
+    commit('setTextToCopy', text);
   },
 };
 
@@ -101,6 +113,10 @@ const mutations = {
 
   setSnack(state, snack) {
     state.snack = snack;
+  },
+
+  setTextToCopy(state, textToCopy) {
+    state.textToCopy = textToCopy;
   },
 };
 

@@ -4,6 +4,7 @@ import NavMenu from '@/components/NavMenu.vue';
 import NavMenuIcon from '@/components/NavMenuIcon.vue';
 import AdminPageSwitcher from '@/components/admin/AdminPageSwitcher.vue';
 import Snackbar from '@/components/Snackbar.vue';
+import CopyText from '@/components/CopyText.vue';
 
 export default {
   name: 'Layout',
@@ -13,6 +14,7 @@ export default {
     NavMenuIcon,
     AdminPageSwitcher,
     Snackbar,
+    CopyText,
   },
 
   data() {
@@ -92,19 +94,13 @@ export default {
   <div class="app-container">
     <div class="back-layer">
       <v-app-bar flat dark color="transparent">
-        <NavMenuIcon
-          :nav-type="navType"
-          :is-back-layer-active="isBackLayerActive"
-        />
+        <NavMenuIcon :nav-type="navType" :is-back-layer-active="isBackLayerActive" />
 
         <v-toolbar-title class="back-layer-title">{{ title }}</v-toolbar-title>
 
         <v-spacer></v-spacer>
 
-        <AdminPageSwitcher
-          v-if="routeName === 'admin'"
-          :page="routeParams.page"
-        />
+        <AdminPageSwitcher v-if="routeName === 'admin'" :page="routeParams.page" />
 
         <!-- <slot name="right-icons" /> -->
       </v-app-bar>
@@ -114,11 +110,7 @@ export default {
         v-on:enter="onBackLayerContentEnter"
         v-on:leave="onBackLayerContentLeave"
       >
-        <div
-          v-if="isBackLayerActive"
-          ref="backLayerContent"
-          class="back-layer-content pa-3 pt-0"
-        >
+        <div v-if="isBackLayerActive" ref="backLayerContent" class="back-layer-content pa-3 pt-0">
           <NavMenu v-if="showMenu" />
           <slot name="back-layer-content" />
         </div>
@@ -130,11 +122,7 @@ export default {
       :class="{ 'inactive-front-layer': usingCloseTransition }"
     >
       <transition name="fade">
-        <div
-          v-if="isBackLayerActive"
-          class="front-overlay"
-          @click="closeBackLayer"
-        ></div>
+        <div v-if="isBackLayerActive" class="front-overlay" @click="closeBackLayer"></div>
       </transition>
       <div class="front-content pa-4 pb-0" :style="frontHeightStyle">
         <slot name="main-content" class="main-content" />
@@ -142,10 +130,12 @@ export default {
     </div>
 
     <Snackbar />
+
+    <CopyText />
     <!-- <v-snackbar :value="updateNotification.text" :timeout="0">
       {{ updateNotification.text }}
       <v-btn color="#b1ffff" text @click="updateNotification.handler">Refresh</v-btn>
-    </v-snackbar> -->
+    </v-snackbar>-->
   </div>
 </template>
 

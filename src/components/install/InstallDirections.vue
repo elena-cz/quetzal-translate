@@ -4,6 +4,7 @@ import PromptInstall from '@/components/install/PromptInstall.vue';
 import AndroidChrome from '@/components/install/AndroidChrome.vue';
 import OtherMobile from '@/components/install/OtherMobile.vue';
 import iOSSafari from '@/components/install/iOSSafari.vue';
+import iOSOther from '@/components/install/iOSOther.vue';
 
 export default {
   name: 'InstallDirections',
@@ -13,6 +14,7 @@ export default {
     AndroidChrome,
     OtherMobile,
     iOSSafari,
+    iOSOther,
   },
 
   props: {
@@ -103,6 +105,8 @@ export default {
     <OtherMobile />
     <hr />
     <iOSSafari />
+    <hr />
+    <iOSOther />
   </div>
 </template>
 

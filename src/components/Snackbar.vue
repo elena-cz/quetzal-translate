@@ -6,6 +6,17 @@ export default {
 
   computed: {
     ...mapState('ui', ['snack']),
+
+    timeout() {
+      const { keepOpen, quick } = this.snack;
+      if (keepOpen) {
+        return 0;
+      }
+      if (quick) {
+        return 2500;
+      }
+      return 5000;
+    },
   },
 
   methods: {
@@ -25,18 +36,13 @@ export default {
 </script>
 
 <template>
-  <v-snackbar
-    :value="snack.text"
-    :timeout="snack.keepOpen ? 0 : 5000"
-    @input="clearSnack"
-  >
+  <v-snackbar :value="snack.text" :timeout="timeout" @input="clearSnack">
     {{ snack.text }}
     <v-btn
       v-if="snack.actionText"
       color="#b1ffff"
       text
       @click="handleActionClick"
-      >{{ snack.actionText }}</v-btn
-    >
+    >{{ snack.actionText }}</v-btn>
   </v-snackbar>
 </template>
