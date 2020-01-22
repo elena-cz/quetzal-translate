@@ -5,6 +5,25 @@
 }
 
 .text-content {
+  h2,
+  h3 {
+    &:first-child {
+      margin-block-start: 0;
+    }
+  }
+
+  h2 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-block-start: 0.83em;
+    margin-block-end: 0.83em;
+  }
+
+  h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+
   p {
     // margin-bottom: 0.75rem;
     line-height: 1.4em;
@@ -17,7 +36,7 @@
 
   ol,
   ul {
-    margin-left: 1.5rem;
+    margin-left: 1rem;
   }
 
   li {

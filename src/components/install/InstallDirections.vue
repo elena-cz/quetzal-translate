@@ -31,55 +31,16 @@ export default {
   computed: {
     ...mapState('sw', ['installPrompt', 'acceptedInstallPrompt']),
 
-    ...mapState('device', ['deviceInfoSet', 'browser', 'os', 'swSupported']),
+    // ...mapState('device', ['deviceInfoSet', 'browser', 'os', 'swSupported']),
 
-    ...mapGetters('device', ['isAndroid', 'isIOS']),
-
-    device() {
-      const { browser, swSupported: sw, isAndroid, isIOS } = this;
-      const size = this.$mq;
-
-      let device = '';
-      if (isIOS) {
-        if (sw && browser === 'Safari') {
-          device = 'iOS-Safari';
-        } else if (!sw && browser === 'Safari') {
-          device = 'iOS-Safari-NoSW';
-        } else {
-          device = 'iOS-Other';
-        }
-      } else if (isAndroid) {
-        if (sw && browser === 'Chrome') {
-          device = 'Android-Chrome';
-        } else if (!sw && browser === 'Chrome') {
-          device = 'Android-Chrome-NoSW';
-        } else {
-          device = 'Android-Other';
-        }
-      } else if (size === 'sm') {
-        device = 'OtherMobile';
-      } else {
-        device = 'WebDefault';
-      }
-      // return 'iOS-Safari';
-      // return 'iOS-Safari-NoSW';
-      // return 'iOS-Other';
-      // return 'Android-Chrome';
-      // return 'Android-Firefox';
-      // return 'Android-Samsung';
-      // return 'Android-Chrome-NoSW';
-      // return 'Android-Other';
-      // return 'OtherMobile';
-      // return 'WebDefault';
-      return device;
-    },
+    ...mapGetters('device', ['device']),
   },
 
-  created() {
-    if (!this.deviceInfoSet) {
-      this.$store.dispatch('device/init');
-    }
-  },
+  // created() {
+  //   if (!this.deviceInfoSet) {
+  //     this.$store.dispatch('device/init');
+  //   }
+  // },
 
   methods: {
     // ...mapActions('module', [

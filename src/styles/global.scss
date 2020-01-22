@@ -153,6 +153,9 @@
 }
 
 // Buttons
+.v-btn--outlined {
+  border-width: 1.5px !important;
+}
 
 .v-btn__content {
   letter-spacing: 1px;

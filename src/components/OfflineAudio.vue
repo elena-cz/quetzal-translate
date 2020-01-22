@@ -105,10 +105,13 @@ export default {
 </template>
 
 <style lang="scss" scoped>
+@import '@/styles/colors.scss';
+
 .v-subheader {
-  color: var(--v-primary-base);
-  font-weight: 700;
-  font-size: 1rem;
+  // color: var(--v-primary-base);
+  color: $black;
+  font-weight: 600;
+  font-size: 1.1rem;
   padding: 0;
 }
 
@@ -118,5 +121,9 @@ export default {
 
 .v-list-item__title {
   font-size: 1rem;
+}
+
+.v-list-item:not(.v-list-item--active):not(.v-list-item--disabled) {
+  color: $black !important;
 }
 </style>

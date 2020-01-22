@@ -36,7 +36,7 @@ const getters = {
       admin: 'Admin',
       auth: 'Sign In',
       home: 'Dentistry',
-      offline: 'Offline Audio',
+      offline: 'Offline',
     };
     return titles[routeName] || appTitle;
   },

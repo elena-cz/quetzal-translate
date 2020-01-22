@@ -60,7 +60,7 @@ export default {
           <v-list-item-content>
             <v-list-item-title>Install</v-list-item-title>
           </v-list-item-content>
-        </v-list-item> -->
+        </v-list-item>-->
 
         <!-- <v-list-item :to="'/'">
           <v-list-item-icon>
@@ -69,14 +69,14 @@ export default {
           <v-list-item-content>
             <v-list-item-title>Home</v-list-item-title>
           </v-list-item-content>
-        </v-list-item> -->
+        </v-list-item>-->
 
         <v-list-item :to="'/offline'">
           <v-list-item-icon>
             <v-icon class="material-icons-round">offline_pin</v-icon>
           </v-list-item-icon>
           <v-list-item-content>
-            <v-list-item-title>Offline Audio</v-list-item-title>
+            <v-list-item-title>Offline</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
 

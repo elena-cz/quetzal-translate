@@ -50,6 +50,11 @@ const getters = {
       return !status.isDownloaded && !status.isUpdating;
     });
   },
+
+  hasDownloadedLangs: (state, getters) => {
+    const { downloadedLangs = [] } = getters;
+    return downloadedLangs.length > 0;
+  },
 };
 
 /*

@@ -19,11 +19,7 @@ export default {
       </li>
       <li>
         Tap
-        <b>Add</b>
-      </li>
-      <li>
-        Check out the
-        <b>Quetzal</b> app on your Home screen
+        <strong>Add</strong>
       </li>
     </ol>
 

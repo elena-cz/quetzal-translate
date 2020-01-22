@@ -26,6 +26,7 @@ const state = {
   shareSupported: false,
   swSupported: null,
   isStandaloneMode: false,
+  hasSmallScreen: true,
   deviceInfoSet: false,
 };
 
@@ -40,6 +41,43 @@ const getters = {
   isIOS: state => state.os === 'iOS',
   // isOlderIOS: state => state.os === 'iOS' && state.osVersionNum < 12.2,
   isIPad: state => state.platformModel.toLowerCase().includes('ipad'),
+  device: (state, getters) => {
+    const { browser, swSupported: sw, hasSmallScreen } = state;
+    const { isAndroid, isIOS } = getters;
+
+    let device = '';
+    if (isIOS) {
+      if (sw && browser === 'Safari') {
+        device = 'iOS-Safari';
+      } else if (!sw && browser === 'Safari') {
+        device = 'Mobile-NoSW';
+      } else {
+        device = 'iOS-Other';
+      }
+    } else if (isAndroid) {
+      if (sw && browser === 'Chrome') {
+        device = 'Android-Chrome';
+      } else if (!sw) {
+        device = 'Mobile-NoSW';
+      } else {
+        device = 'OtherMobile';
+      }
+    } else if (sw && hasSmallScreen) {
+      device = 'OtherMobile';
+    } else if (!sw) {
+      device = 'NoSW';
+    } else {
+      device = 'WebDefault';
+    }
+    // return 'iOS-Safari';
+    // return 'iOS-Other';
+    // return 'Android-Chrome';
+    // return 'OtherMobile';
+    // return 'Mobile-NoSW';
+    // return 'WebDefault';
+    console.log('device', device);
+    return device;
+  },
 };
 
 /*
@@ -67,6 +105,8 @@ const actions = {
 
     info.shareSupported = navigator.share !== undefined;
     info.swSupported = !!('serviceWorker' in navigator);
+
+    info.hasSmallScreen = window.matchMedia('(max-width: 800px)').matches;
 
     commit('setDeviceInfo', info);
     dispatch('detectStandaloneMode');
@@ -105,6 +145,7 @@ const mutations = {
       platformModel,
       shareSupported,
       swSupported,
+      hasSmallScreen,
     } = info;
     state.bowser = bowser;
     state.browser = browser;
@@ -116,6 +157,7 @@ const mutations = {
     state.platformModel = platformModel;
     state.shareSupported = shareSupported;
     state.swSupported = swSupported;
+    state.hasSmallScreen = hasSmallScreen;
     state.deviceInfoSet = true;
   },
 
