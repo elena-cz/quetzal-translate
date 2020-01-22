@@ -60,18 +60,10 @@ export default {
         <b>Add</b>
       </li>
     </ol>
-
-    <p>
-      Check out the
-      <b>Quetzal</b> app on your Home Screen
-    </p>
   </div>
 </template>
 
 <style lang="scss" scoped>
-// @import '@/design/help.scss';
-// @import '@/design/colors.scss';
-
 .ios-icon {
   height: 1.2em;
   width: 1.2em;

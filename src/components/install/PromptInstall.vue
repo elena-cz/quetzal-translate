@@ -33,11 +33,6 @@ export default {
       @click="showInstallPrompt"
     >{{ installButtonText }}</v-btn>
 
-    <p>
-      Then, check out the
-      <b>Quetzal</b> app on your Home screen
-    </p>
-
     <p class="body-2">
       Note: This is a web app so you can install it right from here. Once you do, it works just like
       other apps&mdash;even offline. Plus, you never have to install updates and it works on every

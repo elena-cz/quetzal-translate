@@ -17,36 +17,12 @@ export default {
     iOSOther,
   },
 
-  props: {
-    // thing: {
-    //   type: Array,
-    //   required: true,
-    // },
-  },
-
-  data: () => ({
-    //
-  }),
-
   computed: {
     ...mapState('sw', ['installPrompt', 'acceptedInstallPrompt']),
 
     // ...mapState('device', ['deviceInfoSet', 'browser', 'os', 'swSupported']),
 
     ...mapGetters('device', ['device']),
-  },
-
-  // created() {
-  //   if (!this.deviceInfoSet) {
-  //     this.$store.dispatch('device/init');
-  //   }
-  // },
-
-  methods: {
-    // ...mapActions('module', [
-    //   'foo',
-    // ]),
-    // method() {},
   },
 };
 </script>
@@ -70,6 +46,3 @@ export default {
   </div>
 </template>
 
-<style lang="scss" scoped>
-// @import '@/styles/colors.scss';
-</style>

@@ -18,7 +18,7 @@ export default {
     numSteps: 2,
     markedAppInstalled: false,
     markAudioDownloaded: false,
-    // showOfflineFlow: true,
+    showOfflineFlow: true,
   }),
 
   computed: {
@@ -31,14 +31,6 @@ export default {
     noOffline() {
       return this.device === 'NoSW';
     },
-
-    showOfflineFlow() {
-      const { noOffline, isStandaloneMode, hasDownloadedLangs } = this;
-      if (noOffline || (isStandaloneMode && hasDownloadedLangs)) {
-        return false;
-      }
-      return true;
-    },
   },
 
   created() {
@@ -46,16 +38,17 @@ export default {
       this.$store.dispatch('device/init');
     }
 
-    const { isStandaloneMode, hasDownloadedLangs, device } = this;
+    const { noOffline, isStandaloneMode, hasDownloadedLangs, device } = this;
 
-    // if (noOffline || (isStandaloneMode && hasDownloadedLangs)) {
-    //   this.showOfflineFlow = false;
-    // }
+    if (noOffline || (isStandaloneMode && hasDownloadedLangs)) {
+      this.showOfflineFlow = false;
+    }
+
     if (!isStandaloneMode && !(device === 'WebDefault')) {
       this.numSteps = 3; // Add "Open app" step if on supported device
     }
 
-    if (isStandaloneMode && !hasDownloadedLangs) {
+    if (isStandaloneMode) {
       this.step = 2;
     }
   },
@@ -113,10 +106,10 @@ export default {
                 <b>Offline</b> page in the app to continue
               </li>
             </ol>
-            <!-- <div class="d-flex justify-end py-1">
+            <div class="d-flex justify-end py-1">
               <v-btn text @click="step = 3">Skip</v-btn>
               <v-btn rounded outlined color="primary" @click="step = 3">Done</v-btn>
-            </div>-->
+            </div>
           </v-stepper-content>
 
           <!-- AUDIO -->
