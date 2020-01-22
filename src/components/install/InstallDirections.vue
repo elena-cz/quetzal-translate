@@ -5,6 +5,7 @@ import AndroidChrome from '@/components/install/AndroidChrome.vue';
 import OtherMobile from '@/components/install/OtherMobile.vue';
 import iOSSafari from '@/components/install/iOSSafari.vue';
 import iOSOther from '@/components/install/iOSOther.vue';
+import WebDefault from '@/components/install/WebDefault.vue';
 
 export default {
   name: 'InstallDirections',
@@ -15,6 +16,7 @@ export default {
     OtherMobile,
     iOSSafari,
     iOSOther,
+    WebDefault,
   },
 
   computed: {
@@ -43,6 +45,8 @@ export default {
 
     <!-- <iOSOther /> -->
     <IOSOther v-else-if="device === 'iOS-Other'" />
+
+    <WebDefault v-else />
   </div>
 </template>
 

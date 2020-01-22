@@ -74,8 +74,8 @@ const getters = {
     // return 'Android-Chrome';
     // return 'OtherMobile';
     // return 'Mobile-NoSW';
-    // return 'WebDefault';
-    console.log('device', device);
+    return 'WebDefault';
+    // console.log('device', device);
     return device;
   },
 };
