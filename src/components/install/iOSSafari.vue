@@ -2,7 +2,7 @@
 import { mapGetters } from 'vuex';
 
 export default {
-  name: 'IOSSafariInstall',
+  name: 'IOSSafari',
 
   components: {},
 

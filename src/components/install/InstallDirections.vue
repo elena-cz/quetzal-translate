@@ -3,8 +3,8 @@ import { mapState, mapGetters, mapActions } from 'vuex';
 import PromptInstall from '@/components/install/PromptInstall.vue';
 import AndroidChrome from '@/components/install/AndroidChrome.vue';
 import OtherMobile from '@/components/install/OtherMobile.vue';
-import iOSSafari from '@/components/install/iOSSafari.vue';
-import iOSOther from '@/components/install/iOSOther.vue';
+import IOSSafari from '@/components/install/IOSSafari.vue';
+import IOSOther from '@/components/install/IOSOther.vue';
 import WebDefault from '@/components/install/WebDefault.vue';
 
 export default {
@@ -14,15 +14,13 @@ export default {
     PromptInstall,
     AndroidChrome,
     OtherMobile,
-    iOSSafari,
-    iOSOther,
+    IOSSafari,
+    IOSOther,
     WebDefault,
   },
 
   computed: {
     ...mapState('sw', ['installPrompt', 'acceptedInstallPrompt']),
-
-    // ...mapState('device', ['deviceInfoSet', 'browser', 'os', 'swSupported']),
 
     ...mapGetters('device', ['device']),
   },
@@ -40,10 +38,10 @@ export default {
     <!-- <OtherMobile /> -->
     <OtherMobile v-else-if="device === 'OtherMobile'" />
 
-    <!-- <iOSSafari /> -->
+    <!-- <IOSSafari /> -->
     <IOSSafari v-else-if="device === 'iOS-Safari'" />
 
-    <!-- <iOSOther /> -->
+    <!-- <IOSOther /> -->
     <IOSOther v-else-if="device === 'iOS-Other'" />
 
     <WebDefault v-else />

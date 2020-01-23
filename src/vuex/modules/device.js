@@ -73,8 +73,8 @@ const getters = {
     // return 'iOS-Other';
     // return 'Android-Chrome';
     // return 'OtherMobile';
-    // return 'Mobile-NoSW';
-    return 'WebDefault';
+    // return 'NoSW';
+    // return 'WebDefault';
     // console.log('device', device);
     return device;
   },

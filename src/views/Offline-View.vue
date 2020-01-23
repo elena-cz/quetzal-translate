@@ -3,7 +3,9 @@ import { mapState, mapGetters } from 'vuex';
 import InstallDirections from '@/components/install/InstallDirections.vue';
 import OfflineAudio from '@/components/OfflineAudio.vue';
 
-// Show offline flow if...
+// If using a supported device & no audio is downloaded, show Offline flow
+// If already using app & audio is downloaded, just show audio manager
+// If using an unsupported device, show message
 
 export default {
   name: 'Offline-View',
@@ -48,7 +50,7 @@ export default {
       this.numSteps = 3; // Add "Open app" step if on supported device
     }
 
-    if (isStandaloneMode) {
+    if (isStandaloneMode || hasDownloadedLangs) {
       this.step = 2;
     }
   },
@@ -61,7 +63,7 @@ export default {
   <div class="offline-view scroll-container mx-n4">
     <div class="px-4 pb-4">
       <div v-if="noOffline">
-        <p>It looks like your browser or device doesn't support offline for this app.</p>
+        <p>It looks like your browser or device doesn't support offline for this app. You can try updating your browser or your device's operating system.</p>
       </div>
 
       <div v-if="showOfflineFlow">
