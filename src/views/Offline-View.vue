@@ -198,13 +198,5 @@ export default {
     margin-right: 0;
     padding-right: 16px;
   }
-
-  // .v-btn {
-  //   text-transform: none;
-  // }
-
-  // .v-btn--outlined {
-  //   border-width: 1px;
-  // }
 }
 </style>

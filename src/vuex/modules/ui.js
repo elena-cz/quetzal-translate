@@ -25,7 +25,7 @@ const state = {
   banners: {
     offlinePromo: {
       status: '', // 'dismissed', 'done'
-      isComplete: false,
+      isComplete: true, // Don't show by default
     },
   },
 };
@@ -70,7 +70,7 @@ const getters = {
 
 const actions = {
   init({ dispatch }) {
-    dispatch('getBannerStatusFromIDB', 'offlinePromo');
+    dispatch('getBannerStatus', 'offlinePromo');
   },
 
   parseRoute({ commit, dispatch, state }, { name, params, meta, path }) {
@@ -104,13 +104,13 @@ const actions = {
     commit('setTextToCopy', text);
   },
 
-  async getBannerStatusFromIDB({ commit }, banner) {
+  async getBannerStatus({ commit }, banner) {
     const status = await getIDB(`banner-${banner}`);
     const isComplete = status === 'dismissed' || status === 'done';
     commit('setBannerStatus', { banner, status, isComplete });
   },
 
-  async updateBannerStatusInIDB({ commit }, { banner, status }) {
+  async updateBannerStatus({ commit }, { banner, status }) {
     setIDB(`banner-${banner}`, status);
     const isComplete = status === 'dismissed' || status === 'done';
     commit('setBannerStatus', { banner, status, isComplete });
