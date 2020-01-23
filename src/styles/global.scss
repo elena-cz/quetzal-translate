@@ -155,6 +155,22 @@
   }
 }
 
+// Skeleton Loader
+
+.expansion-skeleton.v-skeleton-loader {
+  border-radius: 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
+  padding: 10px 0;
+
+  .v-skeleton-loader__list-item {
+    padding: 0 8px !important;
+  }
+
+  .v-skeleton-loader__text {
+    height: 16px !important;
+  }
+}
+
 // Buttons
 .v-btn--outlined {
   border-width: 1.5px !important;
