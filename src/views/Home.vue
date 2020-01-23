@@ -62,7 +62,7 @@ export default {
 </script>
 
 <template>
-  <v-container class="pa-0 mt-n1">
+  <v-container class="main-content pa-0 mt-n1">
     <v-tabs v-model="tab" background-color="transparent" color="primary" grow>
       <v-tab key="kek" class="lang1-tab">Q'eqchi'</v-tab>
       <v-tab key="es" class="lang2-tab">Spanish</v-tab>
@@ -122,7 +122,7 @@ export default {
             </v-expansion-panel>
           </v-expansion-panels>
 
-          <!-- <OfflinePromo /> -->
+          <OfflinePromo />
         </v-tab-item>
       </v-tabs-items>
     </div>
