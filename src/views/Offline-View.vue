@@ -26,7 +26,7 @@ export default {
   computed: {
     ...mapState('device', ['isStandaloneMode']),
 
-    ...mapGetters('device', ['device', 'isIOS']),
+    ...mapGetters('device', ['device', 'isIOS', 'shouldShowOfflineFlow']),
 
     ...mapGetters('audio', ['hasDownloadedLangs']),
 
@@ -40,9 +40,15 @@ export default {
       this.$store.dispatch('device/init');
     }
 
-    const { noOffline, isStandaloneMode, hasDownloadedLangs, device } = this;
+    const {
+      shouldShowOfflineFlow,
+      noOffline,
+      isStandaloneMode,
+      hasDownloadedLangs,
+      device,
+    } = this;
 
-    if (noOffline || (isStandaloneMode && hasDownloadedLangs)) {
+    if (!shouldShowOfflineFlow) {
       this.showOfflineFlow = false;
     }
 
@@ -51,7 +57,7 @@ export default {
     }
 
     if (isStandaloneMode || hasDownloadedLangs) {
-      this.step = 2;
+      this.step = this.numSteps;
     }
   },
 
@@ -61,7 +67,7 @@ export default {
 
 <template>
   <div class="offline-view scroll-container mx-n4">
-    <div class="px-4 pb-4">
+    <div class="main-content px-4 pt-md-6 pb-6">
       <div v-if="noOffline">
         <p>It looks like your browser or device doesn't support offline for this app. You can try updating your browser or your device's operating system.</p>
       </div>

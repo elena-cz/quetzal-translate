@@ -1,3 +1,5 @@
+import { setIDB, getIDB } from '@/helpers/settings';
+
 /*
 
   STATE
@@ -20,6 +22,12 @@ const state = {
     quick: false,
   },
   textToCopy: '',
+  banners: {
+    offlinePromo: {
+      status: '', // 'dismissed', 'done'
+      isComplete: false,
+    },
+  },
 };
 
 /*
@@ -61,6 +69,10 @@ const getters = {
  */
 
 const actions = {
+  init({ dispatch }) {
+    dispatch('getBannerStatusFromIDB', 'offlinePromo');
+  },
+
   parseRoute({ commit, dispatch, state }, { name, params, meta, path }) {
     const { currentTopic } = state;
     commit('setCurrentRoute', { name, params, meta });
@@ -91,6 +103,18 @@ const actions = {
   copyText({ commit }, text = '') {
     commit('setTextToCopy', text);
   },
+
+  async getBannerStatusFromIDB({ commit }, banner) {
+    const status = await getIDB(`banner-${banner}`);
+    const isComplete = status === 'dismissed' || status === 'done';
+    commit('setBannerStatus', { banner, status, isComplete });
+  },
+
+  async updateBannerStatusInIDB({ commit }, { banner, status }) {
+    setIDB(`banner-${banner}`, status);
+    const isComplete = status === 'dismissed' || status === 'done';
+    commit('setBannerStatus', { banner, status, isComplete });
+  },
 };
 
 /*
@@ -117,6 +141,11 @@ const mutations = {
 
   setTextToCopy(state, textToCopy) {
     state.textToCopy = textToCopy;
+  },
+
+  setBannerStatus(state, { banner, status, isComplete }) {
+    state.banners[banner].status = status;
+    state.banners[banner].isComplete = isComplete;
   },
 };
 

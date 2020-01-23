@@ -38,12 +38,10 @@ export default {
 <template>
   <v-sheet dark class="promo gradient pa-4 mt-6 mb-8">
     <div class="d-flex align-center mb-3">
-      <v-icon class="offline-icon material-icons-round mr-3">
-        offline_pin
-      </v-icon>
+      <v-icon class="offline-icon material-icons-round mr-3">offline_pin</v-icon>
       <div>
         <h3 class="d-inline">Get offline translations</h3>
-        <p class="mb-0">Install the app & download audio</p>
+        <p class="mb-0 description">Install the app & download audio</p>
       </div>
     </div>
     <div class="d-flex justify-end mt-4">
@@ -54,9 +52,7 @@ export default {
         color="white"
         class="font-weight-bold primary--text"
         :to="'/offline'"
-      >
-        Install
-      </v-btn>
+      >Install</v-btn>
     </div>
   </v-sheet>
 </template>
@@ -68,5 +64,9 @@ export default {
 
 .promo {
   border-radius: 8px;
+}
+
+.description {
+  font-weight: 600;
 }
 </style>

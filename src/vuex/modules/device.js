@@ -78,6 +78,16 @@ const getters = {
     // console.log('device', device);
     return device;
   },
+
+  shouldShowOfflineFlow: (state, getters, rootState, rootGetters) => {
+    const { isStandaloneMode } = state;
+    const { device } = getters;
+    const hasDownloadedLangs = rootGetters['audio/hasDownloadedLangs'];
+    if (device === 'NoSW' || (isStandaloneMode && hasDownloadedLangs)) {
+      return false;
+    }
+    return true;
+  },
 };
 
 /*
