@@ -1,4 +1,14 @@
 <script>
+/* 
+  Transforming icons update with this logic:
+
+  | Prev Type | Current Type  | isBackLayerActive | Icon Set   | IconDisplayed |
+  | ''/menu   | menu          | false             | menuClose  | menu          |
+  | menu      | menu          | true              | menuClose  | close         |
+  | menu      | back          | false             | closeArrow | arrow         |
+  | back      | menu          | false             | menuArrow  | menu          |
+ */
+
 export default {
   name: 'NavMenuIcon',
 
@@ -16,14 +26,27 @@ export default {
   data() {
     return {
       type: 'menu',
+      iconSet: 'menuClose',
     };
   },
 
   watch: {
-    navType(newType) {
-      setTimeout(() => {
-        this.type = newType;
-      }, 120);
+    navType(newType, oldType) {
+      if (oldType === 'menu' && newType === 'back') {
+        this.iconSet = 'closeArrow';
+      } else if (oldType === 'back' && newType === 'menu') {
+        this.iconSet = 'menuArrow';
+      } else if (newType === 'menu') {
+        this.iconSet = 'menuClose';
+      } else {
+        this.iconSet = 'menuArrow';
+      }
+    },
+
+    isBackLayerActive(isActive) {
+      if (this.navType === 'menu' && isActive) {
+        this.iconSet = 'menuClose';
+      }
     },
   },
 };
@@ -36,9 +59,11 @@ export default {
               </template>
               <v-icon v-if="userCacheIsUpToDate" class="material-icons-round" large>check</v-icon>
               <v-icon v-else class="material-icons-round" large>download</v-icon>
-            </v-badge> -->
+  </v-badge>-->
+
+  <!-- menu/close -->
   <v-btn
-    v-if="type === 'menu'"
+    v-if="iconSet === 'menuClose'"
     text
     icon
     :retain-focus-on-click="false"
@@ -52,6 +77,23 @@ export default {
     </span>
   </v-btn>
 
+  <!-- close/arrow -->
+  <v-btn
+    v-else-if="iconSet === 'closeArrow'"
+    text
+    icon
+    :retain-focus-on-click="false"
+    dark
+    class="hamburger hamburger--x-arrow"
+    :class="{ 'is-active': navType === 'back' }"
+    @click="$router.go(-1)"
+  >
+    <span class="hamburger-box">
+      <span class="hamburger-inner" />
+    </span>
+  </v-btn>
+
+  <!-- menu/arrow -->
   <v-btn
     v-else
     text
@@ -59,8 +101,8 @@ export default {
     :retain-focus-on-click="false"
     dark
     class="hamburger hamburger--arrowalt"
-    :class="{ 'is-active': !isBackLayerActive }"
-    @click="$router.go(-1)"
+    :class="{ 'is-active': navType === 'back' }"
+    @click="$root.$emit('toggleBackLayer', 'menu')"
   >
     <span class="hamburger-box">
       <span class="hamburger-inner" />

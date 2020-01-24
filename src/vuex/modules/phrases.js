@@ -1,5 +1,9 @@
 import fb from '@/firebaseConfig';
 
+// TO DO
+// Move translations to own collection instead of subcollections under EN phrases
+// Copy topics over to each translation so that they can be queried by topic/language combo
+
 /*
 
   STATE
