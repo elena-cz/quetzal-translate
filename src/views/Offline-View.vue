@@ -69,11 +69,18 @@ export default {
   <div class="offline-view scroll-container mx-n4">
     <div class="main-content px-4 pt-md-6 pb-6">
       <div v-if="noOffline">
-        <p>It looks like your browser or device doesn't support offline for this app. You can try updating your browser or your device's operating system.</p>
+        <p>
+          It looks like your browser or device doesn't support offline for this
+          app. You can try updating your browser or your device's operating
+          system.
+        </p>
       </div>
 
       <div v-if="showOfflineFlow">
-        <p>Get translations offline by installing the app and downloading the audio recordings for the languages you choose.</p>
+        <p>
+          Get translations offline by installing the app and downloading the
+          audio recordings for the languages you choose.
+        </p>
 
         <v-stepper v-model="step" vertical non-linear>
           <!-- INSTALL -->
@@ -81,7 +88,8 @@ export default {
             :complete="isStandaloneMode || markedAppInstalled"
             step="1"
             @click="step = 1"
-          >Install app</v-stepper-step>
+            >Install app</v-stepper-step
+          >
           <v-stepper-content step="1">
             <InstallDirections />
 
@@ -91,8 +99,14 @@ export default {
                 rounded
                 outlined
                 color="primary"
-                @click="() => { step = 2; markedAppInstalled = true;}"
-              >Done</v-btn>
+                @click="
+                  () => {
+                    step = 2;
+                    markedAppInstalled = true;
+                  }
+                "
+                >Done</v-btn
+              >
             </div>
           </v-stepper-content>
 
@@ -102,8 +116,13 @@ export default {
             :complete="isStandaloneMode"
             step="2"
             @click="step = 2"
-          >Open App</v-stepper-step>
-          <v-stepper-content v-if="numSteps === 3" step="2" class="text-content">
+            >Open App</v-stepper-step
+          >
+          <v-stepper-content
+            v-if="numSteps === 3"
+            step="2"
+            class="text-content"
+          >
             <ol>
               <li>
                 Open the
@@ -116,7 +135,9 @@ export default {
             </ol>
             <div class="d-flex justify-end py-1">
               <v-btn text @click="step = 3">Skip</v-btn>
-              <v-btn rounded outlined color="primary" @click="step = 3">Done</v-btn>
+              <v-btn rounded outlined color="primary" @click="step = 3"
+                >Done</v-btn
+              >
             </div>
           </v-stepper-content>
 
@@ -125,13 +146,20 @@ export default {
             :complete="step > numSteps"
             :step="numSteps"
             @click="step = numSteps"
-          >Download audio</v-stepper-step>
+            >Download audio</v-stepper-step
+          >
           <v-stepper-content :step="numSteps">
             <OfflineAudio class="mb-3" />
 
             <div class="d-flex justify-end py-1">
               <v-btn text @click="step = numSteps + 1">Skip</v-btn>
-              <v-btn rounded outlined color="primary" @click="step = numSteps + 1">Done</v-btn>
+              <v-btn
+                rounded
+                outlined
+                color="primary"
+                @click="step = numSteps + 1"
+                >Done</v-btn
+              >
             </div>
           </v-stepper-content>
         </v-stepper>
@@ -156,12 +184,11 @@ export default {
             If the audio isn't playing, check these settings:
             <ul>
               <li class="mt-3">The volume for media is turned up</li>
-              <li>
-                <b>Do Not Disturb</b> mode is turned off
-              </li>
+              <li><b>Do Not Disturb</b> mode is turned off</li>
               <li v-if="isIOS">
                 If you have a hardware
-                <b>Ring/Silent switch</b> on your phone, make sure it's in "Ring" mode
+                <b>Ring/Silent switch</b> on your phone, make sure it's in
+                "Ring" mode
               </li>
             </ul>
           </li>
@@ -176,12 +203,12 @@ export default {
 
 .offline-view {
   .v-stepper {
-    box-shadow: none;
+    box-shadow: none !important;
   }
 
   .v-stepper__step {
-    padding-right: 0;
-    padding-left: 0;
+    padding-right: 0 !important;
+    padding-left: 0 !important;
   }
 
   .v-stepper__label {
@@ -194,9 +221,9 @@ export default {
   }
 
   .v-stepper__content {
-    margin-left: 12px;
-    margin-right: 0;
-    padding-right: 16px;
+    margin-left: 12px !important;
+    margin-right: 0 !important;
+    padding-right: 16px !important;
   }
 }
 </style>
