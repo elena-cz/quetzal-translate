@@ -1,135 +1,229 @@
 <script>
 import { mapState, mapGetters } from 'vuex';
-// import HelloWorld from '@/components/HelloWorld.vue';
+import InstallDirections from '@/components/install/InstallDirections.vue';
+import OfflineAudio from '@/components/OfflineAudio.vue';
+
+// If using a supported device & no audio is downloaded, show Offline flow
+// If already using app & audio is downloaded, just show audio manager
+// If using an unsupported device, show message
 
 export default {
   name: 'Offline-View',
 
   components: {
-    // HelloWorld,
+    InstallDirections,
+    OfflineAudio,
   },
 
   data: () => ({
-    //
+    step: 1,
+    numSteps: 2,
+    markedAppInstalled: false,
+    markAudioDownloaded: false,
+    showOfflineFlow: true,
   }),
 
   computed: {
-    ...mapState('languages', ['langNames']),
+    ...mapState('device', ['isStandaloneMode']),
 
-    ...mapState('audio', ['langStatus']),
+    ...mapGetters('device', ['device', 'isIOS', 'shouldShowOfflineFlow']),
 
-    ...mapGetters('audio', ['downloadedLangs', 'availableLangs']),
-  },
+    ...mapGetters('audio', ['hasDownloadedLangs']),
 
-  methods: {
-    downloadLang(lang) {
-      this.$store.dispatch('audio/downloadLang', lang);
-    },
-
-    updateLang(lang) {
-      this.$store.dispatch('audio/updateLang', lang);
-    },
-
-    deleteLang(lang) {
-      this.$store.dispatch('audio/deleteLang', lang);
+    noOffline() {
+      return this.device === 'NoSW';
     },
   },
+
+  created() {
+    if (!this.deviceInfoSet) {
+      this.$store.dispatch('device/init');
+    }
+
+    const {
+      shouldShowOfflineFlow,
+      noOffline,
+      isStandaloneMode,
+      hasDownloadedLangs,
+      device,
+    } = this;
+
+    if (!shouldShowOfflineFlow) {
+      this.showOfflineFlow = false;
+    }
+
+    if (!isStandaloneMode && !(device === 'WebDefault')) {
+      this.numSteps = 3; // Add "Open app" step if on supported device
+    }
+
+    if (isStandaloneMode || hasDownloadedLangs) {
+      this.step = this.numSteps;
+    }
+  },
+
+  methods: {},
 };
 </script>
 
 <template>
-  <div>
-    <v-subheader>Downloaded Languages</v-subheader>
-    <v-list flat class="mb-5">
-      <v-list-item v-if="!downloadedLangs.length" key="noDownloads">
-        <v-list-item-content class="caption">No languages downloaded yet</v-list-item-content>
-      </v-list-item>
-      <template v-for="(lang, index) in downloadedLangs">
-        <v-list-item :key="lang">
-          <v-list-item-content>
-            <v-list-item-title v-text="langNames[lang]"></v-list-item-title>
-          </v-list-item-content>
+  <div class="offline-view scroll-container mx-n4">
+    <div class="main-content px-4 pt-md-6 pb-6">
+      <div v-if="noOffline">
+        <p>
+          It looks like your browser or device doesn't support offline for this
+          app. You can try updating your browser or your device's operating
+          system.
+        </p>
+      </div>
 
-          <v-list-item-action class="d-flex flex-row align-center">
-            <v-progress-circular v-if="langStatus[lang].isUpdating" indeterminate color="primary">
-              <v-icon class="material-icons-round">download</v-icon>
-            </v-progress-circular>
+      <div v-if="showOfflineFlow">
+        <p>
+          Get translations offline by installing the app and downloading the
+          audio recordings for the languages you choose.
+        </p>
 
-            <template v-else>
+        <v-stepper v-model="step" vertical non-linear>
+          <!-- INSTALL -->
+          <v-stepper-step
+            :complete="isStandaloneMode || markedAppInstalled"
+            step="1"
+            @click="step = 1"
+            >Install app</v-stepper-step
+          >
+          <v-stepper-content step="1">
+            <InstallDirections />
+
+            <div class="d-flex justify-end py-1">
+              <v-btn text @click="step = 2">Skip</v-btn>
               <v-btn
-                v-if="langStatus[lang].hasUpdates"
-                color="accent"
                 rounded
                 outlined
-                small
-                class="mr-4"
-                @click.prevent="updateLang(lang)"
-              >Update</v-btn>
+                color="primary"
+                @click="
+                  () => {
+                    step = 2;
+                    markedAppInstalled = true;
+                  }
+                "
+                >Done</v-btn
+              >
+            </div>
+          </v-stepper-content>
 
-              <v-tooltip bottom>
-                <template v-slot:activator="{ on }">
-                  <v-btn icon v-on="on" @click.prevent="deleteLang(lang)">
-                    <v-icon class="material-icons-round">delete</v-icon>
-                  </v-btn>
-                </template>
-                <span>Remove</span>
-              </v-tooltip>
-            </template>
-          </v-list-item-action>
-        </v-list-item>
-        <v-divider :key="index"></v-divider>
-      </template>
-    </v-list>
+          <!-- OPEN -->
+          <v-stepper-step
+            v-if="numSteps === 3"
+            :complete="isStandaloneMode"
+            step="2"
+            @click="step = 2"
+            >Open App</v-stepper-step
+          >
+          <v-stepper-content
+            v-if="numSteps === 3"
+            step="2"
+            class="text-content"
+          >
+            <ol>
+              <li>
+                Open the
+                <b>Quetzal</b> app on your Home screen
+              </li>
+              <li>
+                Open this
+                <b>Offline</b> page in the app to continue
+              </li>
+            </ol>
+            <div class="d-flex justify-end py-1">
+              <v-btn text @click="step = 3">Skip</v-btn>
+              <v-btn rounded outlined color="primary" @click="step = 3"
+                >Done</v-btn
+              >
+            </div>
+          </v-stepper-content>
 
-    <v-subheader>Available Languages</v-subheader>
-    <v-list flat>
-      <v-list-item v-if="!availableLangs.length" key="allDownloaded">
-        <v-list-item-content class="caption">All languages downloaded</v-list-item-content>
-      </v-list-item>
-      <template v-for="(lang, index) in availableLangs">
-        <v-list-item :key="lang" color="primary">
-          <v-list-item-content>
-            <v-list-item-title v-text="langNames[lang]"></v-list-item-title>
-          </v-list-item-content>
+          <!-- AUDIO -->
+          <v-stepper-step
+            :complete="step > numSteps"
+            :step="numSteps"
+            @click="step = numSteps"
+            >Download audio</v-stepper-step
+          >
+          <v-stepper-content :step="numSteps">
+            <OfflineAudio class="mb-3" />
 
-          <v-list-item-action>
-            <v-tooltip bottom>
-              <template v-slot:activator="{ on }">
-                <v-btn icon v-on="on" @click.prevent="downloadLang(lang)">
-                  <v-icon class="material-icons-round">download</v-icon>
-                </v-btn>
-              </template>
-              <span>Download</span>
-            </v-tooltip>
-          </v-list-item-action>
-        </v-list-item>
-        <v-divider :key="index"></v-divider>
-      </template>
-    </v-list>
+            <div class="d-flex justify-end py-1">
+              <v-btn text @click="step = numSteps + 1">Skip</v-btn>
+              <v-btn
+                rounded
+                outlined
+                color="primary"
+                @click="step = numSteps + 1"
+                >Done</v-btn
+              >
+            </div>
+          </v-stepper-content>
+        </v-stepper>
+      </div>
+
+      <div v-if="!noOffline && !showOfflineFlow" class="text-content">
+        <h2>Offline Audio</h2>
+
+        <OfflineAudio class="mb-6" />
+      </div>
+
+      <div v-if="!noOffline" class="text-content">
+        <h2>Offline Tips</h2>
+
+        <ul>
+          <li>
+            If your Internet connection is slow, turn on
+            <b>Airplane</b> mode
+          </li>
+
+          <li>
+            If the audio isn't playing, check these settings:
+            <ul>
+              <li class="mt-3">The volume for media is turned up</li>
+              <li><b>Do Not Disturb</b> mode is turned off</li>
+              <li v-if="isIOS">
+                If you have a hardware
+                <b>Ring/Silent switch</b> on your phone, make sure it's in
+                "Ring" mode
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
   </div>
 </template>
 
-<style lang="scss" scoped>
-.v-subheader {
-  color: var(--v-primary-base);
-  font-weight: 700;
-  font-size: 1rem;
-  padding: 0;
-}
+<style lang="scss">
+@import '@/styles/colors.scss';
 
-.v-list-item {
-  min-height: 60px !important;
-}
+.offline-view {
+  .v-stepper {
+    box-shadow: none !important;
+  }
 
-.v-list-item__title {
-  font-size: 1rem;
-}
+  .v-stepper__step {
+    padding-right: 0 !important;
+    padding-left: 0 !important;
+  }
 
-.v-btn {
-  text-transform: none;
-}
+  .v-stepper__label {
+    font-weight: 700 !important;
+    font-size: 1.2rem !important;
+  }
 
-.v-btn--outlined {
-  border-width: 1px;
+  .v-stepper__step--active {
+    text-shadow: 0px 0px 0px $black !important;
+  }
+
+  .v-stepper__content {
+    margin-left: 12px !important;
+    margin-right: 0 !important;
+    padding-right: 16px !important;
+  }
 }
 </style>

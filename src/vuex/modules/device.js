@@ -22,11 +22,12 @@ const state = {
   os: '',
   osInfo: {},
   // osVersionNum: null,
-  // platformModel: '',
+  platformModel: '',
   shareSupported: false,
   swSupported: null,
-  deviceInfoSet: false,
   isStandaloneMode: false,
+  hasSmallScreen: true,
+  deviceInfoSet: false,
 };
 
 /*
@@ -39,7 +40,54 @@ const getters = {
   isAndroid: state => state.os === 'Android',
   isIOS: state => state.os === 'iOS',
   // isOlderIOS: state => state.os === 'iOS' && state.osVersionNum < 12.2,
-  // isIPad: state => state.platformModel.toLowerCase().includes('ipad'),
+  isIPad: state => state.platformModel.toLowerCase().includes('ipad'),
+  device: (state, getters) => {
+    const { browser, swSupported: sw, hasSmallScreen } = state;
+    const { isAndroid, isIOS } = getters;
+
+    let device = '';
+    if (isIOS) {
+      if (sw && browser === 'Safari') {
+        device = 'iOS-Safari';
+      } else if (!sw && browser === 'Safari') {
+        device = 'Mobile-NoSW';
+      } else {
+        device = 'iOS-Other';
+      }
+    } else if (isAndroid) {
+      if (sw && browser === 'Chrome') {
+        device = 'Android-Chrome';
+      } else if (!sw) {
+        device = 'Mobile-NoSW';
+      } else {
+        device = 'OtherMobile';
+      }
+    } else if (sw && hasSmallScreen) {
+      device = 'OtherMobile';
+    } else if (!sw) {
+      device = 'NoSW';
+    } else {
+      device = 'WebDefault';
+    }
+    // return 'iOS-Safari';
+    // return 'iOS-Other';
+    // return 'Android-Chrome';
+    // return 'OtherMobile';
+    // return 'NoSW';
+    // return 'WebDefault';
+    // console.log('device', device);
+    return device;
+  },
+
+  shouldShowOfflineFlow: (state, getters, rootState, rootGetters) => {
+    const { isStandaloneMode } = state;
+    const { device } = getters;
+    const hasDownloadedLangs = rootGetters['audio/hasDownloadedLangs'];
+    if (device === 'NoSW' || (isStandaloneMode && hasDownloadedLangs)) {
+      return false;
+    }
+    return true;
+  },
 };
 
 /*
@@ -63,10 +111,12 @@ const actions = {
     // info.osVersionNum = getVersionNum(info.osInfo.version);
 
     info.platform = info.bowser.platform || {};
-    // info.platformModel = info.platform.model || '';
+    info.platformModel = info.platform.model || '';
 
     info.shareSupported = navigator.share !== undefined;
     info.swSupported = !!('serviceWorker' in navigator);
+
+    info.hasSmallScreen = window.matchMedia('(max-width: 800px)').matches;
 
     commit('setDeviceInfo', info);
     dispatch('detectStandaloneMode');
@@ -102,9 +152,10 @@ const mutations = {
       os,
       osInfo,
       // osVersionNum,
-      // platformModel,
+      platformModel,
       shareSupported,
       swSupported,
+      hasSmallScreen,
     } = info;
     state.bowser = bowser;
     state.browser = browser;
@@ -113,9 +164,10 @@ const mutations = {
     state.os = os;
     state.osInfo = osInfo;
     // state.osVersionNum = osVersionNum;
-    // state.platformModel = platformModel;
+    state.platformModel = platformModel;
     state.shareSupported = shareSupported;
     state.swSupported = swSupported;
+    state.hasSmallScreen = hasSmallScreen;
     state.deviceInfoSet = true;
   },
 

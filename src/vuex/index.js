@@ -35,6 +35,7 @@ store.dispatch('topics/init');
 store.dispatch('phrases/init');
 store.dispatch('favorites/init');
 store.dispatch('device/init');
+store.dispatch('ui/init');
 
 export default store;
 

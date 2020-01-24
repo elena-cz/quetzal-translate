@@ -21,6 +21,10 @@ export default {
     ...mapState('topics', ['subtopicIds', 'subtopics']),
     ...mapState('phrases', ['phrases', 'translations']),
     ...mapState('favorites', ['favoritePhrases']),
+
+    isLoading() {
+      return this.subtopicIds.length < 1;
+    },
   },
 
   created() {
@@ -62,7 +66,7 @@ export default {
 </script>
 
 <template>
-  <v-container class="pa-0 mt-n1">
+  <v-container class="main-content pa-0 mt-n1">
     <v-tabs v-model="tab" background-color="transparent" color="primary" grow>
       <v-tab key="kek" class="lang1-tab">Q'eqchi'</v-tab>
       <v-tab key="es" class="lang2-tab">Spanish</v-tab>
@@ -72,6 +76,7 @@ export default {
       <v-tabs-items v-model="tab" class="tab-items pt-5 px-4">
         <v-tab-item v-for="(lang, langIndex) in langs" :key="lang" class="tab-item pb-12">
           <v-expansion-panels accordion elevation="0">
+            <!-- FAVORITES -->
             <v-expansion-panel
               :key="`${lang}Favorites`"
               @click="handleSubtopicClick(`${lang}Favorites`)"
@@ -96,6 +101,18 @@ export default {
               </v-expansion-panel-content>
             </v-expansion-panel>
 
+            <!-- SKELETON LOADER -->
+            <v-container v-if="isLoading" class="px-0">
+              <v-skeleton-loader
+                v-for="n in 8"
+                ref="skeleton"
+                type="list-item"
+                width="100%"
+                class="expansion-skeleton"
+              ></v-skeleton-loader>
+            </v-container>
+
+            <!-- SUBTOPICS-->
             <v-expansion-panel
               v-for="subtopicId in subtopicIds"
               :key="subtopicId"
@@ -122,7 +139,7 @@ export default {
             </v-expansion-panel>
           </v-expansion-panels>
 
-          <!-- <OfflinePromo /> -->
+          <OfflinePromo />
         </v-tab-item>
       </v-tabs-items>
     </div>

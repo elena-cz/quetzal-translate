@@ -19,8 +19,8 @@ export default {
 
 <template>
   <div class="scroll-container mx-n4">
-    <div class="px-4 pt-0 pb-6">
-      <h3 class="mb-3">Quetzal Translate</h3>
+    <div class="main-content px-4 pt-md-6 pb-6 text-content">
+      <h2>Quetzal Translate</h2>
 
       <p>
         Our mission is to help care providers compassionately communicate with
@@ -33,7 +33,7 @@ export default {
         <a href="mailto:hello@quetzal.app" target="_blank">hello@quetzal.app</a>
       </p>
 
-      <h3 class="mb-3">Our story</h3>
+      <h2>Our story</h2>
 
       <p>
         Imagine going to the dentist, possibly for the first time in your life,
@@ -78,5 +78,4 @@ export default {
 </template>
 
 <style lang="scss" scoped>
-// @import '@/design/colors.scss';
 </style>

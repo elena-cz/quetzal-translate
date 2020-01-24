@@ -4,6 +4,7 @@ import NavMenu from '@/components/NavMenu.vue';
 import NavMenuIcon from '@/components/NavMenuIcon.vue';
 import AdminPageSwitcher from '@/components/admin/AdminPageSwitcher.vue';
 import Snackbar from '@/components/Snackbar.vue';
+import CopyText from '@/components/CopyText.vue';
 
 export default {
   name: 'Layout',
@@ -13,6 +14,7 @@ export default {
     NavMenuIcon,
     AdminPageSwitcher,
     Snackbar,
+    CopyText,
   },
 
   data() {
@@ -142,10 +144,8 @@ export default {
     </div>
 
     <Snackbar />
-    <!-- <v-snackbar :value="updateNotification.text" :timeout="0">
-      {{ updateNotification.text }}
-      <v-btn color="#b1ffff" text @click="updateNotification.handler">Refresh</v-btn>
-    </v-snackbar> -->
+
+    <CopyText />
   </div>
 </template>
 
