@@ -113,21 +113,19 @@ export default {
         </v-list-item-group>
       </v-list>
     </aside>
-    <div class="main">
-      <div class="scroll-container">
-        <AdminEditTopic
-          v-if="page === 'topics'"
-          :saved-id="currentId"
-          :doc="currentDoc"
-          :set-current-id="setCurrentId"
-        />
-        <AdminEditPhrase
-          v-else
-          :saved-id="currentId"
-          :doc="currentDoc"
-          :set-current-id="setCurrentId"
-        />
-      </div>
+    <div class="main scroll-container">
+      <AdminEditTopic
+        v-if="page === 'topics'"
+        :saved-id="currentId"
+        :doc="currentDoc"
+        :set-current-id="setCurrentId"
+      />
+      <AdminEditPhrase
+        v-else
+        :saved-id="currentId"
+        :doc="currentDoc"
+        :set-current-id="setCurrentId"
+      />
     </div>
   </v-container>
 </template>
