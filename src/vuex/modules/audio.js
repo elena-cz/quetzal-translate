@@ -55,6 +55,11 @@ const getters = {
     const { downloadedLangs = [] } = getters;
     return downloadedLangs.length > 0;
   },
+
+  shouldShowAudioUpdateBadge: (state, getters) => {
+    return true;
+    // return state.updatesAvailable && getters.hasDownloadedLangs;
+  },
 };
 
 /*
