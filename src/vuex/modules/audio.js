@@ -6,7 +6,6 @@ const audioCacheWorker = new Worker('@/workers/audioCacheWorker.js', {
 
 // TO DO
 // Add snackbar notifications
-// Add badge notification for hasUpdates
 // Detect feature compatibility & add error messages & analytics
 
 // FUTURE
@@ -136,9 +135,7 @@ const mutations = {
   },
 
   setLangsToUpdate(state, langs) {
-    if (langs.length) {
-      state.updatesAvailable = true;
-    }
+    state.updatesAvailable = langs.length > 0;
     langs.forEach(lang => {
       state.langStatus[lang].hasUpdates = true;
     });
