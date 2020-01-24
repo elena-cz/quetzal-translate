@@ -114,18 +114,20 @@ export default {
       </v-list>
     </aside>
     <div class="main">
-      <AdminEditTopic
-        v-if="page === 'topics'"
-        :saved-id="currentId"
-        :doc="currentDoc"
-        :set-current-id="setCurrentId"
-      />
-      <AdminEditPhrase
-        v-else
-        :saved-id="currentId"
-        :doc="currentDoc"
-        :set-current-id="setCurrentId"
-      />
+      <div class="scroll-container">
+        <AdminEditTopic
+          v-if="page === 'topics'"
+          :saved-id="currentId"
+          :doc="currentDoc"
+          :set-current-id="setCurrentId"
+        />
+        <AdminEditPhrase
+          v-else
+          :saved-id="currentId"
+          :doc="currentDoc"
+          :set-current-id="setCurrentId"
+        />
+      </div>
     </div>
   </v-container>
 </template>
@@ -138,7 +140,8 @@ export default {
   grid-template-areas: 'sidebar main';
   grid-gap: 1rem;
   align-content: flex-start;
-  min-height: 100%;
+  height: 100%;
+  max-height: 100%;
   width: 100%;
   max-width: 100%;
   box-sizing: border-box;

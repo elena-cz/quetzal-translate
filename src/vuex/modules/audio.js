@@ -21,7 +21,7 @@ const audioCacheWorker = new Worker('@/workers/audioCacheWorker.js', {
 
 const state = {
   langStatus: {}, // { es: { isDownloaded: true, hasUpdates: true, isUpdating: false } }
-  updatesAvailable: false,
+  updatesAvailable: false, // Includes languages not downloaded, and downloaded languages with updates
 };
 
 /*
@@ -55,8 +55,17 @@ const getters = {
     return downloadedLangs.length > 0;
   },
 
+  // Only show badge if a downloaded language has updates
   shouldShowAudioUpdateBadge: (state, getters) => {
-    return state.updatesAvailable && getters.hasDownloadedLangs;
+    const { langStatus } = state;
+    const { downloadedLangs } = getters;
+    let shouldShow = false;
+    downloadedLangs.forEach(lang => {
+      if (langStatus[lang].hasUpdates) {
+        shouldShow = true;
+      }
+    });
+    return shouldShow;
   },
 };
 
@@ -134,6 +143,7 @@ const mutations = {
     });
   },
 
+  // Includes languages not downloaded, and downloaded languages with updates
   setLangsToUpdate(state, langs) {
     state.updatesAvailable = langs.length > 0;
     langs.forEach(lang => {
