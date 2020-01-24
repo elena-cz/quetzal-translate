@@ -1,4 +1,6 @@
 <script>
+import { mapGetters } from 'vuex';
+
 /* 
   Transforming icons update with this logic:
 
@@ -30,6 +32,10 @@ export default {
     };
   },
 
+  computed: {
+    ...mapGetters('audio', ['shouldShowAudioUpdateBadge']),
+  },
+
   watch: {
     navType(newType, oldType) {
       if (oldType === 'menu' && newType === 'back') {
@@ -53,14 +59,6 @@ export default {
 </script>
 
 <template>
-  <!-- <v-badge :value="showDownloadNotification" color="accent" overlap class="small-badge">
-              <template v-slot:badge>
-                <span></span>
-              </template>
-              <v-icon v-if="userCacheIsUpToDate" class="material-icons-round" large>check</v-icon>
-              <v-icon v-else class="material-icons-round" large>download</v-icon>
-  </v-badge>-->
-
   <!-- menu/close -->
   <v-btn
     v-if="iconSet === 'menuClose'"
@@ -72,9 +70,18 @@ export default {
     :class="{ 'is-active': isBackLayerActive }"
     @click="$root.$emit('toggleBackLayer', 'menu')"
   >
-    <span class="hamburger-box">
-      <span class="hamburger-inner" />
-    </span>
+    <v-badge
+      :value="shouldShowAudioUpdateBadge && !isBackLayerActive"
+      color="accent"
+      dot
+      offset-x="4"
+      offset-y="4"
+      class="mt-0"
+    >
+      <span class="hamburger-box">
+        <span class="hamburger-inner" />
+      </span>
+    </v-badge>
   </v-btn>
 
   <!-- close/arrow -->

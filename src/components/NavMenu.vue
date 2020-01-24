@@ -15,10 +15,6 @@ export default {
 
   computed: {
     ...mapGetters('audio', ['shouldShowAudioUpdateBadge']),
-    // ...mapGetters('module', [
-    //   'foo',
-    // ]),
-    // property() {},
   },
 
   methods: {
@@ -56,7 +52,14 @@ export default {
           </v-list-item-icon>
           <v-list-item-content>
             <v-list-item-title>
-              <v-badge :value="true" color="accent" overlap>Offline</v-badge>
+              <v-badge
+                :value="shouldShowAudioUpdateBadge"
+                color="accent"
+                dot
+                class="mt-0"
+                offset-x="-2"
+                >Offline</v-badge
+              >
             </v-list-item-title>
           </v-list-item-content>
         </v-list-item>
@@ -73,7 +76,6 @@ export default {
         </v-list-item>
       </v-list-item-group>
     </v-list>
-    <v-badge :value="true" color="pink" dot overlap>Badge</v-badge>
   </div>
 </template>
 
@@ -102,5 +104,6 @@ export default {
 
 .v-list-item__title {
   font-size: 1rem !important;
+  overflow: visible !important;
 }
 </style>

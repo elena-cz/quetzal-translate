@@ -57,8 +57,7 @@ const getters = {
   },
 
   shouldShowAudioUpdateBadge: (state, getters) => {
-    return true;
-    // return state.updatesAvailable && getters.hasDownloadedLangs;
+    return state.updatesAvailable && getters.hasDownloadedLangs;
   },
 };
 
