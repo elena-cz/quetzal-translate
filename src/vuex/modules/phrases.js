@@ -13,6 +13,7 @@ import fb from '@/firebaseConfig';
 const state = {
   phrases: {},
   translations: {},
+  arePhrasesLoaded: false,
 };
 
 /*
@@ -73,6 +74,7 @@ const mutations = {
   setPhrases(state, { phrases, translations }) {
     state.phrases = phrases;
     state.translations = translations;
+    state.arePhrasesLoaded = true;
   },
 };
 
