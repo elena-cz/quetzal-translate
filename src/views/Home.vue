@@ -18,13 +18,9 @@ export default {
   }),
 
   computed: {
-    ...mapState('topics', ['subtopicIds', 'subtopics']),
-    ...mapState('phrases', ['phrases', 'translations']),
+    ...mapState('topics', ['subtopicIds', 'subtopics', 'areSubtopicsLoaded']),
+    ...mapState('phrases', ['phrases', 'translations', 'arePhrasesLoaded']),
     ...mapState('favorites', ['favoritePhrases']),
-
-    isLoading() {
-      return this.subtopicIds.length < 1;
-    },
   },
 
   created() {
@@ -101,8 +97,8 @@ export default {
               </v-expansion-panel-content>
             </v-expansion-panel>
 
-            <!-- SKELETON LOADER -->
-            <v-container v-if="isLoading" class="px-0">
+            <!-- SUBTOMICS SKELETON LOADER -->
+            <v-container v-if="!areSubtopicsLoaded" class="px-0">
               <v-skeleton-loader
                 v-for="n in 8"
                 ref="skeleton"
@@ -124,9 +120,19 @@ export default {
               >{{ subtopics[subtopicId].title }}</v-expansion-panel-header>
               <v-expansion-panel-content>
                 <v-expansion-panels accordion v-model="openItemIndex">
+                  <!-- PHRASES SKELETON LOADER -->
+                  <v-container v-if="!arePhrasesLoaded" class="px-0">
+                    <v-skeleton-loader
+                      v-for="n in 4"
+                      ref="skeleton"
+                      type="list-item"
+                      width="100%"
+                      class="expansion-skeleton"
+                    ></v-skeleton-loader>
+                  </v-container>
+
                   <PhraseItem
-                    v-for="(phraseId, itemIndex) in subtopics[subtopicId]
-                    .phraseIds"
+                    v-for="(phraseId, itemIndex) in subtopics[subtopicId].phraseIds"
                     :key="phraseId"
                     :phrase="phrases[phraseId]"
                     :translation="getTranslation(lang, phraseId)"

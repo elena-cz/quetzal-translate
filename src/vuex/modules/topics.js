@@ -11,6 +11,7 @@ const state = {
   title: '',
   subtopicIds: [],
   subtopics: {},
+  areSubtopicsLoaded: false,
 };
 
 /*
@@ -59,6 +60,7 @@ const mutations = {
     state.title = title;
     state.subtopicIds = subtopicIds;
     state.subtopics = subtopics;
+    state.areSubtopicsLoaded = true;
   },
 };
 

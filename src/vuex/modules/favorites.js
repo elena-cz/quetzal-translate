@@ -59,7 +59,7 @@ const actions = {
     }
 
     favoritePhrases[lang] = langIds;
-    commit('updateFavoritePhrases', { lang, langIds });
+    commit('updateFavoritePhrases', favoritePhrases);
     setIDB('favoritePhrases', favoritePhrases);
 
     if (!isFavorite) {
@@ -81,8 +81,8 @@ const mutations = {
     state.favoritePhrases = favorites;
   },
 
-  updateFavoritePhrases(state, { lang, langIds }) {
-    state.favoritePhrases[lang] = langIds;
+  updateFavoritePhrases(state, favoritePhrases) {
+    state.favoritePhrases = favoritePhrases;
   },
 };
 
