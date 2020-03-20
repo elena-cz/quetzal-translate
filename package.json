@@ -10,6 +10,9 @@
     "deploy-hosting": "firebase deploy --only hosting"
   },
   "dependencies": {
+    "@capacitor/cli": "^1.5.1",
+    "@capacitor/core": "^1.5.1",
+    "@capacitor/ios": "^1.5.1",
     "bowser": "^2.9.0",
     "core-js": "^2.6.11",
     "firebase": "^7.8.2",

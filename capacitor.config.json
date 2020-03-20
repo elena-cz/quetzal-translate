@@ -1,0 +1,8 @@
+{
+  "appId": "app.quetzal.translate",
+  "appName": "Quetzal Translate",
+  "bundledWebRuntime": false,
+  "npmClient": "npm",
+  "webDir": "dist",
+  "cordova": {}
+}
