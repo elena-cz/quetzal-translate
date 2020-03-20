@@ -29,7 +29,7 @@ const getters = {
 
 const actions = {
   showUpdateNotification({ dispatch }, { onClick }) {
-    // console.log('in displayUpdateNotification');
+    // console.log('in showUpdateNotification');
     const snack = {
       text: 'App update available',
       actionText: 'Refresh',
@@ -69,24 +69,6 @@ const actions = {
       dispatch('updateInstallPrompt', null);
     });
   },
-
-  // showInstallNotification({ commit, dispatch, state }) {
-  //   console.log('showInstallNotification');
-  //   if (state.notification) {
-  //     return;
-  //   }
-
-  //   const notification = {
-  //     type: 'install',
-  //     message: 'Add app to Home screen',
-  //     actionText: 'Add app to Home screen',
-  //     // confirmHandler: dispatch('showInstallPrompt'),
-  //   };
-  //   console.log('show notification', notification);
-  //   setTimeout(() => {
-  //     commit('setNotification', notification);
-  //   }, 500);
-  // },
 };
 
 /*
@@ -96,14 +78,6 @@ const actions = {
  */
 
 const mutations = {
-  // setNotification(state, notification) {
-  //   state.notification = notification;
-  // },
-
-  // clearNotification(state) {
-  //   state.notification = null;
-  // },
-
   setInstallPrompt(state, prompt) {
     state.installPrompt = prompt;
   },
@@ -120,58 +94,3 @@ export default {
   actions,
   mutations,
 };
-
-// /*
-
-//   STATE
-
-//  */
-
-// const state = {
-//   updateNotification: {},
-// };
-
-// /*
-
-//   GETTERS
-
-//  */
-
-// const getters = {
-//   // exampleGetter: state => {},
-// };
-
-// /*
-
-//   ACTIONS
-
-//  */
-
-// const actions = {
-//   showUpdateNotification({ commit }, { onClick }) {
-//     commit('setNotification', {
-//       text: 'App update available',
-//       handler: onClick,
-//     });
-//   },
-// };
-
-// /*
-
-//   MUTATIONS
-
-//  */
-
-// const mutations = {
-//   setNotification(state, info) {
-//     state.updateNotification = info;
-//   },
-// };
-
-// export default {
-//   namespaced: true,
-//   state,
-//   getters,
-//   actions,
-//   mutations,
-// };
